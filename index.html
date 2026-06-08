@@ -917,6 +917,13 @@ function buildActiveRow(num) {
       if (e.key === 'Tab' || e.key === 'Enter') { e.preventDefault(); noteInput.focus(); }
     });
 
+    var pill = document.getElementById('type-tog-pill');
+    if (pill) {
+      pill.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); noteInput.focus(); }
+      });
+    }
+
     noteInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') { e.preventDefault(); saveActiveRow(); }
     });
@@ -1766,6 +1773,8 @@ function toggleEntryType() {
   var hi = document.getElementById('type-input');
   var cur = hi ? hi.value : 'received';
   setEntryType(cur === 'received' ? 'given' : 'received');
+  var ni = document.getElementById('note-input');
+  if (ni) setTimeout(function(){ ni.focus(); }, 0);
 }
 
 // ==================== CLIENT SCHEDULE ====================
