@@ -2046,10 +2046,13 @@ function strSim(a, b) {
 function clientScore(spoken, clientName) {
   var s = spoken.toLowerCase(), c = clientName.toLowerCase();
   if (s === c) return 1;
+  // Reject if one is a pure prefix/substring of the other AND lengths differ significantly
+  // e.g. "murali"(6) vs "muralidharan"(12) — same prefix but clearly different name
+  var shorter = s.length < c.length ? s : c;
+  var longer  = s.length < c.length ? c : s;
+  if (longer.indexOf(shorter) === 0 && shorter.length / longer.length < 0.75) return 0;
   // full string similarity
   var full = strSim(s, c);
-  // prefix: spoken starts with client or vice versa
-  var prefixBonus = (s.indexOf(c) === 0 || c.indexOf(s) === 0) ? 0.15 : 0;
   // word-level: best word pair match
   var sWords = s.split(/\s+/), cWords = c.split(/\s+/);
   var wordBest = 0;
@@ -2059,7 +2062,7 @@ function clientScore(spoken, clientName) {
       if (ws > wordBest) wordBest = ws;
     });
   });
-  return Math.min(1, Math.max(full, wordBest * 0.88) + prefixBonus);
+  return Math.min(1, Math.max(full, wordBest * 0.88));
 }
 // Find best matching existing client across all spoken alternatives
 function findBestClient(candidates) {
@@ -2070,7 +2073,7 @@ function findBestClient(candidates) {
       if (sc > bestScore) { bestScore = sc; best = c; }
     });
   });
-  return bestScore >= 0.55 ? { customer: best, score: bestScore } : null;
+  return bestScore >= 0.65 ? { customer: best, score: bestScore } : null;
 }
 // Strip noise words Chrome adds for South Indian speech
 var VOICE_NOISE = [
