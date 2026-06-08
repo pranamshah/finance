@@ -212,6 +212,48 @@ tr.active-row{height:54px}
 
 /* PAGE HEADING */
 .page-heading{font-size:22px;font-weight:700;padding:16px 16px 10px;color:var(--text)}
+
+/* ENTRY + CALC LAYOUT */
+#entry-calc-wrap{display:flex;align-items:flex-start;gap:0}
+#entry-main{flex:1;min-width:0}
+#calc-panel{display:none}
+
+@media(min-width:769px){
+  #entry-calc-wrap{gap:14px;padding:14px 14px 0}
+  #entry-main{flex:1}
+  #entry-section{padding:0}
+  #summary-cards{padding:12px 0 0}
+  #calc-panel{display:block;width:200px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md);position:sticky;top:80px}
+}
+
+/* CALCULATOR */
+#calc-display-wrap{background:#1a1a1a;padding:12px 14px 10px;min-height:62px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end}
+#calc-expr{font-size:11px;color:#888;min-height:16px;word-break:break-all;text-align:right;padding-bottom:2px;font-family:monospace}
+#calc-display{font-size:26px;font-weight:300;color:#fff;font-family:'Noto Sans',sans-serif;letter-spacing:-0.02em;word-break:break-all;text-align:right;line-height:1.1}
+#calc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.cb{border:none;cursor:pointer;font-family:'Noto Sans',sans-serif;font-size:16px;font-weight:500;padding:0;height:46px;background:#fff;color:var(--text);transition:background 0.1s;user-select:none}
+.cb:hover{background:#f0ede7}
+.cb:active{background:#e0ddd6}
+.cb-fn{background:#f4f3ef;color:var(--text);font-weight:600}
+.cb-fn:hover{background:#e8e5de}
+.cb-op{background:#fff3e0;color:#d07000;font-weight:700;font-size:18px}
+.cb-op:hover{background:#ffe0b0}
+.cb-op-active{background:#f7a600;color:#fff}
+.cb-op-active:hover{background:#e09800}
+.cb-eq{background:var(--green);color:#fff;font-weight:700;font-size:18px}
+.cb-eq:hover{background:var(--green-dark)}
+.cb-zero{grid-column:span 2}
+
+/* Mobile calculator toggle */
+#calc-mobile-toggle{display:flex;align-items:center;justify-content:center;padding:8px 14px 0}
+@media(min-width:769px){#calc-mobile-toggle{display:none}}
+#calc-mobile-btn{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 18px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:6px}
+#calc-mobile-panel{display:none;margin:10px 14px 0;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
+@media(max-width:768px){#calc-panel{display:none!important}}
+#calc-display-wrap-m{background:#1a1a1a;padding:12px 14px 10px;min-height:62px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end}
+#calc-expr-m{font-size:11px;color:#888;min-height:16px;word-break:break-all;text-align:right;padding-bottom:2px;font-family:monospace}
+#calc-display-m{font-size:28px;font-weight:300;color:#fff;font-family:'Noto Sans',sans-serif;letter-spacing:-0.02em;word-break:break-all;text-align:right;line-height:1.1}
+#calc-buttons-m{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
 </style>
 </head>
 <body>
@@ -256,29 +298,98 @@ tr.active-row{height:54px}
         <button id="date-edit-btn" onclick="startDateEdit()">✏️</button>
       </div>
     </div>
-    <div id="entry-section">
-      <div class="table-wrap">
-        <table class="entry-table" id="entry-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Note</th>
-              <th style="width:40px"></th>
-            </tr>
-          </thead>
-          <tbody id="entry-tbody"></tbody>
-        </table>
+    <!-- Entry + Calculator side by side on desktop -->
+    <div id="entry-calc-wrap">
+      <div id="entry-main">
+        <div id="entry-section">
+          <div class="table-wrap">
+            <table class="entry-table" id="entry-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Note</th>
+                  <th style="width:40px"></th>
+                </tr>
+              </thead>
+              <tbody id="entry-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="padding:0 0 12px">
+          <div id="summary-cards">
+            <div class="summary-card green"><div class="summary-label">Total Received Today</div><div class="summary-amount" id="sum-received">₹0</div></div>
+            <div class="summary-card red"><div class="summary-label">Total Given Today</div><div class="summary-amount" id="sum-given">₹0</div></div>
+            <div class="summary-card blue"><div class="summary-label">Net Today</div><div class="summary-amount" id="sum-net">₹0</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- CALCULATOR (right side) -->
+      <div id="calc-panel">
+        <div id="calc-display-wrap">
+          <div id="calc-expr"></div>
+          <div id="calc-display">0</div>
+        </div>
+        <div id="calc-buttons">
+          <button class="cb cb-fn" onclick="calcAction('clear')">C</button>
+          <button class="cb cb-fn" onclick="calcAction('sign')">+/−</button>
+          <button class="cb cb-fn" onclick="calcAction('percent')">%</button>
+          <button class="cb cb-op" onclick="calcAction('/')">÷</button>
+
+          <button class="cb" onclick="calcAction('7')">7</button>
+          <button class="cb" onclick="calcAction('8')">8</button>
+          <button class="cb" onclick="calcAction('9')">9</button>
+          <button class="cb cb-op" onclick="calcAction('*')">×</button>
+
+          <button class="cb" onclick="calcAction('4')">4</button>
+          <button class="cb" onclick="calcAction('5')">5</button>
+          <button class="cb" onclick="calcAction('6')">6</button>
+          <button class="cb cb-op" onclick="calcAction('-')">−</button>
+
+          <button class="cb" onclick="calcAction('1')">1</button>
+          <button class="cb" onclick="calcAction('2')">2</button>
+          <button class="cb" onclick="calcAction('3')">3</button>
+          <button class="cb cb-op cb-op-active" onclick="calcAction('+')">+</button>
+
+          <button class="cb cb-zero" onclick="calcAction('0')">0</button>
+          <button class="cb" onclick="calcAction('.')">.</button>
+          <button class="cb cb-eq" onclick="calcAction('=')">＝</button>
+        </div>
       </div>
     </div>
-    <div style="padding:0 0 12px">
-      <div id="summary-cards">
-        <div class="summary-card green"><div class="summary-label">Total Received Today</div><div class="summary-amount" id="sum-received">₹0</div></div>
-        <div class="summary-card red"><div class="summary-label">Total Given Today</div><div class="summary-amount" id="sum-given">₹0</div></div>
-        <div class="summary-card blue"><div class="summary-label">Net Today</div><div class="summary-amount" id="sum-net">₹0</div></div>
-      </div>
+  </div>
+
+  <!-- Mobile calculator toggle (below summary, hidden on desktop) -->
+  <div id="calc-mobile-toggle">
+    <button id="calc-mobile-btn" onclick="toggleMobileCalc()">🧮 Calculator</button>
+  </div>
+  <div id="calc-mobile-panel">
+    <div id="calc-display-wrap-m">
+      <div id="calc-expr-m"></div>
+      <div id="calc-display-m">0</div>
+    </div>
+    <div id="calc-buttons-m">
+      <button class="cb cb-fn" onclick="calcAction('clear','m')">C</button>
+      <button class="cb cb-fn" onclick="calcAction('sign','m')">+/−</button>
+      <button class="cb cb-fn" onclick="calcAction('percent','m')">%</button>
+      <button class="cb cb-op" onclick="calcAction('/','m')">÷</button>
+      <button class="cb" onclick="calcAction('7','m')">7</button>
+      <button class="cb" onclick="calcAction('8','m')">8</button>
+      <button class="cb" onclick="calcAction('9','m')">9</button>
+      <button class="cb cb-op" onclick="calcAction('*','m')">×</button>
+      <button class="cb" onclick="calcAction('4','m')">4</button>
+      <button class="cb" onclick="calcAction('5','m')">5</button>
+      <button class="cb" onclick="calcAction('6','m')">6</button>
+      <button class="cb cb-op" onclick="calcAction('-','m')">−</button>
+      <button class="cb" onclick="calcAction('1','m')">1</button>
+      <button class="cb" onclick="calcAction('2','m')">2</button>
+      <button class="cb" onclick="calcAction('3','m')">3</button>
+      <button class="cb cb-op cb-op-active" onclick="calcAction('+','m')">+</button>
+      <button class="cb cb-zero" onclick="calcAction('0','m')">0</button>
+      <button class="cb" onclick="calcAction('.','m')">.</button>
+      <button class="cb cb-eq" onclick="calcAction('=','m')">＝</button>
     </div>
   </div>
 
@@ -1575,9 +1686,10 @@ function downloadDayPDF() {
   var recv = 0, given = 0;
   var body = _dayTxns.map(function(t, i) {
     if (t.type==='received') recv += Number(t.amount); else given += Number(t.amount);
-    return [i+1, t.customerName, t.type, fmtINR(t.amount), t.note||''];
+    return [i+1, t.customerName, t.type, fmtPDF(t.amount), t.note||''];
   });
-  body.push([{ content: 'Total Received: ' + fmtINR(recv) + '   Given: ' + fmtINR(given) + '   Net: ' + fmtINR(recv-given), colSpan: 5, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Received: ' + fmtPDF(recv), colSpan: 5, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Given: '    + fmtPDF(given), colSpan: 5, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
   var opts = basePdfOpts(doc, date);
   doc.autoTable(Object.assign({ head: [['#','Customer','Type','Amount','Note']], body: body }, opts));
   doc.save('finance-day-' + date + '.pdf');
@@ -1588,10 +1700,13 @@ function downloadMonthPDF() {
   if (!d.rows.length) { showToast('No data to export'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+  var totalG = 0, totalR = 0;
   var body = d.rows.filter(function(r) { return r.given||r.received; }).map(function(r) {
-    return [r.date, fmtINR(r.given), fmtINR(r.received), fmtINR(r.net)];
+    totalG += r.given; totalR += r.received;
+    return [r.date, fmtPDF(r.given), fmtPDF(r.received), fmtPDF(r.received - r.given)];
   });
-  body.push([{ content: 'Net: ' + fmtINR(d.net), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Received: ' + fmtPDF(totalR), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Given: '    + fmtPDF(totalG), colSpan: 4, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
   var opts = basePdfOpts(doc, d.label);
   doc.autoTable(Object.assign({ head: [['Date','Given','Received','Net']], body: body }, opts));
   doc.save('finance-month-' + d.label.replace(' ', '-') + '.pdf');
@@ -1602,8 +1717,13 @@ function downloadYearPDF() {
   if (!d.rows.length) { showToast('No data to export'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
-  var body = d.rows.map(function(r) { return [r.month, fmtINR(r.given), fmtINR(r.received), fmtINR(r.net)]; });
-  body.push([{ content: 'Net: ' + fmtINR(d.net), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  var totalG = 0, totalR = 0;
+  var body = d.rows.map(function(r) {
+    totalG += r.given; totalR += r.received;
+    return [r.month, fmtPDF(r.given), fmtPDF(r.received), fmtPDF(r.received - r.given)];
+  });
+  body.push([{ content: 'Total Received: ' + fmtPDF(totalR), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Given: '    + fmtPDF(totalG), colSpan: 4, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
   var opts = basePdfOpts(doc, d.label);
   doc.autoTable(Object.assign({ head: [['Month','Given','Received','Net']], body: body }, opts));
   doc.save('finance-year-' + d.label + '.pdf');
@@ -1614,10 +1734,13 @@ function downloadRangePDF() {
   if (!d.rows.length) { showToast('No data to export'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+  var totalG2 = 0, totalR2 = 0;
   var body = d.rows.filter(function(r) { return r.given||r.received; }).map(function(r) {
-    return [r.date, fmtINR(r.given), fmtINR(r.received), fmtINR(r.net)];
+    totalG2 += r.given; totalR2 += r.received;
+    return [r.date, fmtPDF(r.given), fmtPDF(r.received), fmtPDF(r.received - r.given)];
   });
-  body.push([{ content: 'Net: ' + fmtINR(d.net), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Received: ' + fmtPDF(totalR2), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Given: '    + fmtPDF(totalG2), colSpan: 4, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
   var periodStr = (d.from && d.to) ? d.from + ' to ' + d.to : '';
   var opts = basePdfOpts(doc, periodStr);
   doc.autoTable(Object.assign({ head: [['Date','Given','Received','Net']], body: body }, opts));
@@ -1635,9 +1758,10 @@ function downloadClientPDF(cid) {
     var totalGiven = 0, totalReceived = 0;
     var body = txns.map(function(t, i) {
       if (t.type==='given') totalGiven += Number(t.amount); else totalReceived += Number(t.amount);
-      return [i+1, t.date, t.type, fmtINR(t.amount), t.note||''];
+      return [i+1, t.date, t.type, fmtPDF(t.amount), t.note||''];
     });
-    body.push([{ content: 'Given: ' + fmtINR(totalGiven) + '   Received: ' + fmtINR(totalReceived) + '   Outstanding: ' + fmtINR(Math.abs(totalGiven-totalReceived)), colSpan: 5, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+    body.push([{ content: 'Total Received: ' + fmtPDF(totalReceived), colSpan: 5, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+    body.push([{ content: 'Total Given: '    + fmtPDF(totalGiven),    colSpan: 5, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
     var periodStr = c.name + (c.phone ? ' | ' + c.phone : '');
@@ -1648,6 +1772,92 @@ function downloadClientPDF(cid) {
 }
 
 // ==================== UTILS ====================
+
+// PDF-safe currency: jsPDF Helvetica can't render ₹ — use Rs. instead
+function fmtPDF(n) {
+  n = Number(n);
+  if (isNaN(n)) return 'Rs.0';
+  return 'Rs.' + n.toLocaleString('en-IN');
+}
+
+// ==================== CALCULATOR ====================
+var _calc = { display: '0', expr: '', op: null, prev: null, fresh: true, id: '' };
+
+function calcAction(key, id) {
+  id = id || '';
+  var c = _calc;
+  var displayEl = id === 'm' ? document.getElementById('calc-display-m') : document.getElementById('calc-display');
+  var exprEl    = id === 'm' ? document.getElementById('calc-expr-m')    : document.getElementById('calc-expr');
+  if (!displayEl) return;
+
+  if (key === 'clear') {
+    c.display = '0'; c.expr = ''; c.op = null; c.prev = null; c.fresh = true;
+  } else if (key === 'sign') {
+    var v = parseFloat(c.display);
+    c.display = isNaN(v) ? '0' : String(-v);
+  } else if (key === 'percent') {
+    var v2 = parseFloat(c.display);
+    c.display = isNaN(v2) ? '0' : String(v2 / 100);
+    c.fresh = true;
+  } else if (key === '=' ) {
+    if (c.op && c.prev !== null) {
+      var b = parseFloat(c.display);
+      var res = evalCalc(c.prev, c.op, b);
+      c.expr = '';
+      c.display = fmtCalcNum(res);
+      c.op = null; c.prev = null; c.fresh = true;
+    }
+  } else if (['+','-','*','/'].indexOf(key) !== -1) {
+    if (c.op && c.prev !== null && !c.fresh) {
+      var b2 = parseFloat(c.display);
+      c.prev = evalCalc(c.prev, c.op, b2);
+      c.display = fmtCalcNum(c.prev);
+    } else {
+      c.prev = parseFloat(c.display);
+    }
+    c.op = key;
+    c.expr = c.display + ' ' + {'+':'+','-':'−','*':'×','/':'÷'}[key];
+    c.fresh = true;
+  } else if (key === '.') {
+    if (c.fresh) { c.display = '0.'; c.fresh = false; }
+    else if (c.display.indexOf('.') === -1) { c.display += '.'; }
+  } else {
+    // digit
+    if (c.fresh || c.display === '0') { c.display = key; c.fresh = false; }
+    else { if (c.display.replace(/[^0-9]/g,'').length < 12) c.display += key; }
+  }
+  displayEl.textContent = c.display;
+  if (exprEl) exprEl.textContent = c.expr;
+}
+
+function evalCalc(a, op, b) {
+  if (op === '+') return a + b;
+  if (op === '-') return a - b;
+  if (op === '*') return a * b;
+  if (op === '/') return b === 0 ? 0 : a / b;
+  return b;
+}
+
+function fmtCalcNum(n) {
+  if (isNaN(n)) return 'Error';
+  var s = String(Math.round(n * 1e10) / 1e10);
+  if (s.length > 14) s = n.toPrecision(8);
+  return s;
+}
+
+function toggleMobileCalc() {
+  var p = document.getElementById('calc-mobile-panel');
+  var b = document.getElementById('calc-mobile-btn');
+  if (!p) return;
+  if (p.style.display === 'block') {
+    p.style.display = 'none';
+    b.textContent = '🧮 Calculator';
+  } else {
+    p.style.display = 'block';
+    b.textContent = '✕ Close Calculator';
+  }
+}
+
 function esc(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
