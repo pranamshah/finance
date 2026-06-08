@@ -134,9 +134,9 @@ body{font-family:'Inter','Noto Sans',sans-serif;background:var(--bg);color:var(-
 .entry-table thead tr{background:var(--bg)}
 .entry-table th{font-size:12px;font-weight:700;color:var(--muted);padding:12px 12px;text-align:left;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.06em}
 .entry-table th:first-child{width:44px;text-align:center}
-.entry-table th:nth-child(2){width:35%}
-.entry-table th:nth-child(3){width:20%}
-.entry-table th:nth-child(4){width:15%}
+.entry-table th:nth-child(2){width:30%}
+.entry-table th:nth-child(3){width:18%}
+.entry-table th:nth-child(4){width:21%}
 .entry-table td{border-bottom:1px solid var(--border);vertical-align:middle}
 tr.active-row{background:linear-gradient(to right,rgba(13,33,55,0.04),transparent 50%);border-left:4px solid var(--navy)}
 tr.active-row td{background:transparent}
@@ -347,6 +347,9 @@ tr.active-row{height:62px}
 .missed-count-chip{display:inline-block;background:var(--expense-light);color:var(--expense);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap}
 .missed-dates-cell{font-size:11px;color:var(--muted);max-width:240px;word-break:break-word;line-height:1.6}
 .missed-date-tag{display:inline-block;background:#fff4e5;color:#c0620a;border-radius:6px;padding:1px 7px;margin:1px;font-size:11px;font-weight:600}
+.missed-period-section{margin-top:20px;border-top:2px solid var(--expense-light);padding-top:16px}
+.missed-period-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.missed-period-title{font-size:13px;font-weight:800;color:var(--expense);text-transform:uppercase;letter-spacing:0.05em}
 
 /* ====== VOICE ENTRY ====== */
 #voice-bar{display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(135deg,#f4f6fb,#edf0f8);border-bottom:1px solid #dde3ee;border-top:1px solid #dde3ee}
@@ -545,7 +548,6 @@ tr.active-row{height:62px}
       <button class="subtab-btn" onclick="switchSubtab('month')">MONTH</button>
       <button class="subtab-btn" onclick="switchSubtab('year')">YEAR</button>
       <button class="subtab-btn" onclick="switchSubtab('range')">RANGE</button>
-      <button class="subtab-btn" onclick="switchSubtab('missed')" style="color:var(--expense)">⚠ MISSED</button>
     </div>
 
     <div id="subtab-day" class="subtab-content active">
@@ -556,6 +558,7 @@ tr.active-row{height:62px}
       <div id="day-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div class="table-scroll"><table class="records-table"><thead><tr><th>#</th><th>Customer</th><th>Type</th><th>Amount</th><th>Note</th><th></th></tr></thead><tbody id="day-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadDayPDF()">Download Day PDF</button>
+      <div id="day-missed" class="missed-period-section" style="display:none"></div>
     </div>
 
     <div id="subtab-month" class="subtab-content">
@@ -567,6 +570,7 @@ tr.active-row{height:62px}
       <div id="month-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div class="table-scroll"><table class="records-table"><thead><tr><th>Date</th><th>Customer</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead><tbody id="month-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadMonthPDF()">Download Month PDF</button>
+      <div id="month-missed" class="missed-period-section" style="display:none"></div>
     </div>
 
     <div id="subtab-year" class="subtab-content">
@@ -577,6 +581,7 @@ tr.active-row{height:62px}
       <div id="year-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div class="table-scroll"><table class="records-table" id="year-table"><thead><tr><th></th><th>Month</th><th>Given</th><th>Received</th><th>Net</th></tr></thead><tbody id="year-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadYearPDF()">Download Year PDF</button>
+      <div id="year-missed" class="missed-period-section" style="display:none"></div>
     </div>
 
     <div id="subtab-range" class="subtab-content">
@@ -589,24 +594,7 @@ tr.active-row{height:62px}
       <div id="range-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div class="table-scroll"><table class="records-table"><thead><tr><th>Date</th><th>Given</th><th>Received</th><th>Net</th></tr></thead><tbody id="range-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadRangePDF()">Download Range PDF</button>
-    </div>
-
-    <div id="subtab-missed" class="subtab-content">
-      <div class="filter-row">
-        <select id="missed-sched-filter">
-          <option value="">All Schedules</option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-        <button onclick="loadMissedPayments()">Refresh</button>
-      </div>
-      <div class="table-scroll">
-        <table class="records-table">
-          <thead><tr><th>Client</th><th>Schedule</th><th>Missed</th><th>Dates</th><th>Avg Amount</th></tr></thead>
-          <tbody id="missed-tbody"><tr><td colspan="5" class="empty-state">Select filters and click Refresh</td></tr></tbody>
-        </table>
-      </div>
+      <div id="range-missed" class="missed-period-section" style="display:none"></div>
     </div>
 
     <div id="backup-section">
@@ -1523,7 +1511,6 @@ function switchSubtab(name) {
   document.querySelectorAll('.subtab-content').forEach(function(el) {
     el.classList.toggle('active', el.id === 'subtab-' + name);
   });
-  if (name === 'missed') loadMissedPayments();
 }
 
 function buildSummaryCards3(recv, given, net) {
@@ -1551,6 +1538,7 @@ function loadDayRecords() {
     tr.querySelector('[data-del-day]').addEventListener('click', function() { deleteDayTxn(t.id); });
     tbody.appendChild(tr);
   });
+  renderMissedSection('day-missed', date, date);
 }
 
 function deleteDayTxn(id) {
@@ -1609,6 +1597,7 @@ function loadMonthRecords() {
       '<td style="padding:10px 12px"></td>' +
       '<td colspan="2" style="padding:10px 12px;font-size:14px">Rcvd: '+fmtINR(totalRecv)+'&nbsp;&nbsp;Given: '+fmtINR(totalGiven)+'</td>';
     tbody.appendChild(totRow);
+    renderMissedSection('month-missed', startDate, endDate);
   });
 }
 
@@ -1636,6 +1625,7 @@ function loadYearRecords() {
     _yearData = { rows:rows, allTxns:txnByMonth, recv:totalRecv, given:totalGiven, net:totalRecv-totalGiven, label:y };
     document.getElementById('year-summary-cards').innerHTML = buildSummaryCards3(totalRecv, totalGiven, totalRecv-totalGiven);
     renderYearTable();
+    renderMissedSection('year-missed', y+'-01-01', y+'-12-31');
   });
 }
 
@@ -1741,6 +1731,7 @@ function loadRangeRecords() {
       tr.innerHTML = '<td>' + r.date + '</td><td>' + fmtINR(r.given) + '</td><td>' + fmtINR(r.received) + '</td><td>' + fmtINR(r.net) + '</td>';
       tbody.appendChild(tr);
     });
+    renderMissedSection('range-missed', from, to);
   });
 }
 
@@ -1772,56 +1763,59 @@ function cycleClientSchedule(e, cid) {
 }
 
 // ==================== MISSED PAYMENTS ====================
-function loadMissedPayments() {
-  var schedFilter = (document.getElementById('missed-sched-filter') || {}).value || '';
-  var tbody = document.getElementById('missed-tbody');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr>';
-  Promise.all([db_getAll('customers'), db_getAll('transactions')]).then(function(res) {
-    var customers = res[0], transactions = res[1];
-    var today = todayStr();
+function renderMissedSection(containerId, fromDate, toDate) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  container.style.display = 'none';
+  var customers = window.allCustomers;
+  if (!customers || !customers.length) return;
+  db_getAll('transactions').then(function(allTxns) {
     var rows = [];
     customers.forEach(function(c) {
       var sched = c.schedule || 'daily';
       if (sched === 'none') return;
-      if (schedFilter && sched !== schedFilter) return;
-      var clientRecv = transactions.filter(function(t) {
+      var clientRecv = allTxns.filter(function(t) {
         return t.customerId === c.id && t.type === 'received';
       });
       if (clientRecv.length === 0) return;
-      var sorted = clientRecv.map(function(t) { return t.date; }).sort();
-      var firstDate = sorted[0];
+      var firstDate = clientRecv.map(function(t){return t.date;}).sort()[0];
       var paidDates = {};
       clientRecv.forEach(function(t) { paidDates[t.date] = true; });
-      var expected = generateExpectedDates(firstDate, today, sched);
-      var missed = expected.filter(function(d) { return !paidDates[d]; });
+      // Generate all expected dates up to toDate, then filter to [fromDate, toDate]
+      var allExpected = generateExpectedDates(firstDate, shiftDate(toDate, 1), sched);
+      var missed = allExpected.filter(function(d) { return d >= fromDate && d <= toDate && !paidDates[d]; });
       if (missed.length === 0) return;
       var total = 0;
       clientRecv.forEach(function(t) { total += Number(t.amount); });
-      var avg = Math.round(total / clientRecv.length);
-      rows.push({ c: c, sched: sched, missed: missed, avg: avg });
+      rows.push({ c: c, sched: sched, missed: missed, avg: Math.round(total / clientRecv.length) });
     });
-    tbody.innerHTML = '';
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:14px">🎉 No missed payments found!</td></tr>';
-      return;
-    }
+    if (rows.length === 0) return;
     rows.sort(function(a, b) { return b.missed.length - a.missed.length; });
+    var html = '<div class="missed-period-hdr"><span class="missed-period-title">⚠ Missed Payments</span>' +
+      '<span class="missed-count-chip">' + rows.length + ' client' + (rows.length > 1 ? 's' : '') + '</span></div>' +
+      '<div class="table-scroll"><table class="records-table"><thead><tr>' +
+      '<th>Client</th><th>Schedule</th><th>Missed</th><th>Dates</th><th>Avg Amt</th>' +
+      '</tr></thead><tbody>';
     rows.forEach(function(r) {
-      var tr = document.createElement('tr');
-      var recentMissed = r.missed.slice(-10);
-      var dateTags = recentMissed.map(function(d) {
-        return '<span class="missed-date-tag">' + d + '</span>';
-      }).join('');
-      var extra = r.missed.length > 10 ? '<span class="missed-date-tag" style="background:#eee">+' + (r.missed.length - 10) + ' more</span>' : '';
-      tr.innerHTML =
-        '<td style="font-weight:700">' + esc(r.c.name) + '</td>' +
+      var show = r.missed.slice(-8);
+      var tags = show.map(function(d){ return '<span class="missed-date-tag">'+d+'</span>'; }).join('');
+      if (r.missed.length > 8) tags += '<span class="missed-date-tag" style="background:#eee;color:#888">+' + (r.missed.length-8) + '</span>';
+      html += '<tr><td style="font-weight:700">' + esc(r.c.name) + '</td>' +
         '<td><span class="type-badge received">' + r.sched + '</span></td>' +
-        '<td><span class="missed-count-chip">' + r.missed.length + ' missed</span></td>' +
-        '<td class="missed-dates-cell">' + dateTags + extra + '</td>' +
-        '<td>' + fmtINR(r.avg) + '</td>';
-      tbody.appendChild(tr);
+        '<td><span class="missed-count-chip">' + r.missed.length + '</span></td>' +
+        '<td class="missed-dates-cell">' + tags + '</td>' +
+        '<td>' + fmtINR(r.avg) + '</td></tr>';
     });
+    html += '</tbody></table></div>';
+    container.innerHTML = html;
+    container.style.display = 'block';
   });
+}
+
+function shiftDate(dateStr, days) {
+  var d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
 }
 
 function generateExpectedDates(startDate, endDate, schedule) {
