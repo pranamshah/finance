@@ -1881,7 +1881,7 @@ function startVoice() {
   _voiceRecognition.lang = 'en-IN';
   _voiceRecognition.continuous = false;
   _voiceRecognition.interimResults = true;
-  _voiceRecognition.maxAlternatives = 3;
+  _voiceRecognition.maxAlternatives = 6; // collect more alternatives for better fuzzy matching
 
   setVoiceUI('listening');
 
@@ -1891,20 +1891,21 @@ function startVoice() {
 
   _voiceRecognition.onresult = function(e) {
     var interim = '';
-    var final = '';
+    var finalResult = null;
     for (var i = e.resultIndex; i < e.results.length; i++) {
-      var t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) final += t;
-      else interim += t;
+      if (e.results[i].isFinal) finalResult = e.results[i];
+      else interim += e.results[i][0].transcript;
     }
-    var display = final || interim;
+    var display = finalResult ? finalResult[0].transcript : interim;
     var tr = document.getElementById('voice-transcript');
-    if (tr) {
-      tr.textContent = display;
-      tr.className = interim ? 'interim' : '';
-    }
-    if (final.trim()) {
-      parseVoiceEntry(final.trim());
+    if (tr) { tr.textContent = display; tr.className = interim ? 'interim' : ''; }
+    if (finalResult) {
+      // Collect ALL alternatives for smarter matching
+      var alternatives = [];
+      for (var j = 0; j < finalResult.length; j++) {
+        alternatives.push(finalResult[j].transcript.trim());
+      }
+      parseVoiceEntry(alternatives);
     }
   };
 
@@ -1944,120 +1945,167 @@ function setVoiceUI(state) {
   }
 }
 
-function parseVoiceEntry(text) {
-  var original = text;
-  var lower = text.toLowerCase();
-
-  // --- Determine type ---
-  var type = 'received'; // default always received
-  var givenKeywords = ['given', 'give', 'diya', 'dia', 'out', 'paid', 'bahar', 'wapas', 'de diya'];
-  var receivedKeywords = ['received', 'receive', 'liya', 'lia', 'aaya', 'mila', 'in', 'wapas liya', 'aai'];
-  givenKeywords.forEach(function(w) { if (lower.indexOf(w) !== -1) type = 'given'; });
-  receivedKeywords.forEach(function(w) { if (lower.indexOf(w) !== -1) type = 'received'; }); // received overrides
-
-  // --- Extract amount ---
-  // Support: "10000", "10,000", "10 thousand", "2 lakh", "50 hundred"
-  var amount = '';
-  var numericAmount = 0;
-
-  // Replace word-based numbers first
-  var textForNum = lower
-    .replace(/\bone\s*lakh\b/g, '100000')
-    .replace(/(\d+)\s*lakh/g, function(_,n){ return String(Number(n)*100000); })
-    .replace(/\bhalf\s*lakh\b/g, '50000')
-    .replace(/(\d+)\s*thousand/g, function(_,n){ return String(Number(n)*1000); })
-    .replace(/(\d+)\s*hundred/g, function(_,n){ return String(Number(n)*100); })
-    .replace(/\bone\s*thousand\b/g, '1000')
-    .replace(/\btwo\s*thousand\b/g, '2000')
-    .replace(/\bfive\s*thousand\b/g, '5000')
-    .replace(/\bten\s*thousand\b/g, '10000');
-
-  var numMatch = textForNum.match(/\b(\d[\d,]*(?:\.\d+)?)\b/);
-  if (numMatch) {
-    numericAmount = parseFloat(numMatch[1].replace(/,/g, ''));
-    amount = String(numericAmount);
+// ---- Fuzzy matching helpers ----
+function editDist(a, b) {
+  var m = a.length, n = b.length, i, j;
+  var d = [];
+  for (i = 0; i <= m; i++) { d[i] = [i]; }
+  for (j = 1; j <= n; j++) { d[0][j] = j; }
+  for (i = 1; i <= m; i++) {
+    for (j = 1; j <= n; j++) {
+      d[i][j] = a[i-1] === b[j-1] ? d[i-1][j-1] :
+        1 + Math.min(d[i-1][j], d[i][j-1], d[i-1][j-1]);
+    }
   }
-
-  // --- Extract name ---
-  // Remove the matched number from original text
-  var nameText = original;
-  if (numMatch) {
-    // Remove the numeric part from the original (case-insensitive)
-    nameText = nameText.replace(/\b\d[\d,]*(?:\.\d+)?\b/, '');
-    // Also remove word-based amount expressions
-    nameText = nameText.replace(/\bone\s*lakh\b/gi, '').replace(/\d+\s*lakh\b/gi, '')
-      .replace(/\d+\s*thousand\b/gi, '').replace(/\d+\s*hundred\b/gi, '')
-      .replace(/\bone\s*thousand\b/gi,'').replace(/\btwo\s*thousand\b/gi,'')
-      .replace(/\bfive\s*thousand\b/gi,'').replace(/\bten\s*thousand\b/gi,'');
-  }
-  // Remove type keywords
-  var allKeywords = givenKeywords.concat(receivedKeywords).concat(['rupees','rupee','rs','rupe']);
-  allKeywords.forEach(function(w) {
-    nameText = nameText.replace(new RegExp('\\b' + w + '\\b', 'gi'), '');
+  return d[m][n];
+}
+function strSim(a, b) {
+  if (!a || !b) return 0;
+  var maxLen = Math.max(a.length, b.length);
+  return maxLen ? 1 - editDist(a, b) / maxLen : 1;
+}
+// Score a spoken candidate against one existing client name
+function clientScore(spoken, clientName) {
+  var s = spoken.toLowerCase(), c = clientName.toLowerCase();
+  if (s === c) return 1;
+  // full string similarity
+  var full = strSim(s, c);
+  // prefix: spoken starts with client or vice versa
+  var prefixBonus = (s.indexOf(c) === 0 || c.indexOf(s) === 0) ? 0.15 : 0;
+  // word-level: best word pair match
+  var sWords = s.split(/\s+/), cWords = c.split(/\s+/);
+  var wordBest = 0;
+  sWords.forEach(function(sw) {
+    cWords.forEach(function(cw) {
+      var ws = strSim(sw, cw);
+      if (ws > wordBest) wordBest = ws;
+    });
   });
-  var name = nameText.trim().replace(/\s+/g, ' ').replace(/[,\.]+$/, '').trim();
+  return Math.min(1, Math.max(full, wordBest * 0.88) + prefixBonus);
+}
+// Find best matching existing client across all spoken alternatives
+function findBestClient(candidates) {
+  var best = null, bestScore = 0;
+  window.allCustomers.forEach(function(c) {
+    candidates.forEach(function(cand) {
+      var sc = clientScore(cand, c.name);
+      if (sc > bestScore) { bestScore = sc; best = c; }
+    });
+  });
+  return bestScore >= 0.55 ? { customer: best, score: bestScore } : null;
+}
+// Strip noise words Chrome adds for South Indian speech
+var VOICE_NOISE = [
+  'telugu','hindi','tamil','malayalam','kannada','marathi','urdu','punjabi',
+  'english','language','rupees','rupee','rs','rupe','sir','ji','bhai',
+  'anna','amma','garu','akka','bro','mr','mrs','miss'
+];
+function stripNoise(text) {
+  var words = text.trim().split(/\s+/);
+  // Only strip noise from multi-word strings; never strip the only word
+  if (words.length > 1) {
+    words = words.filter(function(w) { return VOICE_NOISE.indexOf(w.toLowerCase()) === -1; });
+  }
+  return words.join(' ').trim();
+}
+function normalizeAmounts(text) {
+  return text.toLowerCase()
+    .replace(/\bone\s*lakh\b/g,'100000').replace(/(\d+\.?\d*)\s*lakh/g,function(_,n){return String(Math.round(n*100000));})
+    .replace(/\bhalf\s*lakh\b/g,'50000')
+    .replace(/(\d+\.?\d*)\s*thousand/g,function(_,n){return String(Math.round(n*1000));})
+    .replace(/(\d+\.?\d*)\s*hundred/g,function(_,n){return String(Math.round(n*100));})
+    .replace(/\bten\s*thousand\b/g,'10000').replace(/\bfive\s*thousand\b/g,'5000')
+    .replace(/\btwo\s*thousand\b/g,'2000').replace(/\bone\s*thousand\b/g,'1000');
+}
 
-  // Capitalize first letter of each word
+function parseVoiceEntry(alternatives) {
+  // alternatives = array of strings from speech recognition
+  if (!Array.isArray(alternatives)) alternatives = [alternatives];
+  var primary = alternatives[0] || '';
+  var lower = primary.toLowerCase();
+
+  // --- Determine type from primary transcript ---
+  var type = 'received';
+  var givenKW  = ['given','give','diya','dia','out','paid','bahar','wapas','de diya','koduttaen','koduthen','kottu'];
+  var recvKW   = ['received','receive','liya','lia','aaya','mila','in','wapas liya','aai','vangatten','vangathen'];
+  givenKW.forEach(function(w){ if(lower.indexOf(w)!==-1) type='given'; });
+  recvKW.forEach(function(w){ if(lower.indexOf(w)!==-1) type='received'; });
+
+  // --- Extract amount (try all alternatives, pick first that has a number) ---
+  var amount = '';
+  var numMatch = null;
+  var altUsedForNum = primary;
+  for (var ai = 0; ai < alternatives.length; ai++) {
+    var norm = normalizeAmounts(alternatives[ai]);
+    var m = norm.match(/\b(\d[\d,]*(?:\.\d+)?)\b/);
+    if (m) { numMatch = m; altUsedForNum = alternatives[ai]; break; }
+  }
+  if (numMatch) amount = String(parseFloat(numMatch[1].replace(/,/g,'')));
+
+  // --- Build name candidates from ALL alternatives after stripping numbers + noise ---
+  var nameCandidates = alternatives.map(function(alt) {
+    var t = alt;
+    // remove numeric expressions
+    t = normalizeAmounts(t).replace(/\b\d[\d,]*(?:\.\d+)?\b/g,' ');
+    // remove type keywords
+    givenKW.concat(recvKW).concat(['rupees','rupee','rs','rupe','lakh','thousand','hundred']).forEach(function(w){
+      t = t.replace(new RegExp('(?:^|\\s)' + w + '(?:\\s|$)','gi'),' ');
+    });
+    t = stripNoise(t).replace(/\s+/g,' ').replace(/[,\.]+$/,'').trim();
+    return t;
+  }).filter(function(n){ return n.length > 0; });
+
+  // Remove duplicates
+  var seen = {};
+  nameCandidates = nameCandidates.filter(function(n){ if(seen[n]) return false; seen[n]=true; return true; });
+
+  var name = nameCandidates[0] || '';
+  // Capitalize
   name = name.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
 
-  if (!name && !amount) {
-    showToast('Could not understand — try again');
-    return;
-  }
+  if (!name && !amount) { showToast('Could not understand — try again'); return; }
 
-  // Helper: fill amount + type after customer is selected
-  function fillAmountType() {
+  // Helper: fill fields
+  function fillAmountType(displayName) {
     var amtInput = document.getElementById('amt-input');
     if (amtInput && amount) amtInput.value = amount;
     var typeInput = document.getElementById('type-input');
     if (typeInput) typeInput.value = type;
-    showToast('🎤 ' + (name || '?') + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
+    showToast('🎤 ' + displayName + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
     var noteInput = document.getElementById('note-input');
     if (noteInput) setTimeout(function(){ noteInput.focus(); }, 50);
   }
 
-  // --- Fill into entry row ---
   if (!name && amount) {
-    // Only amount heard — just fill amount + type
-    var amtInputOnly = document.getElementById('amt-input');
-    if (amtInputOnly) amtInputOnly.value = amount;
-    var typeInputOnly = document.getElementById('type-input');
-    if (typeInputOnly) typeInputOnly.value = type;
+    var amtOnly = document.getElementById('amt-input'); if(amtOnly) amtOnly.value = amount;
+    var typOnly = document.getElementById('type-input'); if(typOnly) typOnly.value = type;
     showToast('🎤 ₹' + Number(amount).toLocaleString('en-IN') + ' · ' + type);
     return;
   }
 
-  if (!name) { showToast('Could not understand — try again'); return; }
+  // --- Smart client matching: try all name candidates against all clients ---
+  var matchResult = findBestClient(nameCandidates);
 
-  // Check if any existing customer matches (case-insensitive, partial OK)
-  var nameLower = name.toLowerCase();
-  var exactMatch = window.allCustomers.find(function(c) {
-    return c.name.toLowerCase() === nameLower;
-  });
-  var partialMatch = !exactMatch && window.allCustomers.find(function(c) {
-    return c.name.toLowerCase().indexOf(nameLower) === 0 || nameLower.indexOf(c.name.toLowerCase()) === 0;
-  });
-  var matched = exactMatch || partialMatch;
-
-  if (matched) {
-    // Existing client found — select them directly, no dropdown needed
-    var custInput = document.getElementById('cust-input');
-    if (custInput) custInput.value = matched.name;
+  if (matchResult) {
+    // Good fuzzy match found
+    var matched = matchResult.customer;
+    var ci = document.getElementById('cust-input');
+    if (ci) ci.value = matched.name;
     _selectedCustomer = matched;
     closeDropdown();
-    fillAmountType();
+    fillAmountType(matched.name);
   } else {
-    // No match — auto-create client immediately, then fill
+    // No match — auto-create with best candidate name
     var newC = { id: uid(), name: name, phone: '', createdAt: Date.now() };
     db_add('customers', newC).then(function() {
       window.allCustomers.push(newC);
       rebuildBalanceMap();
-      var custInput2 = document.getElementById('cust-input');
-      if (custInput2) custInput2.value = newC.name;
+      var ci2 = document.getElementById('cust-input');
+      if (ci2) ci2.value = newC.name;
       _selectedCustomer = newC;
       closeDropdown();
-      fillAmountType();
-      showToast('🎤 New client "' + name + '" created · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
+      fillAmountType(newC.name);
+      showToast('🎤 New: "' + name + '" · ₹' + (amount?Number(amount).toLocaleString('en-IN'):'?') + ' · ' + type);
     });
   }
 
