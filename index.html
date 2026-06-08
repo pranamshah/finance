@@ -2095,7 +2095,13 @@ function findBestClient(candidates) {
 var VOICE_NOISE = [
   'telugu','hindi','tamil','malayalam','kannada','marathi','urdu','punjabi',
   'english','language','rupees','rupee','rs','rupe','sir','ji','bhai',
-  'anna','amma','garu','akka','bro','mr','mrs','miss'
+  'anna','amma','garu','akka','bro','mr','mrs','miss',
+  // pronouns and sentence filler words
+  'i','me','my','he','she','they','we','our','his','her','their',
+  'the','a','an','ye','yeh','woh','unhe','ne','ko','ka','ki','ke',
+  // common verbs that survive keyword removal
+  'gave','give','given','got','get','paid','pay','sent','send','took','take',
+  'nee','avan','aval','avanga','naan','naam'
 ];
 function stripNoise(text) {
   var words = text.trim().split(/\s+/);
@@ -2123,8 +2129,8 @@ function parseVoiceEntry(alternatives) {
 
   // --- Determine type from primary transcript ---
   var type = 'received';
-  var givenKW  = ['given','give','diya','dia','out','paid','bahar','wapas','de diya','koduttaen','koduthen','kottu'];
-  var recvKW   = ['received','receive','liya','lia','aaya','mila','in','wapas liya','aai','vangatten','vangathen'];
+  var givenKW  = ['given','give','gave','taken','take','diya','dia','out','paid','pay','sent','send','bahar','wapas','de diya','de','koduttaen','koduthen','kottu','kuduttaen','kuduthen'];
+  var recvKW   = ['received','receive','got','get','liya','lia','aaya','mila','in','wapas liya','aai','vangatten','vangathen','vaangi'];
   givenKW.forEach(function(w){ if(lower.indexOf(w)!==-1) type='given'; });
   recvKW.forEach(function(w){ if(lower.indexOf(w)!==-1) type='received'; });
 
