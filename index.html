@@ -299,6 +299,18 @@ tr.active-row{height:62px}
 #calc-expr-m{font-size:13px;color:#636366;min-height:20px;word-break:break-all;text-align:right;font-family:monospace}
 #calc-display-m{font-size:42px;font-weight:300;color:#fff;font-family:'Noto Sans',sans-serif;letter-spacing:-0.03em;word-break:break-all;text-align:right;line-height:1.1}
 #calc-buttons-m{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#3a3a3c}
+
+/* ====== VOICE ENTRY ====== */
+#voice-bar{display:flex;align-items:center;gap:14px;padding:10px 16px;background:linear-gradient(135deg,#f0faf5,#e6f7ee);border-bottom:1px solid #d0eddb;border-top:1px solid #d0eddb}
+#voice-btn{display:flex;align-items:center;gap:10px;background:var(--green);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 3px 10px rgba(26,122,74,0.28);white-space:nowrap}
+#voice-btn:hover{background:var(--green-dark);transform:translateY(-1px)}
+#voice-btn.listening{background:#e53e3e;animation:micpulse 1.2s ease-in-out infinite;box-shadow:0 3px 20px rgba(229,62,62,0.4)}
+@keyframes micpulse{0%,100%{box-shadow:0 3px 20px rgba(229,62,62,0.4),0 0 0 0 rgba(229,62,62,0.3)}50%{box-shadow:0 3px 20px rgba(229,62,62,0.4),0 0 0 10px rgba(229,62,62,0)}}
+#voice-btn .mic-icon{font-size:18px;line-height:1}
+#voice-transcript{flex:1;font-size:14px;color:var(--muted);font-style:italic;min-height:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#voice-transcript.interim{color:var(--text);font-weight:500;font-style:normal}
+#voice-status{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
+#voice-hint{font-size:12px;color:var(--muted);padding:4px 16px 8px;opacity:0.7}
 </style>
 </head>
 <body>
@@ -346,6 +358,16 @@ tr.active-row{height:62px}
     <div id="entry-calc-wrap">
       <div id="entry-main">
         <div id="entry-section">
+          <!-- Voice entry bar -->
+          <div id="voice-bar">
+            <button id="voice-btn" onclick="toggleVoice()">
+              <span class="mic-icon">🎤</span>
+              <span id="voice-btn-label">Speak Entry</span>
+            </button>
+            <span id="voice-transcript">Say: "murali 5000" or "ram 2000 given"</span>
+            <span id="voice-status"></span>
+          </div>
+          <div id="voice-hint">Tip: say name + amount. Add "given" if it's a payment out. Default is Received.</div>
           <div class="table-wrap">
             <table class="entry-table" id="entry-table">
               <thead>
@@ -1838,6 +1860,193 @@ function fmtPDF(n) {
   n = Number(n);
   if (isNaN(n)) return 'Rs.0';
   return 'Rs.' + n.toLocaleString('en-IN');
+}
+
+// ==================== VOICE ENTRY ====================
+var _voiceRecognition = null;
+var _voiceListening = false;
+
+function toggleVoice() {
+  if (_voiceListening) { stopVoice(); return; }
+  startVoice();
+}
+
+function startVoice() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast('Voice not supported — use Chrome browser');
+    return;
+  }
+  _voiceRecognition = new SR();
+  _voiceRecognition.lang = 'en-IN';
+  _voiceRecognition.continuous = false;
+  _voiceRecognition.interimResults = true;
+  _voiceRecognition.maxAlternatives = 3;
+
+  setVoiceUI('listening');
+
+  _voiceRecognition.onstart = function() {
+    _voiceListening = true;
+  };
+
+  _voiceRecognition.onresult = function(e) {
+    var interim = '';
+    var final = '';
+    for (var i = e.resultIndex; i < e.results.length; i++) {
+      var t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final += t;
+      else interim += t;
+    }
+    var display = final || interim;
+    var tr = document.getElementById('voice-transcript');
+    if (tr) {
+      tr.textContent = display;
+      tr.className = interim ? 'interim' : '';
+    }
+    if (final.trim()) {
+      parseVoiceEntry(final.trim());
+    }
+  };
+
+  _voiceRecognition.onerror = function(e) {
+    stopVoice();
+    if (e.error === 'no-speech') showToast('No speech heard — try again');
+    else if (e.error === 'not-allowed') showToast('Microphone blocked — allow mic in browser');
+    else showToast('Voice error: ' + e.error);
+  };
+
+  _voiceRecognition.onend = function() {
+    stopVoice();
+  };
+
+  _voiceRecognition.start();
+}
+
+function stopVoice() {
+  _voiceListening = false;
+  if (_voiceRecognition) { try { _voiceRecognition.stop(); } catch(e){} _voiceRecognition = null; }
+  setVoiceUI('idle');
+}
+
+function setVoiceUI(state) {
+  var btn = document.getElementById('voice-btn');
+  var label = document.getElementById('voice-btn-label');
+  var status = document.getElementById('voice-status');
+  if (!btn) return;
+  if (state === 'listening') {
+    btn.classList.add('listening');
+    if (label) label.textContent = 'Listening...';
+    if (status) status.textContent = '🔴 Recording';
+  } else {
+    btn.classList.remove('listening');
+    if (label) label.textContent = 'Speak Entry';
+    if (status) status.textContent = '';
+  }
+}
+
+function parseVoiceEntry(text) {
+  var original = text;
+  var lower = text.toLowerCase();
+
+  // --- Determine type ---
+  var type = 'received'; // default always received
+  var givenKeywords = ['given', 'give', 'diya', 'dia', 'out', 'paid', 'bahar', 'wapas', 'de diya'];
+  var receivedKeywords = ['received', 'receive', 'liya', 'lia', 'aaya', 'mila', 'in', 'wapas liya', 'aai'];
+  givenKeywords.forEach(function(w) { if (lower.indexOf(w) !== -1) type = 'given'; });
+  receivedKeywords.forEach(function(w) { if (lower.indexOf(w) !== -1) type = 'received'; }); // received overrides
+
+  // --- Extract amount ---
+  // Support: "10000", "10,000", "10 thousand", "2 lakh", "50 hundred"
+  var amount = '';
+  var numericAmount = 0;
+
+  // Replace word-based numbers first
+  var textForNum = lower
+    .replace(/\bone\s*lakh\b/g, '100000')
+    .replace(/(\d+)\s*lakh/g, function(_,n){ return String(Number(n)*100000); })
+    .replace(/\bhalf\s*lakh\b/g, '50000')
+    .replace(/(\d+)\s*thousand/g, function(_,n){ return String(Number(n)*1000); })
+    .replace(/(\d+)\s*hundred/g, function(_,n){ return String(Number(n)*100); })
+    .replace(/\bone\s*thousand\b/g, '1000')
+    .replace(/\btwo\s*thousand\b/g, '2000')
+    .replace(/\bfive\s*thousand\b/g, '5000')
+    .replace(/\bten\s*thousand\b/g, '10000');
+
+  var numMatch = textForNum.match(/\b(\d[\d,]*(?:\.\d+)?)\b/);
+  if (numMatch) {
+    numericAmount = parseFloat(numMatch[1].replace(/,/g, ''));
+    amount = String(numericAmount);
+  }
+
+  // --- Extract name ---
+  // Remove the matched number from original text
+  var nameText = original;
+  if (numMatch) {
+    // Remove the numeric part from the original (case-insensitive)
+    nameText = nameText.replace(/\b\d[\d,]*(?:\.\d+)?\b/, '');
+    // Also remove word-based amount expressions
+    nameText = nameText.replace(/\bone\s*lakh\b/gi, '').replace(/\d+\s*lakh\b/gi, '')
+      .replace(/\d+\s*thousand\b/gi, '').replace(/\d+\s*hundred\b/gi, '')
+      .replace(/\bone\s*thousand\b/gi,'').replace(/\btwo\s*thousand\b/gi,'')
+      .replace(/\bfive\s*thousand\b/gi,'').replace(/\bten\s*thousand\b/gi,'');
+  }
+  // Remove type keywords
+  var allKeywords = givenKeywords.concat(receivedKeywords).concat(['rupees','rupee','rs','rupe']);
+  allKeywords.forEach(function(w) {
+    nameText = nameText.replace(new RegExp('\\b' + w + '\\b', 'gi'), '');
+  });
+  var name = nameText.trim().replace(/\s+/g, ' ').replace(/[,\.]+$/, '').trim();
+
+  // Capitalize first letter of each word
+  name = name.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+
+  if (!name && !amount) {
+    showToast('Could not understand — try again');
+    return;
+  }
+
+  // --- Fill into entry row ---
+  // 1. Fill customer name & trigger search
+  var custInput = document.getElementById('cust-input');
+  if (custInput && name) {
+    custInput.value = name;
+    onCustInput(); // triggers dropdown
+    // After short delay, auto-select first real match
+    setTimeout(function() {
+      var firstReal = activeDropdownItems ? activeDropdownItems.findIndex(function(i) {
+        return !i.classList.contains('add-new');
+      }) : -1;
+      if (firstReal >= 0) {
+        entryDropdownIndex = firstReal;
+        updateDropdownFocus();
+        activeDropdownItems[firstReal].dispatchEvent(new MouseEvent('mousedown'));
+      }
+      // 2. Fill amount
+      setTimeout(function() {
+        var amtInput = document.getElementById('amt-input');
+        if (amtInput && amount) amtInput.value = amount;
+        // 3. Fill type
+        var typeInput = document.getElementById('type-input');
+        if (typeInput) typeInput.value = type;
+        // 4. Focus note for any last additions, or just show confirmation
+        showToast('🎤 ' + (name||'?') + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
+        var noteInput = document.getElementById('note-input');
+        if (noteInput) noteInput.focus();
+      }, 120);
+    }, 80);
+  } else if (amount) {
+    var amtInput2 = document.getElementById('amt-input');
+    if (amtInput2) amtInput2.value = amount;
+    var typeInput2 = document.getElementById('type-input');
+    if (typeInput2) typeInput2.value = type;
+    showToast('🎤 ₹' + Number(amount).toLocaleString('en-IN') + ' · ' + type);
+  }
+
+  // Reset transcript label after 3s
+  setTimeout(function() {
+    var tr = document.getElementById('voice-transcript');
+    if (tr && !_voiceListening) tr.textContent = 'Say: "murali 5000" or "ram 2000 given"';
+  }, 3000);
 }
 
 // ==================== CALCULATOR ====================
