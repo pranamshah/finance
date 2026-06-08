@@ -504,7 +504,7 @@ tr.active-row{height:62px}
         <button onclick="loadMonthRecords()">View</button>
       </div>
       <div id="month-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
-      <div class="table-scroll"><table class="records-table"><thead><tr><th>Date</th><th>Given</th><th>Received</th><th>Net</th></tr></thead><tbody id="month-tbody"></tbody></table></div>
+      <div class="table-scroll"><table class="records-table"><thead><tr><th>Date</th><th>Customer</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead><tbody id="month-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadMonthPDF()">Download Month PDF</button>
     </div>
 
@@ -514,7 +514,7 @@ tr.active-row{height:62px}
         <button onclick="loadYearRecords()">View</button>
       </div>
       <div id="year-summary-cards" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px"></div>
-      <div class="table-scroll"><table class="records-table"><thead><tr><th>Month</th><th>Given</th><th>Received</th><th>Net</th></tr></thead><tbody id="year-tbody"></tbody></table></div>
+      <div class="table-scroll"><table class="records-table" id="year-table"><thead><tr><th></th><th>Month</th><th>Given</th><th>Received</th><th>Net</th></tr></thead><tbody id="year-tbody"></tbody></table></div>
       <button class="btn-green download-btn" onclick="downloadYearPDF()">Download Year PDF</button>
     </div>
 
@@ -1455,74 +1455,145 @@ function deleteDayTxn(id) {
   });
 }
 
-var _monthData = { rows:[], recv:0, given:0, net:0, label:'' };
+// Month view: show ALL individual transactions sorted by date, with a date separator row per day
+var _monthData = { txns:[], recv:0, given:0, net:0, label:'' };
 function loadMonthRecords() {
   var m = document.getElementById('month-sel').value;
   var y = document.getElementById('year-sel-month').value;
   var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var daysInMonth = new Date(+y, +m, 0).getDate();
   var startDate = y + '-' + m + '-01';
-  var endDate = y + '-' + m + '-' + pad2(daysInMonth);
+  var endDate   = y + '-' + m + '-' + pad2(daysInMonth);
   db_getByDateRange('transactions', startDate, endDate).then(function(txns) {
-    var dayMap = {};
-    txns.forEach(function(t) {
-      if (!dayMap[t.date]) dayMap[t.date] = { given:0, received:0 };
-      if (t.type==='given') dayMap[t.date].given += Number(t.amount);
-      else dayMap[t.date].received += Number(t.amount);
-    });
+    txns.sort(function(a,b){ return a.date > b.date ? 1 : a.date < b.date ? -1 : a.createdAt - b.createdAt; });
     var totalRecv = 0, totalGiven = 0;
-    var rows = [];
-    for (var d = 1; d <= daysInMonth; d++) {
-      var dateStr = y + '-' + m + '-' + pad2(d);
-      var data = dayMap[dateStr] || { given:0, received:0 };
-      totalGiven += data.given;
-      totalRecv += data.received;
-      rows.push({ date: dateStr, given: data.given, received: data.received, net: data.received - data.given });
-    }
-    _monthData = { rows: rows, recv: totalRecv, given: totalGiven, net: totalRecv-totalGiven, label: monthNames[+m-1] + ' ' + y };
+    txns.forEach(function(t){ if(t.type==='given') totalGiven+=Number(t.amount); else totalRecv+=Number(t.amount); });
+    _monthData = { txns: txns, recv: totalRecv, given: totalGiven, net: totalRecv-totalGiven, label: monthNames[+m-1]+' '+y };
     document.getElementById('month-summary-cards').innerHTML = buildSummaryCards3(totalRecv, totalGiven, totalRecv-totalGiven);
     var tbody = document.getElementById('month-tbody');
     tbody.innerHTML = '';
-    rows.forEach(function(r) {
-      if (r.given === 0 && r.received === 0) return;
+    if (!txns.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No entries for this month</td></tr>'; return; }
+    var lastDate = '';
+    var seq = 0;
+    txns.forEach(function(t) {
+      // Date separator row
+      if (t.date !== lastDate) {
+        lastDate = t.date;
+        seq = 0;
+        var sep = document.createElement('tr');
+        sep.className = 'date-sep-row';
+        sep.innerHTML = '<td colspan="5" style="background:var(--green-light);padding:6px 12px;font-size:12px;font-weight:700;color:var(--green);letter-spacing:0.04em;text-transform:uppercase">' + formatDate(t.date) + '</td>';
+        tbody.appendChild(sep);
+      }
+      seq++;
       var tr = document.createElement('tr');
-      tr.innerHTML = '<td>' + r.date + '</td><td>' + fmtINR(r.given) + '</td><td>' + fmtINR(r.received) + '</td><td>' + fmtINR(r.net) + '</td>';
+      tr.innerHTML = '<td style="color:var(--muted);font-size:12px;font-weight:700;padding:9px 10px;width:36px">' + seq + '</td>' +
+        '<td style="padding:9px 10px;font-weight:600">' + esc(t.customerName) + '</td>' +
+        '<td style="padding:9px 10px"><span class="type-badge '+t.type+'">'+t.type+'</span></td>' +
+        '<td style="padding:9px 10px;font-weight:700">' + fmtINR(t.amount) + '</td>' +
+        '<td style="padding:9px 10px;color:var(--muted);font-size:13px">' + esc(t.note||'') + '</td>';
       tbody.appendChild(tr);
     });
+    // Totals row
+    var totRow = document.createElement('tr');
+    totRow.style.cssText = 'background:var(--green-light);font-weight:700';
+    totRow.innerHTML = '<td colspan="2" style="padding:10px 12px;font-size:13px">TOTAL</td>' +
+      '<td style="padding:10px 12px"></td>' +
+      '<td colspan="2" style="padding:10px 12px;font-size:14px">Rcvd: '+fmtINR(totalRecv)+'&nbsp;&nbsp;Given: '+fmtINR(totalGiven)+'</td>';
+    tbody.appendChild(totRow);
   });
 }
 
-var _yearData = { rows:[], recv:0, given:0, net:0, label:'' };
+// Year view: monthly totals with expand arrow → shows all transactions for that month
+var _yearData = { rows:[], allTxns:{}, recv:0, given:0, net:0, label:'' };
 function loadYearRecords() {
   var y = document.getElementById('year-sel-year').value;
   var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   db_getByDateRange('transactions', y+'-01-01', y+'-12-31').then(function(txns) {
-    var monthMap = {};
+    // Group by month
+    var monthMap = {}, txnByMonth = {};
     txns.forEach(function(t) {
       var mon = t.date.slice(0,7);
-      if (!monthMap[mon]) monthMap[mon] = { given:0, received:0 };
-      if (t.type==='given') monthMap[mon].given += Number(t.amount);
-      else monthMap[mon].received += Number(t.amount);
+      if (!monthMap[mon]) { monthMap[mon]={given:0,received:0}; txnByMonth[mon]=[]; }
+      if (t.type==='given') monthMap[mon].given+=Number(t.amount); else monthMap[mon].received+=Number(t.amount);
+      txnByMonth[mon].push(t);
     });
-    var totalRecv = 0, totalGiven = 0;
-    var rows = [];
-    for (var mo = 1; mo <= 12; mo++) {
-      var key = y + '-' + pad2(mo);
-      var data = monthMap[key] || { given:0, received:0 };
-      totalGiven += data.given;
-      totalRecv += data.received;
-      rows.push({ month: monthNames[mo-1], given: data.given, received: data.received, net: data.received - data.given });
+    var totalRecv=0, totalGiven=0, rows=[];
+    for (var mo=1; mo<=12; mo++) {
+      var key = y+'-'+pad2(mo);
+      var data = monthMap[key]||{given:0,received:0};
+      totalGiven+=data.given; totalRecv+=data.received;
+      rows.push({ key:key, month:monthNames[mo-1], given:data.given, received:data.received, net:data.received-data.given, hasTxns: !!(txnByMonth[key]&&txnByMonth[key].length) });
     }
-    _yearData = { rows: rows, recv: totalRecv, given: totalGiven, net: totalRecv-totalGiven, label: y };
+    _yearData = { rows:rows, allTxns:txnByMonth, recv:totalRecv, given:totalGiven, net:totalRecv-totalGiven, label:y };
     document.getElementById('year-summary-cards').innerHTML = buildSummaryCards3(totalRecv, totalGiven, totalRecv-totalGiven);
-    var tbody = document.getElementById('year-tbody');
-    tbody.innerHTML = '';
-    rows.forEach(function(r) {
-      var tr = document.createElement('tr');
-      tr.innerHTML = '<td>' + r.month + '</td><td>' + fmtINR(r.given) + '</td><td>' + fmtINR(r.received) + '</td><td>' + fmtINR(r.net) + '</td>';
-      tbody.appendChild(tr);
-    });
+    renderYearTable();
   });
+}
+
+function renderYearTable() {
+  var tbody = document.getElementById('year-tbody');
+  tbody.innerHTML = '';
+  _yearData.rows.forEach(function(r) {
+    // Month summary row
+    var tr = document.createElement('tr');
+    tr.className = 'year-month-row' + (r.hasTxns ? ' has-txns' : '');
+    tr.dataset.key = r.key;
+    var arrow = r.hasTxns ? '<span class="expand-arrow" style="display:inline-block;transition:transform 0.2s;font-size:13px;margin-right:4px">▶</span>' : '<span style="display:inline-block;width:18px"></span>';
+    tr.innerHTML = '<td style="padding:11px 10px;width:30px">' + arrow + '</td>' +
+      '<td style="padding:11px 10px;font-weight:700;font-size:15px">' + r.month + '</td>' +
+      '<td style="padding:11px 10px;font-weight:600">' + (r.given ? fmtINR(r.given) : '<span style="color:#ccc">—</span>') + '</td>' +
+      '<td style="padding:11px 10px;font-weight:600">' + (r.received ? fmtINR(r.received) : '<span style="color:#ccc">—</span>') + '</td>' +
+      '<td style="padding:11px 10px;font-weight:600">' + fmtINR(r.net) + '</td>';
+    if (r.hasTxns) {
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', function() { toggleYearMonth(r.key, tr); });
+    }
+    tbody.appendChild(tr);
+    // Hidden detail rows container
+    if (r.hasTxns) {
+      var detailTr = document.createElement('tr');
+      detailTr.className = 'year-detail-rows';
+      detailTr.id = 'yr-detail-' + r.key;
+      detailTr.style.display = 'none';
+      var td = document.createElement('td');
+      td.colSpan = 5;
+      td.style.cssText = 'padding:0;background:#fafaf8';
+      // Build inner table
+      var inner = '<table style="width:100%;border-collapse:collapse;font-size:13px">';
+      var txns = (_yearData.allTxns[r.key]||[]).slice().sort(function(a,b){ return a.date>b.date?1:a.date<b.date?-1:a.createdAt-b.createdAt; });
+      var lastDate='', seq=0;
+      txns.forEach(function(t) {
+        if(t.date!==lastDate){ lastDate=t.date; seq=0; inner+='<tr style="background:var(--green-light)"><td colspan="5" style="padding:5px 14px;font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.04em">'+formatDate(t.date)+'</td></tr>'; }
+        seq++;
+        inner+='<tr style="border-bottom:1px solid #f0ede7">' +
+          '<td style="padding:8px 14px;color:var(--muted);font-size:12px;width:32px">'+seq+'</td>' +
+          '<td style="padding:8px 10px;font-weight:600">'+esc(t.customerName)+'</td>' +
+          '<td style="padding:8px 10px"><span class="type-badge '+t.type+'">'+t.type+'</span></td>' +
+          '<td style="padding:8px 10px;font-weight:700">'+fmtINR(t.amount)+'</td>' +
+          '<td style="padding:8px 10px;color:var(--muted)">'+esc(t.note||'')+'</td></tr>';
+      });
+      inner += '</table>';
+      td.innerHTML = inner;
+      detailTr.appendChild(td);
+      tbody.appendChild(detailTr);
+    }
+  });
+}
+
+function toggleYearMonth(key, headerTr) {
+  var detail = document.getElementById('yr-detail-' + key);
+  if (!detail) return;
+  var arrow = headerTr.querySelector('.expand-arrow');
+  if (detail.style.display === 'none') {
+    detail.style.display = '';
+    if (arrow) arrow.style.transform = 'rotate(90deg)';
+    headerTr.style.background = 'var(--green-light)';
+  } else {
+    detail.style.display = 'none';
+    if (arrow) arrow.style.transform = 'rotate(0deg)';
+    headerTr.style.background = '';
+  }
 }
 
 var _rangeData = { rows:[], recv:0, given:0, net:0, from:'', to:'' };
@@ -1779,24 +1850,31 @@ function downloadDayPDF() {
 
 function downloadMonthPDF() {
   var d = _monthData;
-  if (!d.rows.length) { showToast('No data to export'); return; }
+  if (!d.txns || !d.txns.length) { showToast('No data to export'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+  var sorted = d.txns.slice().sort(function(a,b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  var body = [];
+  var lastDate = null;
   var totalG = 0, totalR = 0;
-  var body = d.rows.filter(function(r) { return r.given||r.received; }).map(function(r) {
-    totalG += r.given; totalR += r.received;
-    return [r.date, fmtPDF(r.given), fmtPDF(r.received), fmtPDF(r.received - r.given)];
+  sorted.forEach(function(t, i) {
+    if (t.date !== lastDate) {
+      body.push([{ content: t.date, colSpan: 5, styles: { fillColor: [243,242,238], fontStyle: 'bold', fontSize: 9 } }]);
+      lastDate = t.date;
+    }
+    if (t.type === 'received') totalR += Number(t.amount); else totalG += Number(t.amount);
+    body.push([i+1, t.customerName, t.type, fmtPDF(t.amount), t.note||'']);
   });
-  body.push([{ content: 'Total Received: ' + fmtPDF(totalR), colSpan: 4, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
-  body.push([{ content: 'Total Given: '    + fmtPDF(totalG), colSpan: 4, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Received: ' + fmtPDF(totalR), colSpan: 5, styles: { fillColor: [232,245,238], fontStyle: 'bold' } }]);
+  body.push([{ content: 'Total Given: '    + fmtPDF(totalG), colSpan: 5, styles: { fillColor: [247,246,242], fontStyle: 'bold' } }]);
   var opts = basePdfOpts(doc, d.label);
-  doc.autoTable(Object.assign({ head: [['Date','Given','Received','Net']], body: body }, opts));
+  doc.autoTable(Object.assign({ head: [['#','Customer','Type','Amount','Note']], body: body }, opts));
   doc.save('finance-month-' + d.label.replace(' ', '-') + '.pdf');
 }
 
 function downloadYearPDF() {
   var d = _yearData;
-  if (!d.rows.length) { showToast('No data to export'); return; }
+  if (!d.rows || !d.rows.length) { showToast('No data to export'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
   var totalG = 0, totalR = 0;
