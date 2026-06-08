@@ -326,10 +326,10 @@ tr.active-row{height:62px}
 .client-schedule-tag:hover{background:rgba(13,33,55,0.14)}
 
 /* ===== ENTRY TYPE TOGGLE ===== */
-.type-toggle{display:flex;background:var(--bg);border-radius:8px;padding:3px;gap:2px}
-.type-tog-btn{padding:5px 10px;border:none;border-radius:6px;font-family:'Inter','Noto Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;background:transparent;color:var(--muted);white-space:nowrap}
-.type-tog-btn.recv-active{background:var(--income);color:#fff;box-shadow:0 2px 6px rgba(11,110,63,0.3)}
-.type-tog-btn.given-active{background:var(--expense);color:#fff;box-shadow:0 2px 6px rgba(181,36,25,0.3)}
+.type-toggle{display:flex;align-items:center;justify-content:center}
+.type-tog-pill{display:flex;align-items:center;gap:4px;padding:5px 12px;border:none;border-radius:20px;font-family:'Inter','Noto Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.18s;white-space:nowrap;min-width:80px;justify-content:center}
+.type-tog-pill.recv-active{background:var(--income);color:#fff;box-shadow:0 2px 6px rgba(11,110,63,0.3)}
+.type-tog-pill.given-active{background:var(--expense);color:#fff;box-shadow:0 2px 6px rgba(181,36,25,0.3)}
 
 /* ===== ENTRY SECTION HEADERS ===== */
 .entry-sec-hdr td{padding:6px 12px!important;border-bottom:none!important;background:transparent!important}
@@ -874,8 +874,7 @@ function buildActiveRow(num) {
       '<input class="cell-input amount-input" id="amt-input" placeholder="0" inputmode="decimal" autocomplete="off">' +
     '</div></td>' +
     '<td style="padding:5px 8px"><div class="type-toggle">' +
-      '<button class="type-tog-btn recv-active" id="type-btn-recv" onclick="setEntryType(\'received\')">● Received</button>' +
-      '<button class="type-tog-btn" id="type-btn-given" onclick="setEntryType(\'given\')">○ Given</button>' +
+      '<button class="type-tog-pill recv-active" id="type-tog-pill" onclick="toggleEntryType()">▲ Received</button>' +
     '</div><input type="hidden" id="type-input" value="received"></td>' +
     '<td><input class="cell-input" id="note-input" placeholder="note..." style="font-size:14px" autocomplete="off"></td>' +
     '<td></td>';
@@ -1739,10 +1738,16 @@ function loadRangeRecords() {
 function setEntryType(t) {
   var hi = document.getElementById('type-input');
   if (hi) hi.value = t;
-  var rb = document.getElementById('type-btn-recv');
-  var gb = document.getElementById('type-btn-given');
-  if (rb) rb.className = 'type-tog-btn' + (t === 'received' ? ' recv-active' : '');
-  if (gb) gb.className = 'type-tog-btn' + (t === 'given' ? ' given-active' : '');
+  var pill = document.getElementById('type-tog-pill');
+  if (pill) {
+    pill.className = 'type-tog-pill ' + (t === 'received' ? 'recv-active' : 'given-active');
+    pill.textContent = t === 'received' ? '▲ Received' : '▼ Given';
+  }
+}
+function toggleEntryType() {
+  var hi = document.getElementById('type-input');
+  var cur = hi ? hi.value : 'received';
+  setEntryType(cur === 'received' ? 'given' : 'received');
 }
 
 // ==================== CLIENT SCHEDULE ====================
