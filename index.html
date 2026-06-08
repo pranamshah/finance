@@ -10,507 +10,450 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
-<script id="tailwind-config">
+<script id="tw">
 tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "surface-container-low":     "#f0f5ee",
-        "tertiary-container":        "#a94e56",
-        "error-container":           "#ffdad6",
-        "primary-container":         "#1a7a4a",
-        "surface-container":         "#ebefe8",
-        "on-secondary":              "#ffffff",
-        "primary-fixed-dim":         "#80d9a0",
-        "error":                     "#ba1a1a",
-        "on-primary-fixed-variant":  "#00522e",
-        "on-surface-variant":        "#3f4941",
-        "surface-bright":            "#f6fbf4",
-        "on-primary":                "#ffffff",
-        "surface-container-highest": "#dfe4dd",
-        "inverse-surface":           "#2d322d",
-        "surface-container-high":    "#e5e9e3",
-        "on-tertiary-fixed":         "#40000d",
-        "on-primary-container":      "#abffc6",
-        "surface-tint":              "#006d3f",
-        "on-background":             "#181d19",
-        "on-error-container":        "#93000a",
-        "primary":                   "#006036",
-        "on-tertiary-container":     "#ffe7e7",
-        "on-secondary-fixed":        "#410000",
-        "outline-variant":           "#bec9be",
-        "secondary-fixed-dim":       "#ffb4a9",
-        "background":                "#f6fbf4",
-        "secondary-container":       "#fc6451",
-        "inverse-primary":           "#80d9a0",
-        "surface":                   "#f6fbf4",
-        "inverse-on-surface":        "#eef2eb",
-        "tertiary-fixed":            "#ffdada",
-        "on-secondary-container":    "#650001",
-        "surface-dim":               "#d7dbd5",
-        "on-error":                  "#ffffff",
-        "secondary-fixed":           "#ffdad5",
-        "outline":                   "#6f7a70",
-        "surface-variant":           "#dfe4dd",
-        "secondary":                 "#b02d21",
-        "on-tertiary":               "#ffffff",
-        "primary-fixed":             "#9bf6ba",
-        "on-secondary-fixed-variant":"#8e130c",
-        "on-tertiary-fixed-variant": "#7c2b34",
-        "surface-container-lowest":  "#ffffff",
-        "on-surface":                "#181d19",
-        "tertiary":                  "#8b373f",
-        "tertiary-fixed-dim":        "#ffb3b6",
-        "on-primary-fixed":          "#00210f"
-      },
-      borderRadius: {
-        DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"
-      },
-      spacing: {
-        "touch-target-min": "52px",
-        "container-max":    "800px",
-        xl: "32px", xs: "4px", gutter: "16px",
-        lg: "24px",  sm: "8px",  md: "16px",  unit: "4px"
-      },
-      fontFamily: {
-        "display-lg":  ["Noto Sans"],
-        "body-md":     ["Noto Sans"],
-        "body-lg":     ["Noto Sans"],
-        "label-md":    ["Noto Sans"],
-        "label-sm":    ["Noto Sans"],
-        "headline-sm": ["Noto Sans"],
-        "headline-md": ["Noto Sans"]
-      },
-      fontSize: {
-        "display-lg":  ["32px", {lineHeight:"1.2", letterSpacing:"-0.02em", fontWeight:"700"}],
-        "body-md":     ["16px", {lineHeight:"1.6", fontWeight:"400"}],
-        "body-lg":     ["18px", {lineHeight:"1.6", fontWeight:"400"}],
-        "label-md":    ["14px", {lineHeight:"1.4", letterSpacing:"0.01em", fontWeight:"500"}],
-        "label-sm":    ["12px", {lineHeight:"1.4", fontWeight:"500"}],
-        "headline-sm": ["20px", {lineHeight:"1.4", fontWeight:"600"}],
-        "headline-md": ["24px", {lineHeight:"1.3", fontWeight:"600"}]
-      }
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "surface":"#f6fbf4","background":"#f6fbf4",
+      "secondary-fixed":"#d3e4ff","outline":"#6f7a70",
+      "on-primary-fixed":"#00210f","outline-variant":"#bec9be",
+      "on-error":"#ffffff","on-secondary-fixed-variant":"#004881",
+      "inverse-primary":"#80d9a0","on-primary-fixed-variant":"#00522e",
+      "surface-container-high":"#e5e9e3","secondary-container":"#7eb6fd",
+      "on-tertiary-container":"#ffe7e7","on-error-container":"#93000a",
+      "on-tertiary-fixed-variant":"#7c2b34","surface-container-lowest":"#ffffff",
+      "on-tertiary":"#ffffff","surface-bright":"#f6fbf4",
+      "surface-container-low":"#f0f5ee","surface-container-highest":"#dfe4dd",
+      "secondary-fixed-dim":"#a2c9ff","on-primary":"#ffffff",
+      "inverse-on-surface":"#eef2eb","on-secondary-fixed":"#001c38",
+      "on-primary-container":"#abffc6","surface-container":"#ebefe8",
+      "on-tertiary-fixed":"#40000d","on-secondary-container":"#00477e",
+      "on-background":"#181d19","surface-variant":"#dfe4dd",
+      "primary-fixed":"#9bf6ba","on-secondary":"#ffffff",
+      "surface-dim":"#d7dbd5","tertiary-container":"#a94e56",
+      "tertiary":"#8b373f","primary-container":"#1a7a4a",
+      "primary":"#006036","inverse-surface":"#2d322d",
+      "error":"#ba1a1a","tertiary-fixed-dim":"#ffb3b6",
+      "primary-fixed-dim":"#80d9a0","secondary":"#1c60a1",
+      "on-surface-variant":"#3f4941","on-surface":"#181d19",
+      "tertiary-fixed":"#ffdada","surface-tint":"#006d3f",
+      "error-container":"#ffdad6"
+    },
+    borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},
+    spacing:{
+      xs:"4px",xl:"32px","margin-mobile":"16px",md:"16px",
+      base:"4px","margin-desktop":"48px",gutter:"16px",
+      sm:"8px",lg:"24px","max-width":"1200px"
+    },
+    fontFamily:{
+      "display-lg":["Noto Sans"],"headline-lg":["Noto Sans"],
+      "title-lg":["Noto Sans"],"label-sm":["Noto Sans"],
+      "body-md":["Noto Sans"],"headline-lg-mobile":["Noto Sans"],
+      "label-md":["Noto Sans"],"headline-md":["Noto Sans"],"body-lg":["Noto Sans"]
+    },
+    fontSize:{
+      "display-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"700"}],
+      "headline-lg":["32px",{lineHeight:"40px",fontWeight:"700"}],
+      "title-lg":["20px",{lineHeight:"28px",fontWeight:"600"}],
+      "label-sm":["12px",{lineHeight:"16px",fontWeight:"600"}],
+      "body-md":["16px",{lineHeight:"24px",fontWeight:"400"}],
+      "headline-lg-mobile":["24px",{lineHeight:"32px",fontWeight:"700"}],
+      "label-md":["14px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"500"}],
+      "headline-md":["24px",{lineHeight:"32px",fontWeight:"600"}],
+      "body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}]
     }
-  }
+  }}
 }
 </script>
 
 <style>
-  body { background-color:#f6fbf4; font-family:'Noto Sans',sans-serif; color:#181d19; }
+  body { background-color:#f6fbf4; color:#181d19; font-family:'Noto Sans',sans-serif; -webkit-font-smoothing:antialiased; }
   .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
-  .card-shadow { box-shadow:0 2px 8px rgba(0,0,0,0.04); }
-  .modal-shadow { box-shadow:0 10px 40px rgba(0,0,0,0.12); }
-  .modal-slide { animation:slideUp 0.28s ease-out forwards; }
-  .modal-fade  { animation:fadeIn 0.22s ease-out forwards; }
-  @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
 
   /* Toast */
   #toast {
-    position:fixed; bottom:80px; left:50%;
-    transform:translateX(-50%) translateY(12px);
-    background:#181d19; color:#fff; padding:10px 22px;
-    border-radius:9999px; font-size:14px; font-weight:500;
-    z-index:9999; opacity:0; transition:all 0.28s ease;
-    pointer-events:none; white-space:nowrap;
+    position:fixed; top:24px; left:50%; transform:translateX(-50%) translateY(-16px);
+    padding:10px 24px; border-radius:9999px; font-size:14px; font-weight:600;
+    z-index:9999; opacity:0; transition:all 0.3s ease; pointer-events:none; white-space:nowrap;
+    box-shadow:0 4px 16px rgba(0,0,0,0.15);
   }
   #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-  @media(min-width:768px){ #toast{bottom:28px;} }
 
-  /* Report tab active */
-  .tab-active { color:#006036; border-bottom:2px solid #006036; }
+  /* Client card hover */
+  .client-card { transition:transform 0.2s ease, box-shadow 0.2s ease; }
+  .client-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,0.06); }
 
-  /* Entry type buttons */
-  .type-active-received { background-color:#006036 !important; color:#fff !important; transform:scale(1.02); }
-  .type-active-given    { background-color:#b02d21 !important; color:#fff !important; transform:scale(1.02); }
+  /* Modal animation */
+  .modal-anim { animation:mIn 0.25s ease-out forwards; }
+  @keyframes mIn { from{opacity:0;transform:scale(0.97) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+  /* Active type btn */
+  .type-received { background-color:#006036 !important; color:#fff !important; border-color:#006036 !important; }
+  .type-given    { background-color:#ba1a1a !important; color:#fff !important; border-color:#ba1a1a !important; }
+
+  /* Pill tab active */
+  .pill-active { background-color:#006036; color:#ffffff; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
 
   /* Input focus */
   input:focus, select:focus, textarea:focus {
-    outline:none !important;
-    border-color:#006036 !important;
-    box-shadow:0 0 0 1.5px #006036 !important;
+    outline:none !important; border-color:#006036 !important; box-shadow:0 0 0 2px rgba(0,96,54,0.15) !important;
   }
-  .no-ring:focus { border-color:transparent !important; box-shadow:none !important; }
+  .no-ring:focus { border-color:transparent !important; box-shadow:none !important; outline:none !important; }
 
-  /* Scrollbar hide */
-  .no-scrollbar::-webkit-scrollbar { display:none; }
-  .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+  /* Scrollbar */
+  .thin-scroll::-webkit-scrollbar { width:4px; }
+  .thin-scroll::-webkit-scrollbar-track { background:transparent; }
+  .thin-scroll::-webkit-scrollbar-thumb { background:#bec9be; border-radius:10px; }
+  .no-scroll::-webkit-scrollbar { display:none; }
+  .no-scroll { -ms-overflow-style:none; scrollbar-width:none; }
+
+  /* Progress bar */
+  .progress-bar { transition:width 0.6s ease; }
+
+  /* Search dropdown */
+  .search-dropdown { display:none; }
+  .search-wrap:focus-within .search-dropdown { display:block; }
+
+  /* Row animation */
+  .row-anim { animation:rowIn 0.3s ease forwards; }
+  @keyframes rowIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 </style>
 </head>
 
-<!-- pb-24 for bottom nav on mobile; md:pt-[52px] for top nav on desktop -->
-<body class="min-h-screen pb-24 md:pb-0 md:pt-[52px]">
+<body class="min-h-screen pb-20 md:pb-0 md:pt-[72px]">
 
-<!-- ══════════════════════════════════════════
-     TOAST
-══════════════════════════════════════════ -->
+<!-- ══════════════════ TOAST ══════════════════ -->
 <div id="toast"></div>
 
-<!-- ══════════════════════════════════════════
-     TOP NAV (desktop only)
-══════════════════════════════════════════ -->
-<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm hidden md:flex h-touch-target-min">
-  <div class="max-w-container-max mx-auto w-full px-gutter flex justify-between items-center">
-    <span class="font-bold text-[20px] text-primary tracking-tight flex items-center gap-2">
-      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;font-size:22px">menu_book</span>
+<!-- ══════════════════ TOP NAV (desktop) ══════════════════ -->
+<header class="hidden md:flex fixed top-0 w-full z-50 bg-surface border-b border-outline-variant h-[72px] items-center">
+  <div class="max-w-max-width mx-auto w-full px-margin-desktop flex justify-between items-center">
+    <div class="font-headline-md text-headline-md font-bold text-primary flex items-center gap-sm">
+      <span class="material-symbols-outlined text-[26px]" style="font-variation-settings:'FILL' 1">menu_book</span>
       Finance Register
-    </span>
-    <nav class="flex gap-lg h-full items-center">
-      <button onclick="showScreen('home')"      data-nav="home"      class="nav-top font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1 transition-colors">Home</button>
-      <button onclick="showScreen('customers')" data-nav="customers" class="nav-top font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Customers</button>
-      <button onclick="showScreen('entry')"     data-nav="entry"     class="nav-top font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Entry</button>
-      <button onclick="showScreen('reports')"   data-nav="reports"   class="nav-top font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Reports</button>
+    </div>
+    <nav class="flex gap-lg">
+      <button onclick="nav('entry')"   data-nav="entry"   class="ntop font-title-lg text-title-lg text-primary border-b-2 border-primary pb-1">Entry</button>
+      <button onclick="nav('clients')" data-nav="clients" class="ntop font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors">Clients</button>
+      <button onclick="nav('records')" data-nav="records" class="ntop font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors">Records</button>
+      <button onclick="nav('search')"  data-nav="search"  class="ntop font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors">Search</button>
     </nav>
+    <span class="material-symbols-outlined text-primary text-[28px] cursor-pointer">account_circle</span>
   </div>
 </header>
 
-<!-- ══════════════════════════════════════════
-     SCREENS
-══════════════════════════════════════════ -->
+<!-- ══════════════════ SCREENS ══════════════════ -->
 
-<!-- ─── HOME ─── -->
-<div id="screen-home" class="screen max-w-container-max mx-auto px-gutter pt-lg">
-  <header class="mb-xl">
-    <h1 id="home-date" class="font-display-lg text-display-lg text-on-background tracking-tight">Loading…</h1>
+<!-- ── ENTRY ── -->
+<div id="sc-entry" class="screen max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+
+  <!-- Today header -->
+  <div class="mb-xl">
+    <h1 id="entry-date-hdr" class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background"></h1>
     <p class="font-body-md text-body-md text-on-surface-variant">Daily Finance Overview</p>
-  </header>
+  </div>
 
   <!-- Summary cards -->
-  <div id="home-cards" class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl"></div>
+  <div id="entry-cards" class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl"></div>
 
-  <!-- Today's transactions -->
-  <section class="mb-xl">
-    <div class="flex items-center justify-between mb-md px-1">
-      <h2 class="font-headline-sm text-headline-sm">Today's Transactions</h2>
-      <button onclick="showScreen('entry')" class="text-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors">+ Add Entry</button>
+  <!-- Today txns -->
+  <div class="mb-xl">
+    <div class="flex items-center justify-between mb-md">
+      <h2 class="font-title-lg text-title-lg text-on-surface">Today's Transactions</h2>
+      <span id="today-count" class="font-label-sm text-label-sm text-on-surface-variant"></span>
     </div>
-    <div id="home-txns-wrap" class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden card-shadow">
-      <div id="home-txns"></div>
-      <div id="home-empty" class="hidden flex-col items-center justify-center py-12 text-on-surface-variant">
-        <span class="material-symbols-outlined text-5xl mb-3">inbox</span>
-        <p class="font-headline-sm text-headline-sm">No entries today</p>
-        <p class="font-label-md text-label-md mt-1">Tap Entry to add one</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Business overview -->
-  <section class="mb-xl">
-    <h2 class="font-headline-sm text-headline-sm mb-md px-1">Business Overview</h2>
-    <div id="home-health" class="grid grid-cols-1 md:grid-cols-3 gap-md"></div>
-  </section>
-</div>
-
-<!-- ─── CUSTOMERS ─── -->
-<div id="screen-customers" class="screen hidden max-w-container-max mx-auto px-gutter pt-lg">
-  <div class="flex flex-col gap-lg mb-xl">
-    <button onclick="openAddCustomerModal()"
-      class="w-full h-touch-target-min bg-primary-container text-on-primary-container font-headline-sm rounded-xl flex items-center justify-center gap-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
-      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
-      Add Customer
-    </button>
-    <div class="flex items-center justify-between border-b border-outline-variant pb-sm">
-      <h1 class="font-headline-md text-on-surface">All Customers</h1>
-      <span id="cust-count" class="font-label-md text-label-md text-on-surface-variant">0 Total</span>
-    </div>
-  </div>
-  <div id="customers-list"></div>
-</div>
-
-<!-- ─── ENTRY ─── -->
-<div id="screen-entry" class="screen hidden pt-xl pb-32 md:pt-8 px-gutter max-w-container-max mx-auto">
-  <div class="mb-xl text-center md:text-left">
-    <h1 class="font-display-lg text-display-lg text-on-background mb-xs">New Entry</h1>
-    <p class="font-body-md text-body-md text-on-surface-variant">Log a quick transaction with a customer</p>
+    <div id="today-txns" class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden"></div>
   </div>
 
-  <section class="space-y-lg">
-    <!-- Type toggle -->
-    <div class="grid grid-cols-2 gap-md h-touch-target-min">
-      <button id="btnReceived" onclick="selectType('received')"
-        class="flex items-center justify-center gap-sm bg-surface border border-outline-variant text-on-surface-variant rounded-xl font-headline-sm transition-all duration-200">
+  <!-- New entry form -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg md:p-xl">
+    <h2 class="font-headline-md text-headline-md text-on-background mb-lg">New Entry</h2>
+
+    <!-- Type -->
+    <div class="grid grid-cols-2 gap-md h-[52px] mb-lg">
+      <button id="btnR" onclick="selType('received')"
+        class="flex items-center justify-center gap-sm border border-outline-variant rounded-xl font-title-lg text-on-surface-variant transition-all duration-200">
         <span class="material-symbols-outlined">arrow_downward</span> RECEIVED
       </button>
-      <button id="btnGiven" onclick="selectType('given')"
-        class="flex items-center justify-center gap-sm bg-surface border border-outline-variant text-on-surface-variant rounded-xl font-headline-sm transition-all duration-200">
+      <button id="btnG" onclick="selType('given')"
+        class="flex items-center justify-center gap-sm border border-outline-variant rounded-xl font-title-lg text-on-surface-variant transition-all duration-200">
         <span class="material-symbols-outlined">arrow_upward</span> GIVEN
       </button>
     </div>
 
     <!-- Customer -->
-    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm">
+    <div class="mb-lg">
       <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">CUSTOMER</label>
       <div class="relative">
-        <select id="entry-customer" onchange="updateEntryBal()"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-lg text-body-lg appearance-none cursor-pointer">
-          <option value="">Select Customer</option>
+        <select id="e-cust" onchange="showEntryBal()"
+          class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-lg text-body-lg appearance-none cursor-pointer">
+          <option value="">Select customer…</option>
         </select>
-        <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+        <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
       </div>
-      <p id="entry-bal-info" class="hidden mt-sm font-label-sm text-label-sm text-on-surface-variant"></p>
+      <p id="e-bal" class="hidden mt-sm font-label-sm text-label-sm text-on-surface-variant ml-xs"></p>
     </div>
 
     <!-- Amount -->
-    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm">
+    <div class="mb-lg">
       <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">AMOUNT</label>
-      <div class="relative flex items-center">
-        <span class="absolute left-md font-headline-md text-headline-md text-primary pointer-events-none">₹</span>
-        <input id="entry-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
-          class="w-full h-touch-target-min pl-10 pr-md bg-surface border border-outline-variant rounded-lg font-headline-md text-headline-md text-on-surface">
+      <div class="relative">
+        <span class="absolute left-md top-1/2 -translate-y-1/2 font-headline-md text-headline-md text-primary pointer-events-none">₹</span>
+        <input id="e-amt" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
+          class="w-full h-[52px] pl-10 pr-md bg-surface border border-outline-variant rounded-xl font-headline-md text-headline-md text-on-surface">
       </div>
     </div>
 
-    <!-- Date & Note -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-      <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm">
+    <!-- Date + Note -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-md mb-lg">
+      <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">DATE</label>
-        <input id="entry-date" type="date"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="e-date" type="date" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
-      <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm">
+      <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">NOTE (OPTIONAL)</label>
-        <input id="entry-note" type="text" placeholder="Any note…"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="e-note" type="text" placeholder="Any note…" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
     </div>
 
     <!-- Save -->
-    <div class="pt-lg">
-      <button id="entry-save-btn" onclick="saveEntry()"
-        class="w-full h-touch-target-min bg-primary-container text-on-primary-container md:bg-primary md:text-on-primary rounded-xl font-headline-sm active:scale-95 shadow-md flex items-center justify-center gap-sm transition-all">
-        SAVE ENTRY
+    <button id="e-save" onclick="saveEntry()"
+      class="w-full h-[52px] bg-primary-container text-on-primary font-title-lg rounded-xl flex items-center justify-center gap-sm hover:opacity-90 active:scale-95 transition-all shadow-sm">
+      <span class="material-symbols-outlined">save</span> SAVE ENTRY
+    </button>
+  </div>
+</div>
+
+<!-- ── CLIENTS ── -->
+<div id="sc-clients" class="screen hidden max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-xl">
+    <div>
+      <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Clients</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Manage your customer lending and payments.</p>
+    </div>
+    <button onclick="openAddCust()"
+      class="bg-primary-container text-on-primary font-title-lg px-lg py-sm rounded-xl flex items-center justify-center gap-sm hover:opacity-90 active:scale-95 transition-all shadow-sm h-[52px] md:w-auto w-full">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person_add</span>
+      + New Client
+    </button>
+  </div>
+
+  <!-- Search filter -->
+  <div class="relative mb-lg">
+    <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+    <input id="cust-search" type="text" oninput="filterClients()" placeholder="Search clients by name or phone…"
+      class="w-full h-[52px] pl-12 pr-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md transition-all">
+  </div>
+
+  <!-- Stats row -->
+  <div id="clients-stats" class="grid grid-cols-3 gap-md mb-lg"></div>
+
+  <!-- Grid -->
+  <div id="clients-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg"></div>
+</div>
+
+<!-- ── RECORDS ── -->
+<div id="sc-records" class="screen hidden max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-md">
+    <div>
+      <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Transaction Records</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">View and manage your historical financial data.</p>
+    </div>
+    <!-- Pill tabs -->
+    <div class="flex bg-surface-container-low p-xs rounded-xl border border-outline-variant">
+      <button id="pill-day"   onclick="switchRec('day')"   class="pill-active flex-1 md:flex-none px-lg py-sm rounded-lg font-label-md transition-all">DAY</button>
+      <button id="pill-month" onclick="switchRec('month')" class="flex-1 md:flex-none px-lg py-sm rounded-lg font-label-md text-on-surface-variant hover:bg-surface-variant transition-all">MONTH</button>
+      <button id="pill-year"  onclick="switchRec('year')"  class="flex-1 md:flex-none px-lg py-sm rounded-lg font-label-md text-on-surface-variant hover:bg-surface-variant transition-all">YEAR</button>
+    </div>
+  </div>
+
+  <!-- Period picker + PDF -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-md mb-lg items-end">
+    <div class="md:col-span-8 flex flex-wrap items-center gap-md">
+      <div class="flex flex-col gap-xs flex-1 min-w-[200px]">
+        <label class="font-label-sm text-label-sm text-on-surface-variant ml-xs">Select Period</label>
+        <div id="rec-picker-wrap" class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-xl px-md h-[52px] focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+          <span class="material-symbols-outlined text-outline mr-sm">calendar_today</span>
+          <input id="rec-day-date" type="date" onchange="renderRecTable()"
+            class="no-ring bg-transparent border-none w-full font-body-md text-body-md text-on-surface outline-none">
+        </div>
+      </div>
+      <div class="flex gap-sm mt-6">
+        <button onclick="recShift(-1)" class="bg-surface-container-highest text-on-surface p-sm rounded-lg hover:bg-outline-variant transition-colors h-[52px] w-[52px] flex items-center justify-center">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button onclick="recShift(1)"  class="bg-surface-container-highest text-on-surface p-sm rounded-lg hover:bg-outline-variant transition-colors h-[52px] w-[52px] flex items-center justify-center">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    <div class="md:col-span-4 flex justify-end">
+      <button onclick="downloadPDF()" class="flex items-center justify-center gap-sm bg-primary text-on-primary font-label-md px-lg h-[52px] rounded-xl hover:opacity-90 active:scale-95 transition-all w-full md:w-auto shadow-sm">
+        <span class="material-symbols-outlined">picture_as_pdf</span> Download PDF
       </button>
     </div>
-  </section>
+  </div>
 
-  <div class="mt-16 opacity-25 flex justify-center">
-    <div class="w-32 h-32 bg-surface-container-high rounded-full flex items-center justify-center">
-      <span class="material-symbols-outlined text-[72px] text-outline-variant">receipt_long</span>
+  <!-- Summary cards -->
+  <div id="rec-summary" class="grid grid-cols-1 md:grid-cols-3 gap-md mb-xl"></div>
+
+  <!-- Table -->
+  <div id="rec-table" class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden"></div>
+</div>
+
+<!-- ── SEARCH ── -->
+<div id="sc-search" class="screen hidden max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+  <div class="mb-xl">
+    <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">Search</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">Find a client and view their full history.</p>
+  </div>
+
+  <!-- Search input with live dropdown -->
+  <div class="search-wrap relative mb-xl">
+    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+      <span class="material-symbols-outlined text-outline">search</span>
     </div>
+    <input id="srch-input" type="text" oninput="liveSearch()" placeholder="Search client by name or phone…"
+      class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md transition-all">
+    <div id="srch-dropdown" class="search-dropdown absolute top-full left-0 right-0 mt-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg z-30 overflow-hidden max-h-72 overflow-y-auto thin-scroll"></div>
+  </div>
+
+  <!-- Client profile (shown after selection) -->
+  <div id="srch-profile" class="hidden space-y-lg"></div>
+
+  <!-- Empty state -->
+  <div id="srch-empty" class="flex flex-col items-center justify-center py-24 text-on-surface-variant">
+    <span class="material-symbols-outlined text-6xl mb-4">manage_search</span>
+    <p class="font-headline-md text-headline-md">Search for a client</p>
+    <p class="font-body-md text-body-md mt-1">Type a name or phone number above</p>
   </div>
 </div>
 
-<!-- ─── REPORTS ─── -->
-<div id="screen-reports" class="screen hidden max-w-container-max mx-auto p-md md:p-lg">
-  <header class="mb-lg pt-4 md:pt-0">
-    <h2 class="font-headline-md text-headline-md mb-xs">Financial Reports</h2>
-    <p class="font-body-md text-body-md text-on-surface-variant">View and download daily, monthly, and yearly summaries.</p>
-  </header>
-
-  <!-- Tabs -->
-  <div class="flex items-center gap-md border-b border-outline-variant mb-lg no-scrollbar overflow-x-auto whitespace-nowrap">
-    <button id="tab-day"   onclick="switchTab('day')"   class="tab-active   py-md px-lg font-label-md text-label-md transition-all">DAY</button>
-    <button id="tab-month" onclick="switchTab('month')" class="text-on-surface-variant py-md px-lg font-label-md text-label-md transition-all">MONTH</button>
-    <button id="tab-year"  onclick="switchTab('year')"  class="text-on-surface-variant py-md px-lg font-label-md text-label-md transition-all">YEAR</button>
-  </div>
-
-  <!-- Day view -->
-  <section id="view-day" class="space-y-lg">
-    <div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-xl px-md gap-2">
-      <span class="material-symbols-outlined text-outline">calendar_today</span>
-      <input id="rpt-day-date" type="date" onchange="renderDayTable()"
-        class="no-ring bg-transparent border-none w-full h-touch-target-min font-body-md text-body-md focus:outline-none">
-    </div>
-    <div id="day-wrap"></div>
-  </section>
-
-  <!-- Month view -->
-  <section id="view-month" class="hidden space-y-lg">
-    <div class="flex gap-md">
-      <div class="relative flex-1">
-        <select id="rpt-month" onchange="renderMonthTable()"
-          class="w-full h-touch-target-min bg-surface-container-lowest border border-outline-variant rounded-xl px-md font-body-md text-body-md appearance-none cursor-pointer"></select>
-        <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
-      </div>
-      <div class="relative w-32">
-        <select id="rpt-year-m" onchange="renderMonthTable()"
-          class="w-full h-touch-target-min bg-surface-container-lowest border border-outline-variant rounded-xl px-md font-body-md text-body-md appearance-none cursor-pointer"></select>
-        <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
-      </div>
-    </div>
-    <div id="month-summary" class="grid grid-cols-1 md:grid-cols-3 gap-md"></div>
-    <div id="month-wrap"></div>
-  </section>
-
-  <!-- Year view -->
-  <section id="view-year" class="hidden space-y-lg">
-    <div class="relative w-40">
-      <select id="rpt-year" onchange="renderYearTable()"
-        class="w-full h-touch-target-min bg-surface-container-lowest border border-outline-variant rounded-xl px-md font-body-md text-body-md appearance-none cursor-pointer"></select>
-      <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
-    </div>
-    <div id="year-summary" class="grid grid-cols-1 md:grid-cols-3 gap-md"></div>
-    <div id="year-wrap"></div>
-  </section>
-
-  <!-- PDF / Print buttons -->
-  <div class="mt-xl flex flex-col md:flex-row gap-md">
-    <button onclick="downloadPDF()"
-      class="w-full h-touch-target-min bg-primary text-on-primary rounded-xl font-headline-sm flex items-center justify-center gap-lg hover:opacity-90 active:scale-95 transition-all shadow-md">
-      <span class="material-symbols-outlined">picture_as_pdf</span> Download PDF
-    </button>
-    <button onclick="window.print()"
-      class="w-full h-touch-target-min border-2 border-outline text-on-surface rounded-xl font-headline-sm flex items-center justify-center gap-lg hover:bg-surface-container transition-all">
-      <span class="material-symbols-outlined">print</span> Print Report
-    </button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     BOTTOM NAV (mobile)
-══════════════════════════════════════════ -->
-<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl flex justify-around items-center px-2 py-2">
-  <button onclick="showScreen('home')"      data-nav="home"      class="nav-bot flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-all duration-150">
-    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">home</span>
-    <span class="font-label-sm text-label-sm">Home</span>
-  </button>
-  <button onclick="showScreen('customers')" data-nav="customers" class="nav-bot flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150">
-    <span class="material-symbols-outlined">group</span>
-    <span class="font-label-sm text-label-sm">Customers</span>
-  </button>
-  <button onclick="showScreen('entry')"     data-nav="entry"     class="nav-bot flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150">
-    <span class="material-symbols-outlined">add_circle</span>
+<!-- ══════════════════ BOTTOM NAV (mobile) ══════════════════ -->
+<nav class="md:hidden fixed bottom-0 w-full h-16 z-50 bg-surface border-t border-outline-variant shadow-sm flex justify-around items-center px-margin-mobile">
+  <button onclick="nav('entry')"   data-nav="entry"   class="nbot flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">edit_note</span>
     <span class="font-label-sm text-label-sm">Entry</span>
   </button>
-  <button onclick="showScreen('reports')"   data-nav="reports"   class="nav-bot flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150">
-    <span class="material-symbols-outlined">analytics</span>
-    <span class="font-label-sm text-label-sm">Reports</span>
+  <button onclick="nav('clients')" data-nav="clients" class="nbot flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">groups</span>
+    <span class="font-label-sm text-label-sm">Clients</span>
+  </button>
+  <button onclick="nav('records')" data-nav="records" class="nbot flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">receipt_long</span>
+    <span class="font-label-sm text-label-sm">Records</span>
+  </button>
+  <button onclick="nav('search')"  data-nav="search"  class="nbot flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">search</span>
+    <span class="font-label-sm text-label-sm">Search</span>
   </button>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     MODAL — ADD CUSTOMER
-══════════════════════════════════════════ -->
-<div id="m-add-cust" class="hidden fixed inset-0 z-[60] bg-on-background/40 backdrop-blur-sm flex items-end md:items-center justify-center">
-  <div class="bg-surface-bright w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-shadow modal-slide border border-outline-variant">
-    <div class="p-lg border-b border-outline-variant flex items-center justify-between">
-      <h2 class="font-headline-md text-on-surface">Add New Customer</h2>
-      <button onclick="closeModal('m-add-cust')" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<!-- ══════════════════ MODALS ══════════════════ -->
+
+<!-- Add Client -->
+<div id="m-addcust" class="hidden fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center">
+  <div class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-anim border border-outline-variant shadow-2xl">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+      <h2 class="font-headline-md text-on-background">Add New Client</h2>
+      <button onclick="cm('m-addcust')" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <div class="p-lg space-y-md">
       <div>
-        <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">NAME *</label>
-        <input id="nc-name" type="text" placeholder="Customer full name"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-lg text-body-lg">
+        <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">FULL NAME *</label>
+        <input id="nc-n" type="text" placeholder="Customer full name"
+          class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-lg text-body-lg">
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">PHONE NUMBER</label>
-        <input id="nc-phone" type="tel" inputmode="tel" placeholder="Mobile number"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-lg text-body-lg">
+        <input id="nc-p" type="tel" inputmode="tel" placeholder="Mobile number"
+          class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-lg text-body-lg">
       </div>
     </div>
     <div class="p-lg pt-0 flex gap-md">
-      <button onclick="closeModal('m-add-cust')"
-        class="flex-1 h-touch-target-min border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container active:bg-surface-container transition-all">
-        Cancel
-      </button>
-      <button onclick="saveCustomer()"
-        class="flex-1 h-touch-target-min bg-primary-container text-on-primary-container rounded-xl font-headline-sm hover:opacity-90 active:scale-95 transition-all">
-        Save Customer
-      </button>
+      <button onclick="cm('m-addcust')" class="flex-1 h-[52px] border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container transition-all">Cancel</button>
+      <button onclick="saveCust()" class="flex-1 h-[52px] bg-primary-container text-on-primary rounded-xl font-title-lg hover:opacity-90 active:scale-95 transition-all">Save Client</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     MODAL — CUSTOMER DETAIL
-══════════════════════════════════════════ -->
-<div id="m-detail" class="hidden fixed inset-0 z-[60] bg-on-background/40 backdrop-blur-sm flex items-center justify-center p-gutter">
-  <div class="bg-surface-bright w-full max-w-container-max max-h-[92vh] flex flex-col rounded-xl modal-shadow modal-fade border border-outline-variant overflow-hidden">
-    <!-- Sticky header -->
-    <div class="p-lg border-b border-outline-variant flex items-center justify-between flex-shrink-0 bg-surface-bright">
-      <div class="flex items-center gap-md">
-        <button onclick="closeModal('m-detail')" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-        <h2 id="detail-name" class="font-headline-md text-on-surface">Customer</h2>
+<!-- Client Detail Modal -->
+<div id="m-detail" class="hidden fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm flex items-center justify-center p-md md:p-lg">
+  <div class="bg-surface w-full max-w-2xl max-h-[92vh] flex flex-col rounded-xl modal-anim border border-outline-variant shadow-2xl overflow-hidden">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center flex-shrink-0">
+      <div>
+        <h2 id="dt-name" class="font-headline-md text-on-background"></h2>
+        <p class="font-label-md text-label-md text-on-surface-variant">Detailed transaction history</p>
       </div>
-      <button onclick="openGiveLoanModal()"
-        class="h-touch-target-min px-lg bg-primary-container text-on-primary-container rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-sm">
-        <span class="material-symbols-outlined text-[18px]">add</span> Give New Loan
-      </button>
-    </div>
-    <!-- Scrollable body -->
-    <div id="detail-body" class="flex-1 overflow-y-auto p-lg space-y-xl"></div>
-    <!-- Sticky footer -->
-    <div class="p-lg border-t border-outline-variant flex gap-md flex-shrink-0 bg-surface-bright">
-      <button onclick="openRecordPaymentModal()"
-        class="flex-1 h-touch-target-min bg-primary text-on-primary rounded-xl font-label-md shadow-md active:opacity-90 transition-all flex items-center justify-center gap-sm">
-        <span class="material-symbols-outlined text-[18px]">payments</span> Record Payment
-      </button>
-      <button onclick="closeModal('m-detail')"
-        class="flex-1 h-touch-target-min border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container active:bg-surface-container transition-all">
-        Close
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     MODAL — GIVE NEW LOAN
-══════════════════════════════════════════ -->
-<div id="m-loan" class="hidden fixed inset-0 z-[70] bg-on-background/50 backdrop-blur-sm flex items-end md:items-center justify-center">
-  <div class="bg-surface-bright w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-shadow modal-slide border border-outline-variant">
-    <div class="p-lg border-b border-outline-variant flex items-center justify-between">
-      <h2 class="font-headline-md text-on-surface">Give New Loan</h2>
-      <button onclick="closeModal('m-loan')" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+      <button onclick="cm('m-detail')" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <div class="p-lg space-y-md max-h-[55vh] overflow-y-auto">
+    <div id="dt-body" class="flex-1 overflow-y-auto p-lg thin-scroll"></div>
+    <div class="p-lg border-t border-outline-variant flex gap-md flex-shrink-0">
+      <button onclick="openPayModal()" class="flex-1 h-[52px] bg-primary text-on-primary rounded-xl font-label-md flex items-center justify-center gap-sm shadow-sm active:opacity-90 transition-all">
+        <span class="material-symbols-outlined text-[18px]">payments</span> Record Payment
+      </button>
+      <button onclick="openLoanModal()" class="flex-1 h-[52px] bg-primary-container text-on-primary rounded-xl font-label-md flex items-center justify-center gap-sm hover:opacity-90 active:scale-95 transition-all">
+        <span class="material-symbols-outlined text-[18px]">add</span> Give Loan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Give Loan Modal -->
+<div id="m-loan" class="hidden fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center">
+  <div class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-anim border border-outline-variant shadow-2xl">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+      <h2 class="font-headline-md text-on-background">Give New Loan</h2>
+      <button onclick="cm('m-loan')" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-lg space-y-md max-h-[55vh] overflow-y-auto thin-scroll">
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">LOAN AMOUNT (₹) *</label>
         <div class="relative">
           <span class="absolute left-md top-1/2 -translate-y-1/2 font-headline-md text-headline-md text-primary pointer-events-none">₹</span>
-          <input id="l-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
-            class="w-full h-touch-target-min pl-10 pr-md bg-surface border border-outline-variant rounded-lg font-headline-md text-headline-md text-on-surface">
+          <input id="l-amt" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
+            class="w-full h-[52px] pl-10 pr-md bg-surface border border-outline-variant rounded-xl font-headline-md text-headline-md text-on-surface">
         </div>
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">INTEREST RATE (% per day)</label>
         <input id="l-rate" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 2"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-lg text-body-lg">
+          class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-lg text-body-lg">
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">START DATE</label>
-        <input id="l-date" type="date"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="l-date" type="date" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">DURATION (days, optional)</label>
         <input id="l-dur" type="number" inputmode="numeric" min="1" placeholder="e.g. 30"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-lg text-body-lg">
+          class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-lg text-body-lg">
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">NOTE (optional)</label>
-        <input id="l-note" type="text" placeholder="Any note…"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="l-note" type="text" placeholder="Any note…" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
     </div>
     <div class="p-lg flex gap-md">
-      <button onclick="closeModal('m-loan')"
-        class="flex-1 h-touch-target-min border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container transition-all">
-        Cancel
-      </button>
-      <button onclick="saveLoan()"
-        class="flex-1 h-touch-target-min bg-primary-container text-on-primary-container rounded-xl font-headline-sm hover:opacity-90 active:scale-95 transition-all">
-        Give Loan
-      </button>
+      <button onclick="cm('m-loan')" class="flex-1 h-[52px] border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container transition-all">Cancel</button>
+      <button onclick="saveLoan()" class="flex-1 h-[52px] bg-primary-container text-on-primary rounded-xl font-title-lg hover:opacity-90 active:scale-95 transition-all">Give Loan</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     MODAL — RECORD PAYMENT
-══════════════════════════════════════════ -->
-<div id="m-pay" class="hidden fixed inset-0 z-[70] bg-on-background/50 backdrop-blur-sm flex items-end md:items-center justify-center">
-  <div class="bg-surface-bright w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-shadow modal-slide border border-outline-variant">
-    <div class="p-lg border-b border-outline-variant flex items-center justify-between">
-      <h2 class="font-headline-md text-on-surface">Record Payment Received</h2>
-      <button onclick="closeModal('m-pay')" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<!-- Record Payment Modal -->
+<div id="m-pay" class="hidden fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center">
+  <div class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-xl modal-anim border border-outline-variant shadow-2xl">
+    <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+      <h2 class="font-headline-md text-on-background">Record Payment Received</h2>
+      <button onclick="cm('m-pay')" class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
@@ -519,893 +462,903 @@ tailwind.config = {
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">AMOUNT RECEIVED (₹) *</label>
         <div class="relative">
           <span class="absolute left-md top-1/2 -translate-y-1/2 font-headline-md text-headline-md text-primary pointer-events-none">₹</span>
-          <input id="p-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
-            class="w-full h-touch-target-min pl-10 pr-md bg-surface border border-outline-variant rounded-lg font-headline-md text-headline-md text-on-surface">
+          <input id="p-amt" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"
+            class="w-full h-[52px] pl-10 pr-md bg-surface border border-outline-variant rounded-xl font-headline-md text-headline-md text-on-surface">
         </div>
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">DATE</label>
-        <input id="p-date" type="date"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="p-date" type="date" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">NOTE (optional)</label>
-        <input id="p-note" type="text" placeholder="Any note…"
-          class="w-full h-touch-target-min bg-surface border border-outline-variant rounded-lg px-md font-body-md text-body-md">
+        <input id="p-note" type="text" placeholder="Any note…" class="w-full h-[52px] bg-surface border border-outline-variant rounded-xl px-md font-body-md text-body-md">
       </div>
     </div>
     <div class="p-lg flex gap-md">
-      <button onclick="closeModal('m-pay')"
-        class="flex-1 h-touch-target-min border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container transition-all">
-        Cancel
-      </button>
-      <button onclick="savePayment()"
-        class="flex-1 h-touch-target-min bg-primary-container text-on-primary-container rounded-xl font-headline-sm hover:opacity-90 active:scale-95 transition-all">
-        Save Payment
-      </button>
+      <button onclick="cm('m-pay')" class="flex-1 h-[52px] border border-outline text-on-surface rounded-xl font-label-md hover:bg-surface-container transition-all">Cancel</button>
+      <button onclick="savePayment()" class="flex-1 h-[52px] bg-primary-container text-on-primary rounded-xl font-title-lg hover:opacity-90 active:scale-95 transition-all">Save Payment</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
+<!-- ══════════════════ JAVASCRIPT ══════════════════ -->
 <script>
-/* ─── DATA LAYER ─── */
+/* ── DATA ── */
 const DB = {
-  _g: (k, d=[]) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch { return d; } },
-  _s: (k, v)    => localStorage.setItem(k, JSON.stringify(v)),
-  customers()          { return this._g('fr_customers'); },
-  loans()              { return this._g('fr_loans'); },
-  transactions()       { return this._g('fr_transactions'); },
-  saveCustomers(d)     { this._s('fr_customers', d); },
-  saveLoans(d)         { this._s('fr_loans', d); },
-  saveTransactions(d)  { this._s('fr_transactions', d); },
+  g:(k,d=[])=>{ try{return JSON.parse(localStorage.getItem(k))||d}catch{return d} },
+  s:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+  custs()     { return this.g('fr_custs'); },
+  loans()     { return this.g('fr_loans'); },
+  txns()      { return this.g('fr_txns');  },
+  setCusts(d) { this.s('fr_custs',d); },
+  setLoans(d) { this.s('fr_loans',d); },
+  setTxns(d)  { this.s('fr_txns',d);  },
 };
 
-/* ─── UTILS ─── */
-const uid  = () => crypto.randomUUID();
-const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const DAYS_LONG    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const DAYS_SHORT   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+/* ── UTILS ── */
+const uid = ()=>crypto.randomUUID();
+const ML  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-function today() {
-  const d = new Date();
+function td() {
+  const d=new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
+function inr(n){return'₹'+Math.abs(Number(n)||0).toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2});}
+function fmt(s){if(!s)return'';const[y,m,d]=s.split('-');return`${parseInt(d)} ${MS[+m-1]} ${y}`;}
+function dow(s){return DS[new Date(s+'T00:00:00').getDay()];}
+function ini(n){return(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]?.toUpperCase()||'').join('')||'?';}
 
-function inr(n) {
-  return '₹' + Math.abs(Number(n)||0).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:2});
+const avatarBg = ['bg-secondary-fixed text-on-secondary-fixed','bg-primary-fixed text-on-primary-fixed',
+  'bg-tertiary-fixed text-on-tertiary-fixed','bg-secondary-container text-on-secondary-container',
+  'bg-surface-container-highest text-on-surface'];
+function avBg(name){let h=0;for(let c of(name||''))h=(h*31+c.charCodeAt(0))&0xffffffff;return avatarBg[Math.abs(h)%avatarBg.length];}
+
+function getBal(cid){
+  return DB.txns().filter(t=>t.cid===cid).reduce((s,t)=>s+(t.type==='given'?+t.amt:-(+t.amt)),0);
 }
 
-function fmtDate(s) {
-  if (!s) return '';
-  const [y,m,d] = s.split('-');
-  return `${parseInt(d)} ${MONTHS_SHORT[+m-1]} ${y}`;
-}
-
-function dow(s) { return DAYS_SHORT[new Date(s+'T00:00:00').getDay()]; }
-
-function initials(name) {
-  return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]?.toUpperCase()||'').join('') || '?';
-}
-
-function getBalance(customerId) {
-  return DB.transactions()
-    .filter(t => t.customerId === customerId)
-    .reduce((s,t) => s + (t.type==='given' ? +t.amount : -(+t.amount)), 0);
-}
-
-function toast(msg, color='#181d19') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.style.background = color;
+function toast(msg,success=true){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.style.background=success?'#006036':'#ba1a1a';
+  el.style.color='#fff';
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 2400);
+  setTimeout(()=>el.classList.remove('show'),2400);
 }
 
-/* ─── NAVIGATION ─── */
-let _screen = 'home';
-let _reportTab = 'day';
+/* ── NAVIGATION ── */
+let _sc='entry', _recTab='day', _viewCid=null, _srchCid=null;
 
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById(`screen-${name}`).classList.remove('hidden');
-  _screen = name;
+function nav(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(`sc-${name}`).classList.remove('hidden');
+  _sc=name;
 
-  // Bottom nav
-  document.querySelectorAll('.nav-bot').forEach(b => {
-    const active = b.dataset.nav === name;
-    b.classList.toggle('bg-primary-container',      active);
-    b.classList.toggle('text-on-primary-container', active);
-    b.classList.toggle('rounded-full',              active);
-    b.classList.toggle('text-on-surface-variant',   !active);
-    const ic = b.querySelector('.material-symbols-outlined');
-    if (ic) ic.style.fontVariationSettings = active ? "'FILL' 1" : "'FILL' 0";
+  // bottom nav
+  document.querySelectorAll('.nbot').forEach(b=>{
+    const on=b.dataset.nav===name;
+    b.classList.toggle('bg-primary-container',on);
+    b.classList.toggle('text-on-primary-container',on);
+    b.classList.toggle('rounded-xl',on);
+    b.classList.toggle('text-on-surface-variant',!on);
+    const ic=b.querySelector('.material-symbols-outlined');
+    if(ic) ic.style.fontVariationSettings=on?"'FILL' 1":"'FILL' 0";
   });
 
-  // Top nav
-  document.querySelectorAll('.nav-top').forEach(b => {
-    const active = b.dataset.nav === name;
-    b.classList.toggle('text-primary',         active);
-    b.classList.toggle('font-bold',            active);
-    b.classList.toggle('border-b-2',          active);
-    b.classList.toggle('border-primary',       active);
-    b.classList.toggle('pb-1',                 active);
-    b.classList.toggle('text-on-surface-variant', !active);
+  // top nav
+  document.querySelectorAll('.ntop').forEach(b=>{
+    const on=b.dataset.nav===name;
+    b.classList.toggle('text-primary',on);
+    b.classList.toggle('border-b-2',on);
+    b.classList.toggle('border-primary',on);
+    b.classList.toggle('pb-1',on);
+    b.classList.toggle('text-on-surface-variant',!on);
   });
 
-  if      (name==='home')      renderHome();
-  else if (name==='customers') renderCustomers();
-  else if (name==='entry')     renderEntry();
-  else if (name==='reports')   renderReports();
+  if(name==='entry')   renderEntry();
+  else if(name==='clients') renderClients();
+  else if(name==='records') renderRecords();
+  else if(name==='search')  renderSearch();
 }
 
-/* ─── MODALS ─── */
-function openModal(id) {
-  document.getElementById(id).classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-}
-// Close on backdrop click
-document.querySelectorAll('[id^="m-"]').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
-});
-window.addEventListener('keydown', e => {
-  if (e.key==='Escape') document.querySelectorAll('[id^="m-"]').forEach(m => {
-    if (!m.classList.contains('hidden')) closeModal(m.id);
-  });
-});
-
-/* ══════════════════════════════════════════
-   HOME SCREEN
-══════════════════════════════════════════ */
-function renderHome() {
-  const t    = today();
-  const now  = new Date();
-  document.getElementById('home-date').textContent = `${DAYS_LONG[now.getDay()]}, ${now.getDate()} ${MONTHS_LONG[now.getMonth()]}`;
-
-  const txns     = DB.transactions();
-  const todayT   = txns.filter(x => x.date === t);
-  const totGiven = todayT.filter(x=>x.type==='given').reduce((s,x)=>s+Number(x.amount),0);
-  const totRcvd  = todayT.filter(x=>x.type==='received').reduce((s,x)=>s+Number(x.amount),0);
-  const net      = totRcvd - totGiven;
-
-  document.getElementById('home-cards').innerHTML = `
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl border-l-8 border-l-primary-container p-lg card-shadow transition-transform active:scale-95 duration-150">
-      <span class="font-label-md text-label-md text-on-surface-variant block mb-1">Today Received</span>
-      <div class="flex items-center justify-between">
-        <span class="font-headline-md text-headline-md text-primary">${inr(totRcvd)}</span>
-        <span class="material-symbols-outlined text-primary">trending_up</span>
-      </div>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl border-l-8 border-l-secondary p-lg card-shadow transition-transform active:scale-95 duration-150">
-      <span class="font-label-md text-label-md text-on-surface-variant block mb-1">Today Given</span>
-      <div class="flex items-center justify-between">
-        <span class="font-headline-md text-headline-md text-secondary">${inr(totGiven)}</span>
-        <span class="material-symbols-outlined text-secondary">trending_down</span>
-      </div>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl border-l-8 border-l-primary p-lg card-shadow transition-transform active:scale-95 duration-150">
-      <span class="font-label-md text-label-md text-on-surface-variant block mb-1">Net Balance</span>
-      <div class="flex items-center justify-between">
-        <span class="font-headline-md text-headline-md ${net>=0?'text-primary':'text-secondary'}">${net>=0?'':'-'}${inr(Math.abs(net))}</span>
-        <span class="material-symbols-outlined text-outline">account_balance_wallet</span>
-      </div>
-    </div>`;
-
-  const custMap = {}; DB.customers().forEach(c=>custMap[c.id]=c.name);
-  const txnsEl  = document.getElementById('home-txns');
-  const emptyEl = document.getElementById('home-empty');
-
-  if (todayT.length === 0) {
-    txnsEl.innerHTML = '';
-    emptyEl.classList.remove('hidden'); emptyEl.classList.add('flex');
-  } else {
-    emptyEl.classList.add('hidden'); emptyEl.classList.remove('flex');
-    txnsEl.innerHTML = todayT.map((x,i) => {
-      const name = custMap[x.customerId] || 'Unknown';
-      const isLast = i === todayT.length-1;
-      return `
-        <div class="flex items-center justify-between p-lg ${!isLast?'border-b border-outline-variant':''} hover:bg-surface-container-low transition-colors min-h-[64px]">
-          <div class="flex items-center gap-md">
-            <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center ${x.type==='given'?'text-secondary':'text-primary'} font-bold text-sm flex-shrink-0">${initials(name)}</div>
-            <div>
-              <h3 class="font-label-md text-label-md text-on-surface">${name}</h3>
-              <p class="text-xs text-on-surface-variant">${x.type==='given'?'Given out':'Received'}${x.note?' · '+x.note:''}</p>
-            </div>
-          </div>
-          <div class="text-right">
-            <p class="font-headline-sm text-headline-sm ${x.type==='given'?'text-secondary':'text-primary'}">${x.type==='given'?'-':'+'}${inr(x.amount)}</p>
-            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${x.type==='given'?'bg-secondary-fixed text-on-secondary-fixed-variant':'bg-primary-fixed text-on-primary-fixed-variant'}">${x.type==='given'?'Given':'Received'}</span>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  const custs = DB.customers();
-  const totalOut = custs.reduce((s,c)=>s+Math.max(0,getBalance(c.id)),0);
-  const active   = custs.filter(c=>getBalance(c.id)>0).length;
-
-  document.getElementById('home-health').innerHTML = `
-    <div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant card-shadow">
-      <div class="flex items-center gap-sm mb-sm text-on-surface-variant">
-        <span class="material-symbols-outlined text-sm">groups</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wider">Total Customers</span>
-      </div>
-      <p class="font-headline-md text-headline-md">${custs.length}</p>
-    </div>
-    <div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant card-shadow">
-      <div class="flex items-center gap-sm mb-sm text-on-surface-variant">
-        <span class="material-symbols-outlined text-sm">payments</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wider">Total Outstanding</span>
-      </div>
-      <p class="font-headline-md text-headline-md text-secondary">${inr(totalOut)}</p>
-    </div>
-    <div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant card-shadow">
-      <div class="flex items-center gap-sm mb-sm text-on-surface-variant">
-        <span class="material-symbols-outlined text-sm">request_quote</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-wider">Active Borrowers</span>
-      </div>
-      <p class="font-headline-md text-headline-md">${active}</p>
-    </div>`;
-}
-
-/* ══════════════════════════════════════════
-   CUSTOMERS SCREEN
-══════════════════════════════════════════ */
-let _viewCustId = null;
-
-function renderCustomers() {
-  const custs = DB.customers();
-  document.getElementById('cust-count').textContent = `${custs.length} Total`;
-  const el = document.getElementById('customers-list');
-
-  if (!custs.length) {
-    el.innerHTML = `
-      <div class="flex flex-col items-center justify-center text-on-surface-variant py-16">
-        <span class="material-symbols-outlined text-5xl mb-4">group_off</span>
-        <p class="font-headline-sm text-headline-sm">No customers yet</p>
-        <p class="font-body-md text-body-md mt-1">Tap + Add Customer to get started</p>
-      </div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="grid grid-cols-1 gap-md">${
-    custs.map(c => {
-      const bal = getBalance(c.id);
-      return `
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="openDetail('${c.id}')">
-          <div class="flex flex-col gap-xs">
-            <span class="font-headline-sm text-on-surface">${c.name}</span>
-            <span class="text-label-sm text-on-surface-variant">${c.phone||'No phone number'}</span>
-          </div>
-          <div class="flex items-center gap-lg">
-            <div class="text-right">
-              <span class="block text-label-sm text-on-surface-variant uppercase tracking-wider">Balance</span>
-              <span class="font-headline-sm ${bal>0?'text-secondary':'text-primary'}">${bal>0?inr(bal):'Settled ✓'}</span>
-            </div>
-            <button class="flex items-center text-primary-container font-label-md whitespace-nowrap">
-              View <span class="material-symbols-outlined text-sm ml-1">chevron_right</span>
-            </button>
-          </div>
-        </div>`;
-    }).join('')
-  }</div>`;
-}
-
-function openAddCustomerModal() {
-  document.getElementById('nc-name').value  = '';
-  document.getElementById('nc-phone').value = '';
-  openModal('m-add-cust');
-}
-
-function saveCustomer() {
-  const name  = document.getElementById('nc-name').value.trim();
-  const phone = document.getElementById('nc-phone').value.trim();
-  if (!name) { toast('⚠ Please enter a name'); return; }
-  const custs = DB.customers();
-  custs.push({ id:uid(), name, phone, createdAt: new Date().toISOString() });
-  DB.saveCustomers(custs);
-  closeModal('m-add-cust');
-  toast('✓ Customer added', '#006036');
-  renderCustomers();
-}
-
-function openDetail(custId) {
-  _viewCustId = custId;
-  renderDetailBody(custId);
-  openModal('m-detail');
-}
-
-function renderDetailBody(custId) {
-  const cust = DB.customers().find(c=>c.id===custId);
-  if (!cust) return;
-  document.getElementById('detail-name').textContent = cust.name;
-
-  const loans = DB.loans().filter(l=>l.customerId===custId);
-  const bal   = getBalance(custId);
-
-  // Sort txns asc for running balance, then reverse for display
-  const txnsSorted = DB.transactions()
-    .filter(t=>t.customerId===custId)
-    .sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
-
-  let running = 0;
-  const txnsWithBal = txnsSorted.map(t => {
-    running += t.type==='given' ? +t.amount : -(+t.amount);
-    return {...t, _bal: running};
-  }).reverse();
-
-  const loansHTML = !loans.length ? '' : `
-    <div>
-      <h3 class="font-headline-sm text-on-surface mb-md">Loan Details</h3>
-      <div class="grid grid-cols-1 gap-sm">
-        ${loans.map(l=>`
-          <div class="bg-surface-container border border-outline-variant rounded-xl p-md">
-            <div class="grid grid-cols-3 gap-md mb-xs">
-              <div><span class="block text-label-sm text-on-surface-variant mb-1">Principal</span><span class="font-headline-sm text-on-surface">${inr(l.principal)}</span></div>
-              <div><span class="block text-label-sm text-on-surface-variant mb-1">Interest/day</span><span class="font-headline-sm text-on-surface">${l.interestRate||0}%</span></div>
-              <div><span class="block text-label-sm text-on-surface-variant mb-1">Start Date</span><span class="font-headline-sm text-on-surface">${fmtDate(l.startDate)}</span></div>
-            </div>
-            ${l.duration?`<p class="text-label-sm text-on-surface-variant">Duration: ${l.duration} days</p>`:''}
-            ${l.note?`<p class="text-label-sm text-on-surface-variant mt-xs">Note: ${l.note}</p>`:''}
-          </div>`).join('')}
-      </div>
-    </div>`;
-
-  const histHTML = !txnsWithBal.length
-    ? `<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl mb-2 block">history</span><p class="font-body-md">No transactions yet</p></div>`
-    : `
-      <div>
-        <div class="flex items-center justify-between mb-md">
-          <h3 class="font-headline-sm">Payment History</h3>
-        </div>
-        <div class="bg-white border border-outline-variant rounded-xl overflow-hidden">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-surface-container text-label-md">
-                <th class="p-md font-bold">Date</th>
-                <th class="p-md font-bold">Type</th>
-                <th class="p-md font-bold">Amount</th>
-                <th class="p-md font-bold text-right">Balance</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-outline-variant">
-              ${txnsWithBal.map(t=>`
-                <tr>
-                  <td class="p-md text-sm">${fmtDate(t.date)}</td>
-                  <td class="p-md font-bold ${t.type==='given'?'text-secondary':'text-primary'}">${t.type==='given'?'Given':'Received'}</td>
-                  <td class="p-md font-bold ${t.type==='given'?'text-secondary':'text-primary'}">${t.type==='given'?'-':'+'}${inr(t.amount)}</td>
-                  <td class="p-md text-right font-bold ${t._bal>0?'text-secondary':'text-primary'}">${inr(t._bal)}</td>
-                </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>`;
-
-  document.getElementById('detail-body').innerHTML = `
-    <!-- Balance overview -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
-      <div class="bg-white border border-outline-variant p-md rounded-lg">
-        <span class="text-label-sm text-on-surface-variant block mb-1">Phone</span>
-        <span class="font-headline-sm text-on-surface">${cust.phone||'—'}</span>
-      </div>
-      <div class="bg-white border border-outline-variant p-md rounded-lg md:col-span-2">
-        <span class="text-label-sm text-on-surface-variant block mb-1">Outstanding Balance</span>
-        <span class="font-headline-md ${bal>0?'text-secondary':'text-primary'}">${bal>0?inr(bal)+' owed':'Fully Settled ✓'}</span>
-      </div>
-    </div>
-    ${loansHTML}
-    ${histHTML}
-    <div class="border-t border-outline-variant pt-md">
-      <button onclick="deleteCust('${custId}')" class="text-error font-label-md flex items-center gap-sm hover:bg-error-container/20 px-md py-sm rounded-lg transition-colors">
-        <span class="material-symbols-outlined text-sm">delete</span> Delete Customer &amp; All Records
-      </button>
-    </div>`;
-}
-
-function openGiveLoanModal() {
-  document.getElementById('l-amount').value = '';
-  document.getElementById('l-rate').value   = '';
-  document.getElementById('l-date').value   = today();
-  document.getElementById('l-dur').value    = '';
-  document.getElementById('l-note').value   = '';
-  openModal('m-loan');
-}
-
-function saveLoan() {
-  const principal    = parseFloat(document.getElementById('l-amount').value);
-  const interestRate = parseFloat(document.getElementById('l-rate').value) || 0;
-  const startDate    = document.getElementById('l-date').value;
-  const duration     = parseInt(document.getElementById('l-dur').value) || null;
-  const note         = document.getElementById('l-note').value.trim();
-  if (!principal||principal<=0) { toast('⚠ Enter loan amount'); return; }
-  if (!startDate)               { toast('⚠ Select start date'); return; }
-
-  const loanId = uid();
-  const loans  = DB.loans();
-  loans.push({ id:loanId, customerId:_viewCustId, principal, interestRate, startDate, duration, note, createdAt:new Date().toISOString() });
-  DB.saveLoans(loans);
-
-  const txns = DB.transactions();
-  txns.push({ id:uid(), customerId:_viewCustId, loanId, type:'given', amount:principal, date:startDate, note:note||'Loan given', createdAt:new Date().toISOString() });
-  DB.saveTransactions(txns);
-
-  closeModal('m-loan');
-  toast('✓ Loan recorded', '#006036');
-  renderDetailBody(_viewCustId);
-}
-
-function openRecordPaymentModal() {
-  document.getElementById('p-amount').value = '';
-  document.getElementById('p-date').value   = today();
-  document.getElementById('p-note').value   = '';
-  openModal('m-pay');
-}
-
-function savePayment() {
-  const amount = parseFloat(document.getElementById('p-amount').value);
-  const date   = document.getElementById('p-date').value;
-  const note   = document.getElementById('p-note').value.trim();
-  if (!amount||amount<=0) { toast('⚠ Enter payment amount'); return; }
-  if (!date)              { toast('⚠ Select a date'); return; }
-
-  const txns = DB.transactions();
-  txns.push({ id:uid(), customerId:_viewCustId, type:'received', amount, date, note, createdAt:new Date().toISOString() });
-  DB.saveTransactions(txns);
-
-  closeModal('m-pay');
-  toast('✓ Payment saved', '#006036');
-  renderDetailBody(_viewCustId);
-}
-
-function deleteCust(custId) {
-  if (!confirm('Delete this customer and ALL their loan/payment records?\nThis cannot be undone.')) return;
-  DB.saveCustomers(DB.customers().filter(c=>c.id!==custId));
-  DB.saveLoans(DB.loans().filter(l=>l.customerId!==custId));
-  DB.saveTransactions(DB.transactions().filter(t=>t.customerId!==custId));
-  closeModal('m-detail');
-  toast('Customer deleted', '#b02d21');
-  renderCustomers();
-}
+/* ── MODALS ── */
+function om(id){document.getElementById(id).classList.remove('hidden');document.body.style.overflow='hidden';}
+function cm(id){document.getElementById(id).classList.add('hidden');document.body.style.overflow='';}
+document.querySelectorAll('[id^="m-"]').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)cm(m.id);}));
+window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('[id^="m-"]').forEach(m=>{if(!m.classList.contains('hidden'))cm(m.id);});});
 
 /* ══════════════════════════════════════════
    ENTRY SCREEN
 ══════════════════════════════════════════ */
-let _entryType = 'received';
+let _etype='received';
 
-function renderEntry() {
-  const custs = DB.customers();
-  const sel   = document.getElementById('entry-customer');
-  const prev  = sel.value;
-  sel.innerHTML = '<option value="">Select Customer</option>' +
-    custs.map(c => {
-      const bal = getBalance(c.id);
-      return `<option value="${c.id}">${c.name}${bal>0?' (owes '+inr(bal)+')':''}</option>`;
+function renderEntry(){
+  const now=new Date();
+  document.getElementById('entry-date-hdr').textContent=`${DL[now.getDay()]}, ${now.getDate()} ${ML[now.getMonth()]}`;
+
+  const t=td(), txns=DB.txns(), todayT=txns.filter(x=>x.date===t);
+  const tG=todayT.filter(x=>x.type==='given').reduce((s,x)=>s+Number(x.amt),0);
+  const tR=todayT.filter(x=>x.type==='received').reduce((s,x)=>s+Number(x.amt),0);
+  const net=tR-tG;
+
+  document.getElementById('entry-cards').innerHTML=`
+    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-surface-variant">Today Received</span>
+        <span class="material-symbols-outlined text-primary">arrow_downward</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-surface">${inr(tR)}</div>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-surface-variant">Today Given</span>
+        <span class="material-symbols-outlined text-error">arrow_upward</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-surface">${inr(tG)}</div>
+    </div>
+    <div class="bg-primary-container p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-primary-container opacity-80">Net Balance</span>
+        <span class="material-symbols-outlined text-on-primary-container">account_balance_wallet</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-primary-container">${net>=0?'+':'-'}${inr(Math.abs(net))}</div>
+    </div>`;
+
+  // Today's txns
+  const custMap={}; DB.custs().forEach(c=>custMap[c.id]=c);
+  const txEl=document.getElementById('today-txns');
+  document.getElementById('today-count').textContent=todayT.length?`${todayT.length} entries`:'';
+
+  if(!todayT.length){
+    txEl.innerHTML=`<div class="flex flex-col items-center justify-center py-10 text-on-surface-variant">
+      <span class="material-symbols-outlined text-5xl mb-2">inbox</span>
+      <p class="font-body-md">No transactions today</p></div>`;
+  } else {
+    txEl.innerHTML=todayT.map((x,i)=>{
+      const c=custMap[x.cid]||{name:'Unknown'};
+      return `<div class="flex items-center justify-between px-lg py-md ${i<todayT.length-1?'border-b border-outline-variant':''} hover:bg-surface-container-low transition-colors">
+        <div class="flex items-center gap-md">
+          <div class="w-9 h-9 rounded-full ${avBg(c.name)} flex items-center justify-center font-label-md flex-shrink-0">${ini(c.name)}</div>
+          <div>
+            <p class="font-body-md text-on-surface font-semibold">${c.name}</p>
+            <p class="font-label-sm text-on-surface-variant">${x.type==='given'?'Given out':'Received'}${x.note?' · '+x.note:''}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-title-lg ${x.type==='given'?'text-error':'text-primary'}">${x.type==='given'?'-':'+'}${inr(x.amt)}</p>
+          <span class="inline-flex items-center px-sm py-xs rounded-full font-label-sm ${x.type==='given'?'bg-error-container/20 text-error':'bg-primary-container/10 text-primary'}">
+            <span class="material-symbols-outlined text-[12px] mr-xs" style="font-variation-settings:'FILL' 1">${x.type==='given'?'arrow_upward':'arrow_downward'}</span>
+            ${x.type==='given'?'Given':'Received'}
+          </span>
+        </div>
+      </div>`;
     }).join('');
-  if (prev) sel.value = prev;
-  document.getElementById('entry-date').value = today();
-  selectType(_entryType);
+  }
+
+  // Repopulate customer dropdown
+  const sel=document.getElementById('e-cust');
+  const prev=sel.value;
+  sel.innerHTML='<option value="">Select customer…</option>'+
+    DB.custs().map(c=>{const b=getBal(c.id);return`<option value="${c.id}">${c.name}${b>0?' (owes '+inr(b)+')':''}</option>`;}).join('');
+  if(prev) sel.value=prev;
+  document.getElementById('e-date').value=td();
+  selType(_etype);
 }
 
-function selectType(type) {
-  _entryType = type;
-  const rBtn = document.getElementById('btnReceived');
-  const gBtn = document.getElementById('btnGiven');
-  rBtn.classList.toggle('type-active-received', type==='received');
-  rBtn.classList.toggle('text-on-surface-variant', type!=='received');
-  gBtn.classList.toggle('type-active-given',    type==='given');
-  gBtn.classList.toggle('text-on-surface-variant', type!=='given');
+function selType(type){
+  _etype=type;
+  document.getElementById('btnR').className=`flex items-center justify-center gap-sm border rounded-xl font-title-lg transition-all duration-200 ${type==='received'?'type-received':'border-outline-variant text-on-surface-variant'}`;
+  document.getElementById('btnG').className=`flex items-center justify-center gap-sm border rounded-xl font-title-lg transition-all duration-200 ${type==='given'?'type-given':'border-outline-variant text-on-surface-variant'}`;
 }
 
-function updateEntryBal() {
-  const cid = document.getElementById('entry-customer').value;
-  const el  = document.getElementById('entry-bal-info');
-  if (!cid) { el.classList.add('hidden'); return; }
-  const bal = getBalance(cid);
-  el.innerHTML = `Current outstanding: <strong class="${bal>0?'text-secondary':'text-primary'}">${inr(bal)}</strong>`;
+function showEntryBal(){
+  const cid=document.getElementById('e-cust').value;
+  const el=document.getElementById('e-bal');
+  if(!cid){el.classList.add('hidden');return;}
+  const b=getBal(cid);
+  el.innerHTML=`Current outstanding: <strong class="${b>0?'text-error':'text-primary'}">${inr(b)}</strong>`;
   el.classList.remove('hidden');
 }
 
-function saveEntry() {
-  const custId = document.getElementById('entry-customer').value;
-  const amount = parseFloat(document.getElementById('entry-amount').value);
-  const date   = document.getElementById('entry-date').value;
-  const note   = document.getElementById('entry-note').value.trim();
-  if (!custId)            { toast('⚠ Please select a customer'); return; }
-  if (!amount||amount<=0) { toast('⚠ Please enter a valid amount'); return; }
-  if (!date)              { toast('⚠ Please select a date'); return; }
+function saveEntry(){
+  const cid=document.getElementById('e-cust').value;
+  const amt=parseFloat(document.getElementById('e-amt').value);
+  const date=document.getElementById('e-date').value;
+  const note=document.getElementById('e-note').value.trim();
+  if(!cid)          {toast('⚠ Select a customer',false);return;}
+  if(!amt||amt<=0)  {toast('⚠ Enter a valid amount',false);return;}
+  if(!date)         {toast('⚠ Select a date',false);return;}
 
-  const txns = DB.transactions();
-  txns.push({ id:uid(), customerId:custId, type:_entryType, amount, date, note, createdAt:new Date().toISOString() });
-  DB.saveTransactions(txns);
+  const txns=DB.txns();
+  txns.push({id:uid(),cid,type:_etype,amt,date,note,at:new Date().toISOString()});
+  DB.setTxns(txns);
 
-  document.getElementById('entry-amount').value   = '';
-  document.getElementById('entry-note').value     = '';
-  document.getElementById('entry-customer').value = '';
-  document.getElementById('entry-bal-info').classList.add('hidden');
+  document.getElementById('e-amt').value='';
+  document.getElementById('e-note').value='';
+  document.getElementById('e-cust').value='';
+  document.getElementById('e-bal').classList.add('hidden');
+  if(navigator.vibrate) navigator.vibrate(50);
+  toast('✓ Saved successfully');
 
-  toast('✓ Saved', '#006036');
-  if (window.navigator.vibrate) window.navigator.vibrate(50);
-
-  const btn = document.getElementById('entry-save-btn');
-  btn.innerHTML = '<span class="material-symbols-outlined text-[20px]" style="font-variation-settings:\'FILL\' 1">check_circle</span> Saved ✓';
-  setTimeout(()=>{ btn.innerHTML = 'SAVE ENTRY'; }, 2200);
+  const btn=document.getElementById('e-save');
+  btn.innerHTML='<span class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">check_circle</span> Saved ✓';
+  setTimeout(()=>{btn.innerHTML='<span class="material-symbols-outlined">save</span> SAVE ENTRY';},2200);
+  renderEntry();
 }
 
 /* ══════════════════════════════════════════
-   REPORTS SCREEN
+   CLIENTS SCREEN
 ══════════════════════════════════════════ */
-function renderReports() {
-  const now = new Date();
+function renderClients(){
+  const custs=DB.custs();
+  const q=(document.getElementById('cust-search')?.value||'').toLowerCase();
+  const filtered=q?custs.filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)):custs;
 
-  // Populate month select (once)
-  const mSel = document.getElementById('rpt-month');
-  if (!mSel.options.length) {
-    MONTHS_LONG.forEach((m,i)=>{
-      const o=document.createElement('option'); o.value=i+1; o.textContent=m;
-      if(i===now.getMonth()) o.selected=true; mSel.appendChild(o);
-    });
+  const totalOut=custs.reduce((s,c)=>s+Math.max(0,getBal(c.id)),0);
+  const active=custs.filter(c=>getBal(c.id)>0).length;
+  document.getElementById('clients-stats').innerHTML=`
+    <div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl text-center">
+      <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Total Clients</p>
+      <p class="font-headline-md text-headline-md text-on-surface">${custs.length}</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl text-center">
+      <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Active Borrowers</p>
+      <p class="font-headline-md text-headline-md text-primary">${active}</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl text-center">
+      <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Total Outstanding</p>
+      <p class="font-headline-md text-headline-md text-error">${inr(totalOut)}</p>
+    </div>`;
+
+  const el=document.getElementById('clients-grid');
+  if(!custs.length){
+    el.innerHTML=`<div class="col-span-3 flex flex-col items-center justify-center py-20 text-on-surface-variant">
+      <span class="material-symbols-outlined text-6xl mb-4">group_off</span>
+      <p class="font-headline-md text-headline-md">No clients yet</p>
+      <p class="font-body-md text-body-md mt-1">Tap + New Client to add one</p></div>`;
+    return;
   }
+  if(!filtered.length){
+    el.innerHTML=`<div class="col-span-3 flex flex-col items-center justify-center py-16 text-on-surface-variant">
+      <span class="material-symbols-outlined text-5xl mb-3">search_off</span>
+      <p class="font-title-lg">No results found</p></div>`;
+    return;
+  }
+  el.innerHTML=filtered.map(c=>{
+    const bal=getBal(c.id);
+    const due=bal>0;
+    const bgColors=['bg-secondary-fixed','bg-primary-fixed','bg-tertiary-fixed','bg-secondary-container','bg-surface-container-highest'];
+    let h=0; for(let ch of(c.name||'')) h=(h*31+ch.charCodeAt(0))&0xffffffff;
+    const bg=bgColors[Math.abs(h)%bgColors.length];
+    return `
+    <div class="client-card bg-surface-container-lowest border border-outline-variant rounded-xl p-lg cursor-pointer" onclick="openDetail('${c.id}')">
+      <div class="flex justify-between items-start mb-md">
+        <div class="w-12 h-12 rounded-full ${bg} flex items-center justify-center font-title-lg">${ini(c.name)}</div>
+        <span class="px-sm py-1 rounded-full font-label-sm text-label-sm ${due?'bg-error-container text-on-error-container':'bg-primary-container text-on-primary-container'}">${due?'Due':'Settled'}</span>
+      </div>
+      <h3 class="font-title-lg text-on-surface mb-xs">${c.name}</h3>
+      <p class="font-body-md text-on-surface-variant mb-lg">${c.phone||'No phone'}</p>
+      <div class="flex justify-between items-end">
+        <div class="${due?'text-error':'text-primary'} font-headline-md text-headline-md">${due?inr(bal):'Settled ✓'}</div>
+        <span class="material-symbols-outlined text-outline">chevron_right</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  // Populate year selects (once each)
-  [document.getElementById('rpt-year-m'), document.getElementById('rpt-year')].forEach(sel=>{
-    if (!sel.options.length) {
-      for(let y=now.getFullYear()-4;y<=now.getFullYear()+1;y++){
-        const o=document.createElement('option'); o.value=y; o.textContent=y;
-        if(y===now.getFullYear()) o.selected=true; sel.appendChild(o);
-      }
-    }
+function filterClients(){ renderClients(); }
+
+function openAddCust(){
+  document.getElementById('nc-n').value='';
+  document.getElementById('nc-p').value='';
+  om('m-addcust');
+}
+
+function saveCust(){
+  const name=document.getElementById('nc-n').value.trim();
+  const phone=document.getElementById('nc-p').value.trim();
+  if(!name){toast('⚠ Enter client name',false);return;}
+  const custs=DB.custs();
+  custs.push({id:uid(),name,phone,at:new Date().toISOString()});
+  DB.setCusts(custs);
+  cm('m-addcust');
+  toast('✓ Client added');
+  renderClients();
+}
+
+function openDetail(cid){
+  _viewCid=cid;
+  renderDetailBody(cid);
+  om('m-detail');
+}
+
+function renderDetailBody(cid){
+  const c=DB.custs().find(x=>x.id===cid); if(!c) return;
+  document.getElementById('dt-name').textContent=c.name;
+
+  const loans=DB.loans().filter(l=>l.cid===cid);
+  const txns=DB.txns().filter(t=>t.cid===cid).sort((a,b)=>a.date<b.date?-1:1);
+  const totG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+  const totR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+  const bal=totG-totR;
+
+  let run=0;
+  const tWithBal=txns.map(t=>{run+=t.type==='given'?+t.amt:-(+t.amt);return{...t,_b:run};}).reverse();
+
+  const histHTML=!tWithBal.length
+    ?`<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl block mb-2">history</span><p class="font-body-md">No transactions yet</p></div>`
+    :`<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+        <thead><tr class="bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant">
+          <th class="px-md py-sm">DATE</th><th class="px-md py-sm">TYPE</th>
+          <th class="px-md py-sm">AMOUNT</th><th class="px-md py-sm text-right">BALANCE</th>
+        </tr></thead>
+        <tbody class="divide-y divide-outline-variant">
+          ${tWithBal.map(t=>`<tr class="hover:bg-surface-container-low/50 transition-colors">
+            <td class="px-md py-sm font-body-md">${fmt(t.date)}</td>
+            <td class="px-md py-sm">
+              <span class="inline-flex items-center px-sm py-xs rounded-full font-label-sm ${t.type==='given'?'bg-error-container/20 text-error':'bg-primary-container/10 text-primary'}">
+                <span class="material-symbols-outlined text-[12px] mr-xs" style="font-variation-settings:'FILL' 1">${t.type==='given'?'arrow_upward':'arrow_downward'}</span>
+                ${t.type==='given'?'Given':'Received'}
+              </span>
+            </td>
+            <td class="px-md py-sm font-title-lg ${t.type==='given'?'text-error':'text-primary'}">${t.type==='given'?'-':'+'}${inr(t.amt)}</td>
+            <td class="px-md py-sm text-right font-label-md ${t._b>0?'text-error':'text-primary'}">${inr(t._b)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+
+  const loansHTML=!loans.length?'':`
+    <div>
+      <h4 class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest mb-md">Active Loans</h4>
+      <div class="space-y-sm">
+        ${loans.map(l=>{
+          const lTxns=DB.txns().filter(t=>t.lid===l.id&&t.type==='received');
+          const paid=lTxns.reduce((s,t)=>s+Number(t.amt),0);
+          const pct=l.principal>0?Math.min(100,Math.round(paid/l.principal*100)):0;
+          return`<div class="flex justify-between items-start p-md border border-outline-variant rounded-xl bg-surface-container-lowest">
+            <div class="flex-1 mr-md">
+              <p class="font-title-lg mb-xs">${inr(l.principal)} @ ${l.rate||0}%/day</p>
+              <p class="font-label-sm text-on-surface-variant mb-sm">Started ${fmt(l.date)}${l.dur?` · ${l.dur} days`:''}</p>
+              <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                <div class="bg-primary h-full rounded-full progress-bar" style="width:${pct}%"></div>
+              </div>
+              <div class="flex justify-between font-label-sm text-on-surface-variant mt-xs">
+                <span>Paid: ${inr(paid)}</span><span>${pct}% complete</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  document.getElementById('dt-body').innerHTML=`
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-md mb-lg">
+      <div class="bg-surface-container-low p-md rounded-xl text-center">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Total Given</p>
+        <p class="font-title-lg text-error">${inr(totG)}</p>
+      </div>
+      <div class="bg-surface-container-low p-md rounded-xl text-center">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Total Rcv'd</p>
+        <p class="font-title-lg text-primary">${inr(totR)}</p>
+      </div>
+      <div class="p-md rounded-xl text-center ${bal>0?'bg-error-container':'bg-primary-container'}">
+        <p class="font-label-sm text-label-sm ${bal>0?'text-on-error-container':'text-on-primary-container'} uppercase tracking-wider mb-xs">Outstanding</p>
+        <p class="font-title-lg ${bal>0?'text-on-error-container':'text-on-primary-container'}">${bal>0?inr(bal):'Settled ✓'}</p>
+      </div>
+    </div>
+    <!-- Phone -->
+    ${c.phone?`<p class="font-body-md text-on-surface-variant mb-lg flex items-center gap-sm"><span class="material-symbols-outlined text-[18px]">call</span>${c.phone}</p>`:''}
+    ${loansHTML}
+    <!-- History -->
+    <h4 class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest mb-md mt-lg">Transaction History</h4>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mb-lg">${histHTML}</div>
+    <!-- Delete -->
+    <div class="border-t border-outline-variant pt-md">
+      <button onclick="delCust('${cid}')" class="w-full flex items-center justify-center gap-sm p-md text-error hover:bg-error-container/10 rounded-xl transition-colors font-title-lg">
+        <span class="material-symbols-outlined">delete</span> Delete Client Profile
+      </button>
+    </div>`;
+}
+
+function openPayModal(){
+  document.getElementById('p-amt').value='';
+  document.getElementById('p-date').value=td();
+  document.getElementById('p-note').value='';
+  om('m-pay');
+}
+function openLoanModal(){
+  document.getElementById('l-amt').value='';
+  document.getElementById('l-rate').value='';
+  document.getElementById('l-date').value=td();
+  document.getElementById('l-dur').value='';
+  document.getElementById('l-note').value='';
+  om('m-loan');
+}
+
+function saveLoan(){
+  const principal=parseFloat(document.getElementById('l-amt').value);
+  const rate=parseFloat(document.getElementById('l-rate').value)||0;
+  const date=document.getElementById('l-date').value;
+  const dur=parseInt(document.getElementById('l-dur').value)||null;
+  const note=document.getElementById('l-note').value.trim();
+  if(!principal||principal<=0){toast('⚠ Enter loan amount',false);return;}
+  if(!date){toast('⚠ Select start date',false);return;}
+  const lid=uid();
+  const loans=DB.loans(); loans.push({id:lid,cid:_viewCid,principal,rate,date,dur,note,at:new Date().toISOString()}); DB.setLoans(loans);
+  const txns=DB.txns(); txns.push({id:uid(),cid:_viewCid,lid,type:'given',amt:principal,date,note:note||'Loan given',at:new Date().toISOString()}); DB.setTxns(txns);
+  cm('m-loan'); toast('✓ Loan recorded');
+  renderDetailBody(_viewCid);
+}
+
+function savePayment(){
+  const amt=parseFloat(document.getElementById('p-amt').value);
+  const date=document.getElementById('p-date').value;
+  const note=document.getElementById('p-note').value.trim();
+  if(!amt||amt<=0){toast('⚠ Enter payment amount',false);return;}
+  if(!date){toast('⚠ Select a date',false);return;}
+  const txns=DB.txns(); txns.push({id:uid(),cid:_viewCid,type:'received',amt,date,note,at:new Date().toISOString()}); DB.setTxns(txns);
+  cm('m-pay'); toast('✓ Payment saved');
+  renderDetailBody(_viewCid);
+}
+
+function delCust(cid){
+  if(!confirm('Delete this client and ALL their records?\nThis cannot be undone.')) return;
+  DB.setCusts(DB.custs().filter(c=>c.id!==cid));
+  DB.setLoans(DB.loans().filter(l=>l.cid!==cid));
+  DB.setTxns(DB.txns().filter(t=>t.cid!==cid));
+  cm('m-detail'); toast('Client deleted',false); renderClients();
+}
+
+/* ══════════════════════════════════════════
+   RECORDS SCREEN
+══════════════════════════════════════════ */
+function renderRecords(){
+  document.getElementById('rec-day-date').value=td();
+  switchRec(_recTab);
+}
+
+function switchRec(tab){
+  _recTab=tab;
+  ['day','month','year'].forEach(t=>{
+    const btn=document.getElementById(`pill-${t}`);
+    btn.classList.toggle('pill-active',t===tab);
+    btn.classList.toggle('text-on-surface-variant',t!==tab);
+    btn.classList.remove(t!==tab?'pill-active':'text-on-surface-variant');
   });
 
-  document.getElementById('rpt-day-date').value = today();
-  switchTab(_reportTab);
+  // Update picker
+  const wrap=document.getElementById('rec-picker-wrap');
+  const now=new Date();
+  if(tab==='day'){
+    wrap.innerHTML=`<span class="material-symbols-outlined text-outline mr-sm">calendar_today</span>
+      <input id="rec-day-date" type="date" onchange="renderRecTable()" value="${td()}"
+        class="no-ring bg-transparent border-none w-full font-body-md text-body-md text-on-surface outline-none">`;
+  } else if(tab==='month'){
+    const mopts=ML.map((m,i)=>`<option value="${i+1}" ${i===now.getMonth()?'selected':''}>${m} ${now.getFullYear()}</option>`).join('');
+    wrap.innerHTML=`<span class="material-symbols-outlined text-outline mr-sm">calendar_month</span>
+      <select id="rec-month-sel" onchange="renderRecTable()" class="no-ring bg-transparent border-none w-full font-body-md text-body-md text-on-surface outline-none appearance-none">${mopts}</select>`;
+  } else {
+    const yopts=Array.from({length:6},(_,i)=>now.getFullYear()-3+i).map(y=>`<option value="${y}" ${y===now.getFullYear()?'selected':''}>${y}</option>`).join('');
+    wrap.innerHTML=`<span class="material-symbols-outlined text-outline mr-sm">history</span>
+      <select id="rec-year-sel" onchange="renderRecTable()" class="no-ring bg-transparent border-none w-full font-body-md text-body-md text-on-surface outline-none appearance-none">${yopts}</select>`;
+  }
+  renderRecTable();
 }
 
-function switchTab(tab) {
-  _reportTab = tab;
-  ['day','month','year'].forEach(t => {
-    const btn  = document.getElementById(`tab-${t}`);
-    const view = document.getElementById(`view-${t}`);
-    const on   = t===tab;
-    btn.classList.toggle('tab-active',             on);
-    btn.classList.toggle('text-on-surface-variant', !on);
-    view.classList.toggle('hidden', !on);
-  });
-  if      (tab==='day')   renderDayTable();
-  else if (tab==='month') renderMonthTable();
-  else                    renderYearTable();
+function recShift(dir){
+  if(_recTab==='day'){
+    const inp=document.getElementById('rec-day-date');
+    if(!inp)return;
+    const d=new Date(inp.value+'T00:00:00'); d.setDate(d.getDate()+dir);
+    inp.value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    renderRecTable();
+  } else if(_recTab==='month'){
+    const sel=document.getElementById('rec-month-sel');
+    if(!sel)return;
+    let m=parseInt(sel.value)+dir;
+    if(m<1)m=12; if(m>12)m=1;
+    sel.value=m; renderRecTable();
+  } else {
+    const sel=document.getElementById('rec-year-sel');
+    if(!sel)return;
+    sel.value=parseInt(sel.value)+dir; renderRecTable();
+  }
 }
 
-/* Day */
-function renderDayTable() {
-  const dateStr = document.getElementById('rpt-day-date')?.value || today();
-  const txns    = DB.transactions().filter(t=>t.date===dateStr);
-  const custMap = {}; DB.customers().forEach(c=>custMap[c.id]=c.name);
-  const el      = document.getElementById('day-wrap');
+function renderRecTable(){
+  const now=new Date();
+  let txns=[], label='', totG=0, totR=0;
 
-  if (!txns.length) {
-    el.innerHTML=`<div class="text-center py-12 text-on-surface-variant"><span class="material-symbols-outlined text-5xl mb-3 block">event_busy</span><p class="font-headline-sm">No entries for ${fmtDate(dateStr)}</p></div>`;
+  if(_recTab==='day'){
+    const dateStr=document.getElementById('rec-day-date')?.value||td();
+    txns=DB.txns().filter(t=>t.date===dateStr);
+    label=fmt(dateStr)+' ('+dow(dateStr)+')';
+  } else if(_recTab==='month'){
+    const m=parseInt(document.getElementById('rec-month-sel')?.value)||now.getMonth()+1;
+    const y=now.getFullYear();
+    txns=DB.txns().filter(t=>{const[ty,tm]=t.date.split('-');return+ty===y&&+tm===m;});
+    label=`${ML[m-1]} ${y}`;
+  } else {
+    const y=parseInt(document.getElementById('rec-year-sel')?.value)||now.getFullYear();
+    txns=DB.txns().filter(t=>t.date.startsWith(String(y)));
+    label=String(y);
+  }
+
+  totG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+  totR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+  const net=totR-totG;
+
+  document.getElementById('rec-summary').innerHTML=`
+    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-surface-variant">Total Given</span>
+        <span class="material-symbols-outlined text-error">arrow_upward</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-surface">${inr(totG)}</div>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-surface-variant">Total Received</span>
+        <span class="material-symbols-outlined text-primary">arrow_downward</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-surface">${inr(totR)}</div>
+    </div>
+    <div class="bg-primary-container p-lg rounded-xl shadow-sm relative overflow-hidden">
+      <div class="flex justify-between items-start mb-sm">
+        <span class="font-label-md text-label-md text-on-primary-container opacity-80">Net Balance</span>
+        <span class="material-symbols-outlined text-on-primary-container">account_balance_wallet</span>
+      </div>
+      <div class="font-headline-md text-headline-md text-on-primary-container">${net>=0?'+':'-'}${inr(Math.abs(net))}</div>
+    </div>`;
+
+  const custMap={}; DB.custs().forEach(c=>custMap[c.id]=c.name);
+  const recEl=document.getElementById('rec-table');
+
+  if(!txns.length){
+    recEl.innerHTML=`<div class="flex flex-col items-center justify-center py-16 text-on-surface-variant">
+      <span class="material-symbols-outlined text-5xl mb-3">receipt_long</span>
+      <p class="font-headline-sm text-on-surface-variant">No transactions for ${label}</p></div>`;
     return;
   }
 
-  const totG = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-  const totR = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
+  const rows = _recTab==='day'
+    ? txns.sort((a,b)=>a.date<b.date?1:-1).map((t,i)=>`
+        <tr class="hover:bg-surface-container transition-colors group row-anim" style="animation-delay:${i*30}ms">
+          <td class="px-lg py-md"><div class="font-body-md text-on-surface">${fmt(t.date)}</div></td>
+          <td class="px-lg py-md">
+            <div class="flex items-center gap-sm">
+              <div class="w-8 h-8 rounded-full ${avBg(custMap[t.cid]||'')} flex items-center justify-center font-label-md">${ini(custMap[t.cid]||'?')}</div>
+              <span class="font-body-md text-on-surface">${custMap[t.cid]||'Unknown'}</span>
+            </div>
+          </td>
+          <td class="px-lg py-md">
+            <span class="inline-flex items-center px-sm py-xs rounded-full font-label-sm ${t.type==='given'?'bg-error-container/20 text-error':'bg-primary-container/10 text-primary'}">
+              <span class="material-symbols-outlined text-[12px] mr-xs" style="font-variation-settings:'FILL' 1">${t.type==='given'?'arrow_upward':'arrow_downward'}</span>
+              ${t.type==='given'?'Given':'Received'}
+            </span>
+          </td>
+          <td class="px-lg py-md font-title-lg ${t.type==='given'?'text-error':'text-primary'}">${t.type==='given'?'-':'+'}${inr(t.amt)}</td>
+          <td class="px-lg py-md font-body-md text-on-surface-variant max-w-xs truncate">${t.note||'—'}</td>
+        </tr>`)
+    : _recTab==='month'
+    ? (()=>{
+        const dayMap={};
+        txns.forEach(t=>{const d=t.date.split('-')[2];if(!dayMap[d])dayMap[d]={g:0,r:0};dayMap[d][t.type==='given'?'g':'r']+=Number(t.amt);});
+        return Object.keys(dayMap).sort().map((day,i)=>{
+          const d=dayMap[day],n=d.r-d.g;
+          const m=parseInt(document.getElementById('rec-month-sel')?.value)||now.getMonth()+1;
+          const y=now.getFullYear();
+          const ds=`${y}-${String(m).padStart(2,'0')}-${day}`;
+          return`<tr class="hover:bg-surface-container transition-colors row-anim" style="animation-delay:${i*20}ms">
+            <td class="px-lg py-md font-body-md">${parseInt(day)} (${dow(ds)})</td>
+            <td class="px-lg py-md font-title-lg text-error">${d.g>0?'-'+inr(d.g):'—'}</td>
+            <td class="px-lg py-md font-title-lg text-primary">${d.r>0?'+'+inr(d.r):'—'}</td>
+            <td class="px-lg py-md font-title-lg ${n>=0?'text-primary':'text-error'}">${n>=0?'+':'-'}${inr(Math.abs(n))}</td>
+          </tr>`;
+        });
+      })()
+    : (()=>{
+        const mMap={};
+        txns.forEach(t=>{const m=parseInt(t.date.split('-')[1]);if(!mMap[m])mMap[m]={g:0,r:0};mMap[m][t.type==='given'?'g':'r']+=Number(t.amt);});
+        return Object.keys(mMap).sort((a,b)=>a-b).map((m,i)=>{
+          const d=mMap[m],n=d.r-d.g;
+          return`<tr class="hover:bg-surface-container transition-colors row-anim" style="animation-delay:${i*20}ms">
+            <td class="px-lg py-md font-body-md">${ML[+m-1]}</td>
+            <td class="px-lg py-md font-title-lg text-error">${d.g>0?'-'+inr(d.g):'—'}</td>
+            <td class="px-lg py-md font-title-lg text-primary">${d.r>0?'+'+inr(d.r):'—'}</td>
+            <td class="px-lg py-md font-title-lg ${n>=0?'text-primary':'text-error'}">${n>=0?'+':'-'}${inr(Math.abs(n))}</td>
+          </tr>`;
+        });
+      })();
 
-  el.innerHTML = `
-    <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow">
+  const heads = _recTab==='day'
+    ? '<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Customer</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Type</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Amount</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Note</th>'
+    : '<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Period</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Given</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Received</th><th class="px-lg py-md font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Net</th>';
+
+  recEl.innerHTML=`
+    <div class="p-md md:p-lg border-b border-outline-variant flex items-center justify-between">
+      <h3 class="font-title-lg text-on-surface">Transactions — ${label}</h3>
+      <span class="font-label-sm text-label-sm text-on-surface-variant">${txns.length} entries</span>
+    </div>
+    <div class="overflow-x-auto thin-scroll">
       <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-surface-container text-on-surface-variant">
-            <th class="p-md font-label-md text-label-md">#</th>
-            <th class="p-md font-label-md text-label-md">CUSTOMER</th>
-            <th class="p-md font-label-md text-label-md">TYPE</th>
-            <th class="p-md font-label-md text-label-md text-right">AMOUNT</th>
-            <th class="p-md font-label-md text-label-md hidden md:table-cell">NOTE</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-outline-variant">
-          ${txns.map((t,i)=>`
-            <tr class="${i%2===1?'bg-surface-container-low/30':''} hover:bg-surface-container-low transition-colors">
-              <td class="p-md font-body-md text-on-surface-variant">${i+1}</td>
-              <td class="p-md font-body-md">${custMap[t.customerId]||'Unknown'}</td>
-              <td class="p-md font-bold ${t.type==='given'?'text-secondary':'text-primary'}">${t.type==='given'?'Given':'Received'}</td>
-              <td class="p-md font-bold text-right ${t.type==='given'?'text-secondary':'text-primary'}">${t.type==='given'?'-':'+'}${inr(t.amount)}</td>
-              <td class="p-md text-on-surface-variant font-body-md hidden md:table-cell">${t.note||'—'}</td>
-            </tr>`).join('')}
-        </tbody>
-        <tfoot>
-          <tr class="bg-primary-container text-on-primary-container font-bold">
-            <td class="p-md font-headline-sm" colspan="2">Total — ${fmtDate(dateStr)}</td>
-            <td class="p-md text-sm">Given: ${inr(totG)}</td>
-            <td class="p-md font-headline-sm text-right">Rcvd: ${inr(totR)}</td>
-            <td class="hidden md:table-cell p-md text-sm">Net: ${inr(totR-totG)}</td>
-          </tr>
-        </tfoot>
+        <thead class="bg-surface-container-low"><tr>${heads}</tr></thead>
+        <tbody class="divide-y divide-outline-variant">${Array.isArray(rows)?rows.join(''):rows}</tbody>
+        <tfoot><tr class="bg-primary-container text-on-primary-container font-bold">
+          ${_recTab==='day'
+            ?`<td colspan="3" class="px-lg py-md font-title-lg">Total — ${label}</td><td class="px-lg py-md font-title-lg">${net>=0?'+':'-'}${inr(Math.abs(net))}</td><td class="px-lg py-md text-sm">G:${inr(totG)} R:${inr(totR)}</td>`
+            :`<td class="px-lg py-md font-title-lg">Total</td><td class="px-lg py-md font-title-lg">-${inr(totG)}</td><td class="px-lg py-md font-title-lg">+${inr(totR)}</td><td class="px-lg py-md font-title-lg">${net>=0?'+':'-'}${inr(Math.abs(net))}</td>`}
+        </tr></tfoot>
       </table>
     </div>`;
 }
 
-/* Month */
-function renderMonthTable() {
-  const month = parseInt(document.getElementById('rpt-month')?.value);
-  const year  = parseInt(document.getElementById('rpt-year-m')?.value);
-  if (!month||!year) return;
-
-  const txns = DB.transactions().filter(t=>{ const [y,m]=t.date.split('-'); return +y===year&&+m===month; });
-  const totG = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-  const totR = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
-  const net  = totR-totG;
-
-  document.getElementById('month-summary').innerHTML = `
-    <div class="bg-primary-container/10 border-2 border-primary-container rounded-xl p-lg">
-      <p class="font-label-md text-label-md text-primary uppercase tracking-wider mb-1">Total Received</p>
-      <h3 class="font-display-lg text-display-lg text-primary">${inr(totR)}</h3>
-    </div>
-    <div class="bg-secondary/10 border-2 border-secondary rounded-xl p-lg">
-      <p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-1">Total Given</p>
-      <h3 class="font-display-lg text-display-lg text-secondary">${inr(totG)}</h3>
-    </div>
-    <div class="bg-surface-container border-2 border-outline-variant rounded-xl p-lg">
-      <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Net</p>
-      <h3 class="font-display-lg text-display-lg ${net>=0?'text-primary':'text-secondary'}">${net>=0?'+':'-'}${inr(Math.abs(net))}</h3>
-    </div>`;
-
-  const dayMap = {};
-  txns.forEach(t=>{ const d=t.date.split('-')[2]; if(!dayMap[d]) dayMap[d]={given:0,received:0}; dayMap[d][t.type]+=Number(t.amount); });
-  const el = document.getElementById('month-wrap');
-
-  if (!Object.keys(dayMap).length) {
-    el.innerHTML=`<div class="text-center py-12 text-on-surface-variant"><span class="material-symbols-outlined text-5xl mb-3 block">calendar_month</span><p class="font-headline-sm">No entries for ${MONTHS_LONG[month-1]} ${year}</p></div>`;
-    return;
-  }
-
-  el.innerHTML = `
-    <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-surface-container text-on-surface-variant">
-            <th class="p-md font-label-md text-label-md">DAY</th>
-            <th class="p-md font-label-md text-label-md">GIVEN</th>
-            <th class="p-md font-label-md text-label-md">RECEIVED</th>
-            <th class="p-md font-label-md text-label-md text-right">NET</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-outline-variant">
-          ${Object.keys(dayMap).sort().map((day,i)=>{
-            const d=dayMap[day], n=d.received-d.given;
-            const ds=`${year}-${String(month).padStart(2,'0')}-${day}`;
-            return `
-              <tr class="${i%2===1?'bg-surface-container-low/30':''} hover:bg-surface-container-low transition-colors">
-                <td class="p-md font-body-md">${parseInt(day)} (${dow(ds)})</td>
-                <td class="p-md font-bold ${d.given>0?'text-secondary':'text-on-surface-variant'}">${d.given>0?'-'+inr(d.given):'—'}</td>
-                <td class="p-md font-bold ${d.received>0?'text-primary':'text-on-surface-variant'}">${d.received>0?'+'+inr(d.received):'—'}</td>
-                <td class="p-md font-bold text-right ${n>=0?'text-primary':'text-secondary'}">${n>=0?'+':'-'}${inr(Math.abs(n))}</td>
-              </tr>`;
-          }).join('')}
-        </tbody>
-        <tfoot>
-          <tr class="bg-primary-container text-on-primary-container font-bold">
-            <td class="p-md font-headline-sm">Monthly Total</td>
-            <td class="p-md font-headline-sm">-${inr(totG)}</td>
-            <td class="p-md font-headline-sm">+${inr(totR)}</td>
-            <td class="p-md font-headline-sm text-right">${net>=0?'+':'-'}${inr(Math.abs(net))}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>`;
+/* ══════════════════════════════════════════
+   SEARCH SCREEN
+══════════════════════════════════════════ */
+function renderSearch(){
+  document.getElementById('srch-input').value='';
+  document.getElementById('srch-dropdown').innerHTML='';
+  document.getElementById('srch-profile').classList.add('hidden');
+  document.getElementById('srch-empty').classList.remove('hidden');
 }
 
-/* Year */
-function renderYearTable() {
-  const year = parseInt(document.getElementById('rpt-year')?.value);
-  if (!year) return;
-
-  const txns = DB.transactions().filter(t=>t.date.startsWith(String(year)));
-  const totG = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-  const totR = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
-  const net  = totR-totG;
-
-  document.getElementById('year-summary').innerHTML = `
-    <div class="bg-surface-container rounded-xl p-md border border-outline-variant">
-      <p class="font-label-sm text-label-sm text-on-surface-variant">Annual Received</p>
-      <p class="font-headline-sm text-headline-sm text-primary">${inr(totR)}</p>
-    </div>
-    <div class="bg-surface-container rounded-xl p-md border border-outline-variant">
-      <p class="font-label-sm text-label-sm text-on-surface-variant">Annual Given</p>
-      <p class="font-headline-sm text-headline-sm text-secondary">${inr(totG)}</p>
-    </div>
-    <div class="bg-surface-container rounded-xl p-md border border-outline-variant">
-      <p class="font-label-sm text-label-sm text-on-surface-variant">Net ${year}</p>
-      <p class="font-headline-sm text-headline-sm ${net>=0?'text-primary':'text-secondary'}">${net>=0?'+':'-'}${inr(Math.abs(net))}</p>
-    </div>`;
-
-  const monthMap = {};
-  txns.forEach(t=>{ const m=parseInt(t.date.split('-')[1]); if(!monthMap[m]) monthMap[m]={given:0,received:0}; monthMap[m][t.type]+=Number(t.amount); });
-  const el = document.getElementById('year-wrap');
-
-  if (!Object.keys(monthMap).length) {
-    el.innerHTML=`<div class="text-center py-12 text-on-surface-variant"><span class="material-symbols-outlined text-5xl mb-3 block">calendar_today</span><p class="font-headline-sm">No entries for ${year}</p></div>`;
+function liveSearch(){
+  const q=document.getElementById('srch-input').value.toLowerCase().trim();
+  const dd=document.getElementById('srch-dropdown');
+  if(!q){dd.innerHTML='';return;}
+  const matches=DB.custs().filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)).slice(0,8);
+  if(!matches.length){
+    dd.innerHTML=`<div class="p-md text-on-surface-variant font-body-md text-center">No clients found</div>`;
     return;
   }
-
-  el.innerHTML = `
-    <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-surface-container text-on-surface-variant">
-            <th class="p-md font-label-md text-label-md">MONTH</th>
-            <th class="p-md font-label-md text-label-md">GIVEN</th>
-            <th class="p-md font-label-md text-label-md">RECEIVED</th>
-            <th class="p-md font-label-md text-label-md text-right">NET</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-outline-variant">
-          ${Object.keys(monthMap).sort((a,b)=>a-b).map((m,i)=>{
-            const d=monthMap[m], n=d.received-d.given;
-            return `
-              <tr class="${i%2===1?'bg-surface-container-low/30':''} hover:bg-surface-container-low transition-colors">
-                <td class="p-md font-body-md">${MONTHS_LONG[+m-1]}</td>
-                <td class="p-md font-bold ${d.given>0?'text-secondary':'text-on-surface-variant'}">${d.given>0?'-'+inr(d.given):'—'}</td>
-                <td class="p-md font-bold ${d.received>0?'text-primary':'text-on-surface-variant'}">${d.received>0?'+'+inr(d.received):'—'}</td>
-                <td class="p-md font-bold text-right ${n>=0?'text-primary':'text-secondary'}">${n>=0?'+':'-'}${inr(Math.abs(n))}</td>
-              </tr>`;
-          }).join('')}
-        </tbody>
-        <tfoot>
-          <tr class="bg-primary-container text-on-primary-container font-bold">
-            <td class="p-md font-headline-sm">Annual Total ${year}</td>
-            <td class="p-md font-headline-sm">-${inr(totG)}</td>
-            <td class="p-md font-headline-sm">+${inr(totR)}</td>
-            <td class="p-md font-headline-sm text-right">${net>=0?'+':'-'}${inr(Math.abs(net))}</td>
-          </tr>
-        </tfoot>
-      </table>
+  dd.innerHTML=matches.map(c=>{
+    const bal=getBal(c.id);
+    return`<div class="p-md hover:bg-surface-container-low cursor-pointer flex items-center justify-between border-b border-outline-variant last:border-0 transition-colors" onclick="selectSrch('${c.id}')">
+      <div class="flex items-center gap-md">
+        <div class="w-10 h-10 rounded-full ${avBg(c.name)} flex items-center justify-center font-bold">${ini(c.name)}</div>
+        <div>
+          <p class="font-label-md text-on-surface">${c.name}</p>
+          <p class="font-label-sm text-on-surface-variant">${c.phone||'No phone'}</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p class="font-label-md ${bal>0?'text-error':'text-primary'}">${bal>0?inr(bal):'Settled'}</p>
+        <span class="material-symbols-outlined text-outline text-[18px]">chevron_right</span>
+      </div>
     </div>`;
+  }).join('');
+}
+
+function selectSrch(cid){
+  _srchCid=cid;
+  document.getElementById('srch-dropdown').innerHTML='';
+  document.getElementById('srch-input').blur();
+  document.getElementById('srch-empty').classList.add('hidden');
+  renderSrchProfile(cid);
+  document.getElementById('srch-profile').classList.remove('hidden');
+}
+
+function renderSrchProfile(cid){
+  const c=DB.custs().find(x=>x.id===cid); if(!c) return;
+  const txns=DB.txns().filter(t=>t.cid===cid).sort((a,b)=>a.date<b.date?-1:1);
+  const totG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+  const totR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+  const bal=totG-totR;
+  const loans=DB.loans().filter(l=>l.cid===cid);
+
+  const el=document.getElementById('srch-profile');
+  el.innerHTML=`
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+      <div>
+        <h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">${c.name}</h2>
+        ${c.phone?`<div class="flex items-center gap-sm text-on-surface-variant mt-xs"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-body-md">${c.phone}</span></div>`:''}
+      </div>
+      <div class="flex gap-sm">
+        <button onclick="openDetailFromSearch('${cid}')" class="bg-primary-container text-on-primary font-label-md px-lg h-12 rounded-xl flex items-center gap-sm hover:opacity-90 active:scale-95 transition-all">
+          <span class="material-symbols-outlined">edit</span> Manage
+        </button>
+        <button onclick="downloadClientPDF('${cid}')" class="bg-primary text-on-primary font-label-md px-lg h-12 rounded-xl flex items-center gap-sm hover:opacity-90 active:scale-95 transition-all shadow-sm">
+          <span class="material-symbols-outlined">download</span> Download PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+      <div class="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-sm">TOTAL GIVEN</p>
+        <p class="font-headline-md text-headline-md text-error">${inr(totG)}</p>
+      </div>
+      <div class="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl">
+        <p class="font-label-sm text-label-sm text-on-surface-variant mb-sm">TOTAL RECEIVED</p>
+        <p class="font-headline-md text-headline-md text-primary">${inr(totR)}</p>
+      </div>
+      <div class="p-lg ${bal>0?'bg-tertiary-fixed border-tertiary-container':'bg-primary-fixed border-primary-container'} border rounded-xl">
+        <p class="font-label-sm text-label-sm ${bal>0?'text-on-tertiary-fixed-variant':'text-on-primary-fixed-variant'} mb-sm">OUTSTANDING BALANCE</p>
+        <p class="font-headline-md text-headline-md ${bal>0?'text-tertiary':'text-primary'}">${bal>0?inr(bal):'Settled ✓'}</p>
+      </div>
+    </div>
+
+    <!-- Transaction history -->
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+      <div class="p-lg border-b border-outline-variant flex items-center justify-between">
+        <h3 class="font-title-lg text-on-surface">Transaction History</h3>
+        <span class="font-label-sm text-label-sm text-on-surface-variant">${txns.length} records</span>
+      </div>
+      ${!txns.length
+        ?`<div class="p-xl text-center text-on-surface-variant"><p class="font-body-md">No transactions yet</p></div>`
+        :`<div class="overflow-x-auto thin-scroll"><table class="w-full text-left border-collapse">
+          <thead><tr class="bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant">
+            <th class="px-lg py-md">DATE</th><th class="px-lg py-md">TYPE</th>
+            <th class="px-lg py-md">AMOUNT</th><th class="px-lg py-md">NOTE</th>
+          </tr></thead>
+          <tbody class="divide-y divide-outline-variant">
+            ${[...txns].reverse().map((t,i)=>`
+              <tr class="hover:bg-surface-container-low/50 transition-colors row-anim" style="animation-delay:${i*30}ms">
+                <td class="px-lg py-md font-body-md">${fmt(t.date)}</td>
+                <td class="px-lg py-md">
+                  <span class="px-3 py-1 rounded-full font-label-sm ${t.type==='given'?'bg-error-container/20 text-error':'bg-primary-container text-on-primary-container'}">${t.type==='given'?'GIVEN':'RECEIVED'}</span>
+                </td>
+                <td class="px-lg py-md font-label-md ${t.type==='given'?'text-error':'text-primary'}">${t.type==='given'?'-':'+'}${inr(t.amt)}</td>
+                <td class="px-lg py-md font-body-md text-on-surface-variant">${t.note||'—'}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table></div>`}
+    </div>
+
+    <!-- Loans -->
+    ${!loans.length?'':`
+    <div class="space-y-md">
+      <h3 class="font-title-lg text-on-background">Loan Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+        ${loans.map(l=>{
+          const paid=DB.txns().filter(t=>t.lid===l.id&&t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+          const pct=l.principal>0?Math.min(100,Math.round(paid/l.principal*100)):0;
+          const settled=pct>=100;
+          return`<div class="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl relative overflow-hidden ${settled?'opacity-70':''}">
+            <div class="absolute top-0 right-0 p-lg">
+              <span class="px-3 py-1 ${settled?'bg-surface-container-highest text-on-surface-variant':'bg-secondary-fixed text-on-secondary-fixed'} rounded-full font-label-sm">${settled?'CLOSED':'ACTIVE'}</span>
+            </div>
+            <div class="space-y-sm">
+              <p class="font-label-sm text-on-surface-variant">Started ${fmt(l.date)} · ${l.rate||0}%/day</p>
+              <p class="font-headline-md text-headline-md">${inr(l.principal)}</p>
+              <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                <div class="bg-primary h-full rounded-full progress-bar" style="width:${pct}%"></div>
+              </div>
+              <div class="flex justify-between font-label-sm text-on-surface-variant">
+                <span>Paid: ${inr(paid)}</span><span>${pct}% complete</span>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`}`;
+}
+
+function openDetailFromSearch(cid){
+  _viewCid=cid;
+  renderDetailBody(cid);
+  om('m-detail');
 }
 
 /* ══════════════════════════════════════════
    PDF EXPORT
 ══════════════════════════════════════════ */
-function pdfHdr(doc, title, sub) {
-  doc.setFillColor(26,122,74);
-  doc.rect(0,0,210,16,'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(11); doc.setFont('helvetica','bold');
-  doc.text('Finance Register', 10, 10);
-  doc.setFontSize(8);  doc.setFont('helvetica','normal');
-  doc.text(sub, 200, 10, {align:'right'});
-  doc.setTextColor(0,0,0);
-  doc.setFontSize(10); doc.setFont('helvetica','bold');
-  doc.text(title, 10, 24);
-  return 28;
+function pdfHdr(doc,title,sub){
+  doc.setFillColor(26,122,74); doc.rect(0,0,210,16,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('Finance Register',10,10);
+  doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.text(sub,200,10,{align:'right'});
+  doc.setTextColor(0,0,0); doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text(title,10,24); return 28;
 }
+function pgNum(doc){return d=>{const n=doc.internal.getNumberOfPages();doc.setFontSize(7);doc.setTextColor(150);doc.text(`Page ${d.pageNumber}/${n} · Finance Register`,105,290,{align:'center'});}}
 
-function pdfPageNum(doc) {
-  return (d) => {
-    const n = doc.internal.getNumberOfPages();
-    doc.setFontSize(7); doc.setTextColor(160);
-    doc.text(`Page ${d.pageNumber} / ${n}  •  Finance Register`, 105, 290, {align:'center'});
-  };
-}
+function downloadPDF(){
+  if(!window.jspdf){toast('PDF library loading…',false);return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({compress:true});
+  const now=new Date();
+  let txns=[],label='',sy;
 
-function downloadPDF() {
-  if      (_reportTab==='day')   downloadDayPDF();
-  else if (_reportTab==='month') downloadMonthPDF();
-  else                           downloadYearPDF();
-}
-
-function downloadDayPDF() {
-  if (!window.jspdf) { toast('PDF library loading, try again in a second'); return; }
-  const {jsPDF} = window.jspdf;
-  const doc     = new jsPDF({compress:true});
-  const dateStr = document.getElementById('rpt-day-date')?.value || today();
-  const txns    = DB.transactions().filter(t=>t.date===dateStr);
-  const cMap    = {}; DB.customers().forEach(c=>cMap[c.id]=c.name);
-  const sy      = pdfHdr(doc, `Daily Report — ${fmtDate(dateStr)}`, `Printed: ${fmtDate(today())}`);
-
-  if (!txns.length) { doc.setFontSize(10); doc.text('No entries for this date.', 10, sy+10); }
-  else {
-    const tG = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-    const tR = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
-    doc.autoTable({
-      startY: sy,
-      head: [['#','Customer','Type','Amount','Note']],
-      body: txns.map((t,i)=>[i+1, cMap[t.customerId]||'Unknown', t.type==='given'?'Given':'Received', (t.type==='given'?'-':'+')+inr(t.amount), t.note||'']),
-      foot: [['','TOTAL','',`Given: ${inr(tG)}`, `Rcvd: ${inr(tR)}`]],
-      styles:{fontSize:8,cellPadding:2},
-      headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
+  if(_recTab==='day'){
+    const ds=document.getElementById('rec-day-date')?.value||td();
+    txns=DB.txns().filter(t=>t.date===ds);
+    label=`Daily Report — ${fmt(ds)}`;
+    sy=pdfHdr(doc,label,`Printed: ${fmt(td())}`);
+    const cMap={}; DB.custs().forEach(c=>cMap[c.id]=c.name);
+    if(!txns.length){doc.setFontSize(10);doc.text('No entries.',10,sy+10);}
+    else{
+      const tG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+      const tR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+      doc.autoTable({startY:sy,
+        head:[['#','Customer','Type','Amount','Note']],
+        body:txns.map((t,i)=>[i+1,cMap[t.cid]||'Unknown',t.type==='given'?'Given':'Received',(t.type==='given'?'-':'+')+inr(t.amt),t.note||'']),
+        foot:[['','TOTAL','',`Given: ${inr(tG)}`,`Rcvd: ${inr(tR)}`]],
+        styles:{fontSize:8,cellPadding:2},
+        headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
+        footStyles:{fillColor:[232,245,238],fontStyle:'bold',textColor:[26,122,74]},
+        alternateRowStyles:{fillColor:[248,250,248]},didDrawPage:pgNum(doc)});
+    }
+    doc.save(`Finance_Day_${document.getElementById('rec-day-date')?.value||td()}.pdf`);
+  } else if(_recTab==='month'){
+    const m=parseInt(document.getElementById('rec-month-sel')?.value)||now.getMonth()+1;
+    const y=now.getFullYear();
+    txns=DB.txns().filter(t=>{const[ty,tm]=t.date.split('-');return+ty===y&&+tm===m;});
+    sy=pdfHdr(doc,`Monthly Report — ${ML[m-1]} ${y}`,`Printed: ${fmt(td())}`);
+    const tG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+    const tR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+    const net=tR-tG;
+    const dayMap={};
+    txns.forEach(t=>{const d=t.date.split('-')[2];if(!dayMap[d])dayMap[d]={g:0,r:0};dayMap[d][t.type==='given'?'g':'r']+=Number(t.amt);});
+    if(!Object.keys(dayMap).length){doc.setFontSize(10);doc.text('No entries.',10,sy+10);}
+    else doc.autoTable({startY:sy,
+      head:[['Day','Given','Received','Net']],
+      body:Object.keys(dayMap).sort().map(day=>{const d=dayMap[day],n=d.r-d.g,ds=`${y}-${String(m).padStart(2,'0')}-${day}`;return[`${parseInt(day)} (${dow(ds)})`,d.g>0?`-${inr(d.g)}`:'—',d.r>0?`+${inr(d.r)}`:'—',`${n>=0?'+':'-'}${inr(Math.abs(n))}`];}),
+      foot:[['TOTAL',`-${inr(tG)}`,`+${inr(tR)}`,`${net>=0?'+':'-'}${inr(Math.abs(net))}`]],
+      styles:{fontSize:8,cellPadding:2},headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
       footStyles:{fillColor:[232,245,238],fontStyle:'bold',textColor:[26,122,74]},
-      alternateRowStyles:{fillColor:[248,250,248]},
-      didDrawPage: pdfPageNum(doc)
-    });
-  }
-  doc.save(`Finance_Day_${dateStr}.pdf`);
-}
-
-function downloadMonthPDF() {
-  if (!window.jspdf) { toast('PDF library loading, try again in a second'); return; }
-  const {jsPDF} = window.jspdf;
-  const doc   = new jsPDF({compress:true});
-  const month = parseInt(document.getElementById('rpt-month')?.value);
-  const year  = parseInt(document.getElementById('rpt-year-m')?.value);
-  const txns  = DB.transactions().filter(t=>{ const[y,m]=t.date.split('-'); return +y===year&&+m===month; });
-  const sy    = pdfHdr(doc, `Monthly Report — ${MONTHS_LONG[month-1]} ${year}`, `Printed: ${fmtDate(today())}`);
-  const tG    = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-  const tR    = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
-  const net   = tR-tG;
-
-  const dayMap = {};
-  txns.forEach(t=>{ const d=t.date.split('-')[2]; if(!dayMap[d]) dayMap[d]={given:0,received:0}; dayMap[d][t.type]+=Number(t.amount); });
-
-  if (!Object.keys(dayMap).length) { doc.setFontSize(10); doc.text('No entries for this month.', 10, sy+10); }
-  else {
-    doc.autoTable({
-      startY: sy,
-      head: [['Day','Given','Received','Net']],
-      body: Object.keys(dayMap).sort().map(day=>{
-        const d=dayMap[day], n=d.received-d.given;
-        const ds=`${year}-${String(month).padStart(2,'0')}-${day}`;
-        return [`${parseInt(day)} (${dow(ds)})`, d.given>0?`-${inr(d.given)}`:'—', d.received>0?`+${inr(d.received)}`:'—', `${n>=0?'+':'-'}${inr(Math.abs(n))}`];
-      }),
-      foot: [['MONTHLY TOTAL', `-${inr(tG)}`, `+${inr(tR)}`, `${net>=0?'+':'-'}${inr(Math.abs(net))}`]],
-      styles:{fontSize:8,cellPadding:2},
-      headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:[248,250,248]},didDrawPage:pgNum(doc)});
+    doc.save(`Finance_Month_${y}_${String(m).padStart(2,'0')}.pdf`);
+  } else {
+    const yr=parseInt(document.getElementById('rec-year-sel')?.value)||now.getFullYear();
+    txns=DB.txns().filter(t=>t.date.startsWith(String(yr)));
+    sy=pdfHdr(doc,`Yearly Report — ${yr}`,`Printed: ${fmt(td())}`);
+    const tG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+    const tR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+    const net=tR-tG;
+    const mMap={};
+    txns.forEach(t=>{const m=parseInt(t.date.split('-')[1]);if(!mMap[m])mMap[m]={g:0,r:0};mMap[m][t.type==='given'?'g':'r']+=Number(t.amt);});
+    if(!Object.keys(mMap).length){doc.setFontSize(10);doc.text('No entries.',10,sy+10);}
+    else doc.autoTable({startY:sy,
+      head:[['Month','Given','Received','Net']],
+      body:Object.keys(mMap).sort((a,b)=>a-b).map(m=>{const d=mMap[m],n=d.r-d.g;return[ML[+m-1],d.g>0?`-${inr(d.g)}`:'—',d.r>0?`+${inr(d.r)}`:'—',`${n>=0?'+':'-'}${inr(Math.abs(n))}`];}),
+      foot:[['ANNUAL TOTAL',`-${inr(tG)}`,`+${inr(tR)}`,`${net>=0?'+':'-'}${inr(Math.abs(net))}`]],
+      styles:{fontSize:8,cellPadding:2},headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
       footStyles:{fillColor:[232,245,238],fontStyle:'bold',textColor:[26,122,74]},
-      alternateRowStyles:{fillColor:[248,250,248]},
-      didDrawPage: pdfPageNum(doc)
-    });
+      alternateRowStyles:{fillColor:[248,250,248]},didDrawPage:pgNum(doc)});
+    doc.save(`Finance_Year_${yr}.pdf`);
   }
-  doc.save(`Finance_Month_${year}_${String(month).padStart(2,'0')}.pdf`);
 }
 
-function downloadYearPDF() {
-  if (!window.jspdf) { toast('PDF library loading, try again in a second'); return; }
-  const {jsPDF} = window.jspdf;
-  const doc  = new jsPDF({compress:true});
-  const year = parseInt(document.getElementById('rpt-year')?.value);
-  const txns = DB.transactions().filter(t=>t.date.startsWith(String(year)));
-  const sy   = pdfHdr(doc, `Yearly Report — ${year}`, `Printed: ${fmtDate(today())}`);
-  const tG   = txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amount),0);
-  const tR   = txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amount),0);
-  const net  = tR-tG;
-
-  const mMap = {};
-  txns.forEach(t=>{ const m=parseInt(t.date.split('-')[1]); if(!mMap[m]) mMap[m]={given:0,received:0}; mMap[m][t.type]+=Number(t.amount); });
-
-  if (!Object.keys(mMap).length) { doc.setFontSize(10); doc.text('No entries for this year.', 10, sy+10); }
-  else {
-    doc.autoTable({
-      startY: sy,
-      head: [['Month','Given','Received','Net']],
-      body: Object.keys(mMap).sort((a,b)=>a-b).map(m=>{
-        const d=mMap[m], n=d.received-d.given;
-        return [MONTHS_LONG[+m-1], d.given>0?`-${inr(d.given)}`:'—', d.received>0?`+${inr(d.received)}`:'—', `${n>=0?'+':'-'}${inr(Math.abs(n))}`];
-      }),
-      foot: [['ANNUAL TOTAL', `-${inr(tG)}`, `+${inr(tR)}`, `${net>=0?'+':'-'}${inr(Math.abs(net))}`]],
-      styles:{fontSize:8,cellPadding:2},
-      headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
-      footStyles:{fillColor:[232,245,238],fontStyle:'bold',textColor:[26,122,74]},
-      alternateRowStyles:{fillColor:[248,250,248]},
-      didDrawPage: pdfPageNum(doc)
-    });
-  }
-  doc.save(`Finance_Year_${year}.pdf`);
+function downloadClientPDF(cid){
+  if(!window.jspdf){toast('PDF library loading…',false);return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({compress:true});
+  const c=DB.custs().find(x=>x.id===cid); if(!c) return;
+  const txns=DB.txns().filter(t=>t.cid===cid).sort((a,b)=>a.date<b.date?-1:1);
+  const tG=txns.filter(t=>t.type==='given').reduce((s,t)=>s+Number(t.amt),0);
+  const tR=txns.filter(t=>t.type==='received').reduce((s,t)=>s+Number(t.amt),0);
+  const sy=pdfHdr(doc,`Client Statement — ${c.name}`,`Printed: ${fmt(td())}`);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text(`Phone: ${c.phone||'N/A'}  |  Total Given: ${inr(tG)}  |  Total Received: ${inr(tR)}  |  Balance: ${inr(tG-tR)}`,10,sy+6);
+  if(!txns.length){doc.setFontSize(10);doc.text('No transactions.',10,sy+20);}
+  else doc.autoTable({startY:sy+12,
+    head:[['Date','Type','Amount','Note']],
+    body:txns.map(t=>[fmt(t.date),t.type==='given'?'Given':'Received',(t.type==='given'?'-':'+')+inr(t.amt),t.note||'']),
+    foot:[['','',`Given: ${inr(tG)} | Rcvd: ${inr(tR)}`,`Balance: ${inr(tG-tR)}`]],
+    styles:{fontSize:8,cellPadding:2},headStyles:{fillColor:[26,122,74],fontSize:8,fontStyle:'bold'},
+    footStyles:{fillColor:[232,245,238],fontStyle:'bold',textColor:[26,122,74]},
+    alternateRowStyles:{fillColor:[248,250,248]},didDrawPage:pgNum(doc)});
+  doc.save(`Finance_${c.name.replace(/\s+/g,'_')}.pdf`);
 }
 
-/* ══════════════════════════════════════════
-   INIT
-══════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  renderHome();
-  // Pre-seed entry type
-  selectType('received');
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderEntry();
+  selType('received');
 });
 </script>
-
 </body>
 </html>
