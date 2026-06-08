@@ -1924,11 +1924,10 @@ function toggleMobileCalc() {
 document.addEventListener('keydown', function(e) {
   // Only fire when Entry tab is active
   if (!document.getElementById('tab-entry').classList.contains('active')) return;
-  // Skip if the focus is inside any entry input (customer/amount/type/note)
+  // Skip if any input/textarea/select is focused (date picker, entry fields, etc.)
   var focused = document.activeElement;
-  if (focused && (focused.id === 'cust-input' || focused.id === 'amt-input' ||
-      focused.id === 'type-input' || focused.id === 'note-input' ||
-      focused.classList.contains('inline-input'))) return;
+  if (focused && (focused.tagName === 'INPUT' || focused.tagName === 'TEXTAREA' ||
+      focused.tagName === 'SELECT' || focused.isContentEditable)) return;
 
   var calcActive = !!(document.getElementById('calc-panel') &&
     window.getComputedStyle(document.getElementById('calc-panel')).display !== 'none') ||
