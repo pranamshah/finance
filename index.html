@@ -362,6 +362,53 @@ tr.active-row{height:62px}
 #voice-transcript.interim{color:var(--text);font-weight:500;font-style:normal}
 #voice-status{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
 #voice-hint{font-size:12px;color:var(--muted);padding:4px 16px 8px;opacity:0.7}
+
+/* ===== MOBILE BREATHING ROOM ===== */
+@media(max-width:768px){
+  #app-container{padding-left:14px;padding-right:14px;padding-bottom:120px}
+
+  /* Summary cards: stack vertically */
+  #summary-cards{grid-template-columns:1fr;gap:12px;padding:16px 0 4px}
+  .summary-card{padding:20px 22px;border-radius:18px}
+  .summary-amount{font-size:26px}
+
+  /* Entry section */
+  #entry-section{margin:12px 0 4px;border-radius:16px}
+  .entry-table th{padding:10px 8px;font-size:11px}
+  .entry-table .cell-input{font-size:15px;padding:6px 8px}
+  tr.active-row{height:58px}
+
+  /* Client cards */
+  .client-card{margin:0 0 14px;padding:20px}
+  #clients-header{padding:20px 0 14px}
+  #clients-header h2{font-size:20px}
+  #new-client-form{padding:0 0 16px}
+
+  /* Records subtabs: scrollable row */
+  #records-subtabs{padding:0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .subtab-btn{padding:14px 14px;font-size:12px;white-space:nowrap}
+  .subtab-content{padding:16px 0}
+
+  /* Filter rows: stack on mobile */
+  .filter-row{flex-direction:column;gap:10px}
+  .filter-row input,.filter-row select,.filter-row button{width:100%;height:46px;font-size:15px}
+
+  /* Stat boxes in client detail: 2 cols */
+  .stat-boxes{grid-template-columns:repeat(2,1fr);gap:10px}
+
+  /* Loan form grid: 1 col */
+  .loan-form-grid{grid-template-columns:1fr}
+
+  /* Cards */
+  .card{padding:18px;border-radius:16px}
+
+  /* Download/export buttons */
+  .dl-btn{width:100%;justify-content:center}
+
+  /* Voice bar */
+  #voice-bar{padding:10px 14px}
+  #voice-hint{padding:4px 14px 10px}
+}
 </style>
 </head>
 <body>
