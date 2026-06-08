@@ -316,6 +316,38 @@ tr.active-row{height:62px}
 #calc-display-m{font-size:42px;font-weight:300;color:#fff;font-family:'Noto Sans',sans-serif;letter-spacing:-0.03em;word-break:break-all;text-align:right;line-height:1.1}
 #calc-buttons-m{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#3a3a3c}
 
+/* ===== PAYMENT SCHEDULE PILLS ===== */
+.schedule-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0 4px}
+.sched-lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap}
+.sched-pill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:transparent;cursor:pointer;transition:all 0.15s;color:var(--muted);font-family:inherit}
+.sched-pill:hover{border-color:var(--navy);color:var(--navy)}
+.sched-pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.client-schedule-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(13,33,55,0.07);color:var(--navy);cursor:pointer;border:none;font-family:inherit;transition:background 0.15s}
+.client-schedule-tag:hover{background:rgba(13,33,55,0.14)}
+
+/* ===== ENTRY TYPE TOGGLE ===== */
+.type-toggle{display:flex;background:var(--bg);border-radius:8px;padding:3px;gap:2px}
+.type-tog-btn{padding:5px 10px;border:none;border-radius:6px;font-family:'Inter','Noto Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;background:transparent;color:var(--muted);white-space:nowrap}
+.type-tog-btn.recv-active{background:var(--income);color:#fff;box-shadow:0 2px 6px rgba(11,110,63,0.3)}
+.type-tog-btn.given-active{background:var(--expense);color:#fff;box-shadow:0 2px 6px rgba(181,36,25,0.3)}
+
+/* ===== ENTRY SECTION HEADERS ===== */
+.entry-sec-hdr td{padding:6px 12px!important;border-bottom:none!important;background:transparent!important}
+.entry-sec-label{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.entry-sec-label.recv{background:var(--income-light);color:var(--income)}
+.entry-sec-label.given{background:var(--expense-light);color:var(--expense)}
+
+/* ===== VOICE LANG TOGGLE ===== */
+.lang-toggle{display:flex;gap:2px;background:rgba(255,255,255,0.1);border-radius:8px;padding:3px;border:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.lang-btn{padding:4px 10px;border:none;border-radius:5px;font-family:'Inter','Noto Sans',sans-serif;font-size:11px;font-weight:800;cursor:pointer;background:transparent;color:rgba(255,255,255,0.5);transition:all 0.15s}
+.lang-btn.active{background:var(--gold);color:var(--navy)}
+.lang-btn:hover:not(.active){color:rgba(255,255,255,0.9)}
+
+/* ===== MISSED PAYMENTS ===== */
+.missed-count-chip{display:inline-block;background:var(--expense-light);color:var(--expense);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap}
+.missed-dates-cell{font-size:11px;color:var(--muted);max-width:240px;word-break:break-word;line-height:1.6}
+.missed-date-tag{display:inline-block;background:#fff4e5;color:#c0620a;border-radius:6px;padding:1px 7px;margin:1px;font-size:11px;font-weight:600}
+
 /* ====== VOICE ENTRY ====== */
 #voice-bar{display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(135deg,#f4f6fb,#edf0f8);border-bottom:1px solid #dde3ee;border-top:1px solid #dde3ee}
 #voice-btn{display:flex;align-items:center;gap:10px;background:var(--navy);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-family:'Inter','Noto Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 3px 14px rgba(13,33,55,0.32);white-space:nowrap}
@@ -380,6 +412,11 @@ tr.active-row{height:62px}
               <span class="mic-icon">🎤</span>
               <span id="voice-btn-label">Speak Entry</span>
             </button>
+            <div class="lang-toggle">
+              <button class="lang-btn active" onclick="setVoiceLang('en-IN',this)">EN</button>
+              <button class="lang-btn" onclick="setVoiceLang('hi-IN',this)">हिं</button>
+              <button class="lang-btn" onclick="setVoiceLang('ta-IN',this)">தமி</button>
+            </div>
             <span id="voice-transcript">Say: "murali 5000" or "ram 2000 given"</span>
             <span id="voice-status"></span>
           </div>
@@ -486,6 +523,13 @@ tr.active-row{height:62px}
         <input type="text" id="nc-name" placeholder="Client Name *" style="height:52px">
         <input type="tel" id="nc-phone" placeholder="Phone (optional)">
       </div>
+      <div class="schedule-row">
+        <span class="sched-lbl">Pays every:</span>
+        <button class="sched-pill active" data-sched="daily" onclick="selectSched(this)">Daily</button>
+        <button class="sched-pill" data-sched="weekly" onclick="selectSched(this)">Weekly</button>
+        <button class="sched-pill" data-sched="monthly" onclick="selectSched(this)">Monthly</button>
+        <button class="sched-pill" data-sched="none" onclick="selectSched(this)">No Schedule</button>
+      </div>
       <div class="btn-row">
         <button class="btn-green" onclick="saveNewClient()">Save</button>
         <button class="btn-gray" onclick="toggleNewClientForm(false)">Cancel</button>
@@ -501,6 +545,7 @@ tr.active-row{height:62px}
       <button class="subtab-btn" onclick="switchSubtab('month')">MONTH</button>
       <button class="subtab-btn" onclick="switchSubtab('year')">YEAR</button>
       <button class="subtab-btn" onclick="switchSubtab('range')">RANGE</button>
+      <button class="subtab-btn" onclick="switchSubtab('missed')" style="color:var(--expense)">⚠ MISSED</button>
     </div>
 
     <div id="subtab-day" class="subtab-content active">
@@ -546,11 +591,30 @@ tr.active-row{height:62px}
       <button class="btn-green download-btn" onclick="downloadRangePDF()">Download Range PDF</button>
     </div>
 
+    <div id="subtab-missed" class="subtab-content">
+      <div class="filter-row">
+        <select id="missed-sched-filter">
+          <option value="">All Schedules</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <button onclick="loadMissedPayments()">Refresh</button>
+      </div>
+      <div class="table-scroll">
+        <table class="records-table">
+          <thead><tr><th>Client</th><th>Schedule</th><th>Missed</th><th>Dates</th><th>Avg Amount</th></tr></thead>
+          <tbody id="missed-tbody"><tr><td colspan="5" class="empty-state">Select filters and click Refresh</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
     <div id="backup-section">
       <h3>Backup &amp; Restore</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Export all data as a JSON file. Restore from a previous backup at any time.</p>
       <div class="btn-row">
-        <button class="btn-green" onclick="downloadBackup()">Download Backup</button>
-        <label class="btn-gray" style="cursor:pointer;padding:10px 18px;border-radius:8px;font-size:14px;display:inline-block">Restore from Backup<input type="file" accept=".json" style="display:none" onchange="restoreBackup(this)"></label>
+        <button class="btn-green" onclick="downloadBackup()">⬇ Download Backup</button>
+        <label class="btn-gray" style="cursor:pointer;padding:10px 18px;border-radius:8px;font-size:14px;display:inline-block">⬆ Restore from File<input type="file" accept=".json" style="display:none" onchange="restoreBackup(this)"></label>
       </div>
     </div>
   </div>
@@ -598,6 +662,15 @@ function db_add(store, obj) {
   return new Promise(function(resolve, reject) {
     var tx = db.transaction(store, 'readwrite');
     var req = tx.objectStore(store).add(obj);
+    req.onsuccess = function() { resolve(req.result); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+
+function db_put(store, obj) {
+  return new Promise(function(resolve, reject) {
+    var tx = db.transaction(store, 'readwrite');
+    var req = tx.objectStore(store).put(obj);
     req.onsuccess = function() { resolve(req.result); };
     req.onerror = function() { reject(req.error); };
   });
@@ -772,17 +845,31 @@ function renderEntryTab() {
   tbody.innerHTML = '';
   var todayTxns = window.allTransactions
     .filter(function(t) { return t.date === window.activeDate; })
-    .sort(function(a,b) { return b.createdAt - a.createdAt; });
+    .sort(function(a,b) { return a.createdAt - b.createdAt; });
   var nextNum = todayTxns.length + 1;
   tbody.appendChild(buildActiveRow(nextNum));
-  if (todayTxns.length === 0) {
+
+  var recvTxns = todayTxns.filter(function(t) { return t.type === 'received'; });
+  var givenTxns = todayTxns.filter(function(t) { return t.type === 'given'; });
+
+  if (recvTxns.length === 0 && givenTxns.length === 0) {
     var emptyTr = document.createElement('tr');
     emptyTr.innerHTML = '<td colspan="6" style="text-align:center;padding:28px 16px;color:#bbb;font-size:13px;font-style:italic">No entries yet today — start typing above ↑</td>';
     tbody.appendChild(emptyTr);
-  } else {
-    todayTxns.forEach(function(t, i) {
-      tbody.appendChild(buildStaticRow(t, i+1));
-    });
+  }
+  if (recvTxns.length > 0) {
+    var hdrR = document.createElement('tr');
+    hdrR.className = 'entry-sec-hdr';
+    hdrR.innerHTML = '<td colspan="6"><span class="entry-sec-label recv">● Received (' + recvTxns.length + ')</span></td>';
+    tbody.appendChild(hdrR);
+    recvTxns.forEach(function(t, i) { tbody.appendChild(buildStaticRow(t, i + 1)); });
+  }
+  if (givenTxns.length > 0) {
+    var hdrG = document.createElement('tr');
+    hdrG.className = 'entry-sec-hdr';
+    hdrG.innerHTML = '<td colspan="6"><span class="entry-sec-label given">● Given (' + givenTxns.length + ')</span></td>';
+    tbody.appendChild(hdrG);
+    givenTxns.forEach(function(t, i) { tbody.appendChild(buildStaticRow(t, i + 1)); });
   }
   updateSummaryCards();
   focusCustomerCell();
@@ -798,7 +885,10 @@ function buildActiveRow(num) {
     '<td><div class="amount-wrap"><span class="amount-prefix">₹</span>' +
       '<input class="cell-input amount-input" id="amt-input" placeholder="0" inputmode="decimal" autocomplete="off">' +
     '</div></td>' +
-    '<td><input class="cell-input" id="type-input" value="received" autocomplete="off"></td>' +
+    '<td style="padding:5px 8px"><div class="type-toggle">' +
+      '<button class="type-tog-btn recv-active" id="type-btn-recv" onclick="setEntryType(\'received\')">● Received</button>' +
+      '<button class="type-tog-btn" id="type-btn-given" onclick="setEntryType(\'given\')">○ Given</button>' +
+    '</div><input type="hidden" id="type-input" value="received"></td>' +
     '<td><input class="cell-input" id="note-input" placeholder="note..." style="font-size:14px" autocomplete="off"></td>' +
     '<td></td>';
 
@@ -819,18 +909,8 @@ function buildActiveRow(num) {
       amtInput.value = amtInput.value.replace(/[^0-9.]/g, '');
     });
     amtInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Tab' || e.key === 'Enter') { e.preventDefault(); typeInput.focus(); }
-    });
-
-    typeInput.addEventListener('keydown', function(e) {
       if (e.key === 'Tab' || e.key === 'Enter') { e.preventDefault(); noteInput.focus(); }
     });
-    typeInput.addEventListener('input', function() {
-      var v = typeInput.value.toLowerCase();
-      if (v.indexOf('g') !== -1) { typeInput.value = 'given'; }
-      else if (v.indexOf('r') !== -1) { typeInput.value = 'received'; }
-    });
-    typeInput.addEventListener('focus', function() { typeInput.select(); });
 
     noteInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') { e.preventDefault(); saveActiveRow(); }
@@ -1146,11 +1226,18 @@ function toggleNewClientForm(forceState) {
   }
 }
 
+function selectSched(btn) {
+  btn.closest('.schedule-row').querySelectorAll('.sched-pill').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
 function saveNewClient() {
   var name = document.getElementById('nc-name').value.trim();
   var phone = document.getElementById('nc-phone').value.trim();
   if (!name) { shakeEl(document.getElementById('nc-name')); return; }
-  var c = { id: uid(), name: name, phone: phone, createdAt: Date.now() };
+  var schedBtn = document.querySelector('#new-client-form .sched-pill.active');
+  var schedule = schedBtn ? schedBtn.dataset.sched : 'daily';
+  var c = { id: uid(), name: name, phone: phone, schedule: schedule, createdAt: Date.now() };
   db_add('customers', c).then(function() {
     window.allCustomers.push(c);
     toggleNewClientForm(false);
@@ -1168,10 +1255,15 @@ function renderClientsList() {
     var card = document.createElement('div');
     card.className = 'client-card';
     card.id = 'client-card-' + c.id;
+    var sched = c.schedule || 'daily';
+    var schedLabel = {daily:'Daily',weekly:'Weekly',monthly:'Monthly',none:'—'}[sched] || sched;
     card.innerHTML =
       '<div class="client-card-header">' +
         '<div><div class="client-name-big">' + esc(c.name) + '</div>' +
-        '<div class="client-phone">' + esc(c.phone||'') + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-top:4px">' +
+          (c.phone ? '<span class="client-phone">' + esc(c.phone) + '</span>' : '') +
+          (sched !== 'none' ? '<button class="client-schedule-tag" onclick="cycleClientSchedule(event,\'' + c.id + '\')">🔄 ' + schedLabel + '</button>' : '<button class="client-schedule-tag" onclick="cycleClientSchedule(event,\'' + c.id + '\')">+ Set Schedule</button>') +
+        '</div></div>' +
         '<div class="client-balance">' + fmtINR(Math.abs(outstanding)) + '</div>' +
       '</div>' +
       '<div class="client-detail" id="detail-' + c.id + '"></div>';
@@ -1425,13 +1517,13 @@ function initRecordsSelectors() {
 }
 
 function switchSubtab(name) {
-  var names = ['day','month','year','range'];
-  document.querySelectorAll('.subtab-btn').forEach(function(b, i) {
-    b.classList.toggle('active', names[i] === name);
+  document.querySelectorAll('.subtab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('onclick') === "switchSubtab('" + name + "')");
   });
   document.querySelectorAll('.subtab-content').forEach(function(el) {
-    el.classList.toggle('active', el.id === 'subtab-'+name);
+    el.classList.toggle('active', el.id === 'subtab-' + name);
   });
+  if (name === 'missed') loadMissedPayments();
 }
 
 function buildSummaryCards3(recv, given, net) {
@@ -1650,6 +1742,105 @@ function loadRangeRecords() {
       tbody.appendChild(tr);
     });
   });
+}
+
+// ==================== ENTRY TYPE TOGGLE ====================
+function setEntryType(t) {
+  var hi = document.getElementById('type-input');
+  if (hi) hi.value = t;
+  var rb = document.getElementById('type-btn-recv');
+  var gb = document.getElementById('type-btn-given');
+  if (rb) rb.className = 'type-tog-btn' + (t === 'received' ? ' recv-active' : '');
+  if (gb) gb.className = 'type-tog-btn' + (t === 'given' ? ' given-active' : '');
+}
+
+// ==================== CLIENT SCHEDULE ====================
+var _SCHED_CYCLE = ['daily','weekly','monthly','none'];
+function cycleClientSchedule(e, cid) {
+  e.stopPropagation();
+  var c = window.allCustomers.find(function(x) { return x.id === cid; });
+  if (!c) return;
+  var cur = c.schedule || 'daily';
+  var idx = _SCHED_CYCLE.indexOf(cur);
+  var next = _SCHED_CYCLE[(idx + 1) % _SCHED_CYCLE.length];
+  c.schedule = next;
+  db_put('customers', c).then(function() {
+    renderClientsList();
+    var labels = {daily:'Daily',weekly:'Weekly',monthly:'Monthly',none:'No Schedule'};
+    showToast('Schedule: ' + labels[next]);
+  });
+}
+
+// ==================== MISSED PAYMENTS ====================
+function loadMissedPayments() {
+  var schedFilter = (document.getElementById('missed-sched-filter') || {}).value || '';
+  var tbody = document.getElementById('missed-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr>';
+  Promise.all([db_getAll('customers'), db_getAll('transactions')]).then(function(res) {
+    var customers = res[0], transactions = res[1];
+    var today = todayStr();
+    var rows = [];
+    customers.forEach(function(c) {
+      var sched = c.schedule || 'daily';
+      if (sched === 'none') return;
+      if (schedFilter && sched !== schedFilter) return;
+      var clientRecv = transactions.filter(function(t) {
+        return t.customerId === c.id && t.type === 'received';
+      });
+      if (clientRecv.length === 0) return;
+      var sorted = clientRecv.map(function(t) { return t.date; }).sort();
+      var firstDate = sorted[0];
+      var paidDates = {};
+      clientRecv.forEach(function(t) { paidDates[t.date] = true; });
+      var expected = generateExpectedDates(firstDate, today, sched);
+      var missed = expected.filter(function(d) { return !paidDates[d]; });
+      if (missed.length === 0) return;
+      var total = 0;
+      clientRecv.forEach(function(t) { total += Number(t.amount); });
+      var avg = Math.round(total / clientRecv.length);
+      rows.push({ c: c, sched: sched, missed: missed, avg: avg });
+    });
+    tbody.innerHTML = '';
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-size:14px">🎉 No missed payments found!</td></tr>';
+      return;
+    }
+    rows.sort(function(a, b) { return b.missed.length - a.missed.length; });
+    rows.forEach(function(r) {
+      var tr = document.createElement('tr');
+      var recentMissed = r.missed.slice(-10);
+      var dateTags = recentMissed.map(function(d) {
+        return '<span class="missed-date-tag">' + d + '</span>';
+      }).join('');
+      var extra = r.missed.length > 10 ? '<span class="missed-date-tag" style="background:#eee">+' + (r.missed.length - 10) + ' more</span>' : '';
+      tr.innerHTML =
+        '<td style="font-weight:700">' + esc(r.c.name) + '</td>' +
+        '<td><span class="type-badge received">' + r.sched + '</span></td>' +
+        '<td><span class="missed-count-chip">' + r.missed.length + ' missed</span></td>' +
+        '<td class="missed-dates-cell">' + dateTags + extra + '</td>' +
+        '<td>' + fmtINR(r.avg) + '</td>';
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+function generateExpectedDates(startDate, endDate, schedule) {
+  var dates = [];
+  var cur = new Date(startDate + 'T00:00:00');
+  var end = new Date(endDate + 'T00:00:00');
+  // Advance to first expected date after start
+  if (schedule === 'monthly') cur.setMonth(cur.getMonth() + 1);
+  else if (schedule === 'weekly') cur.setDate(cur.getDate() + 7);
+  else cur.setDate(cur.getDate() + 1);
+  // Limit to avoid too many dates: daily=90, weekly=52, monthly=24
+  var maxDates = schedule === 'daily' ? 90 : schedule === 'weekly' ? 52 : 24;
+  while (cur < end) {
+    dates.push(cur.toISOString().split('T')[0]);
+    if (schedule === 'monthly') cur.setMonth(cur.getMonth() + 1);
+    else if (schedule === 'weekly') cur.setDate(cur.getDate() + 7);
+    else cur.setDate(cur.getDate() + 1);
+  }
+  return dates.slice(-maxDates);
 }
 
 // ==================== BACKUP ====================
@@ -1959,6 +2150,15 @@ function fmtPDF(n) {
 // ==================== VOICE ENTRY ====================
 var _voiceRecognition = null;
 var _voiceListening = false;
+var _voiceLang = 'en-IN';
+
+function setVoiceLang(lang, btn) {
+  _voiceLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  var labels = {'en-IN':'EN','hi-IN':'Hindi','ta-IN':'Tamil'};
+  showToast('Voice: ' + (labels[lang] || lang));
+}
 
 function toggleVoice() {
   if (_voiceListening) { stopVoice(); return; }
@@ -1972,7 +2172,7 @@ function startVoice() {
     return;
   }
   _voiceRecognition = new SR();
-  _voiceRecognition.lang = 'en-IN';
+  _voiceRecognition.lang = _voiceLang;
   _voiceRecognition.continuous = false;
   _voiceRecognition.interimResults = true;
   _voiceRecognition.maxAlternatives = 6; // collect more alternatives for better fuzzy matching
@@ -2113,6 +2313,20 @@ function stripNoise(text) {
 }
 function normalizeAmounts(text) {
   return text.toLowerCase()
+    // Hindi number words
+    .replace(/\bek\s*lakh\b/g,'100000').replace(/\bdo\s*lakh\b/g,'200000')
+    .replace(/\bteen\s*lakh\b/g,'300000').replace(/\bpaanch\s*lakh\b/g,'500000')
+    .replace(/\bdas\s*hazaar\b/g,'10000').replace(/\bpaanch\s*hazaar\b/g,'5000')
+    .replace(/\bdo\s*hazaar\b/g,'2000').replace(/\bek\s*hazaar\b/g,'1000')
+    .replace(/\b(\d+)\s*hazaar\b/g,function(_,n){return String(n*1000);})
+    .replace(/\bhazaar\b/g,'1000').replace(/\b(\d+)\s*sau\b/g,function(_,n){return String(n*100);})
+    .replace(/\bsau\b/g,'100')
+    // Tamil number words
+    .replace(/\bpathi\s*aayiram\b/g,'10000').replace(/\banju\s*aayiram\b/g,'5000')
+    .replace(/\brendu\s*aayiram\b/g,'2000').replace(/\b(\d+)\s*aayiram\b/g,function(_,n){return String(n*1000);})
+    .replace(/\baayiram\b/g,'1000').replace(/\bnoooru\b/g,'100').replace(/\bnooru\b/g,'100')
+    .replace(/\bpathu\b/g,'10').replace(/\blatcham\b/g,'100000')
+    // English
     .replace(/\bone\s*lakh\b/g,'100000').replace(/(\d+\.?\d*)\s*lakh/g,function(_,n){return String(Math.round(n*100000));})
     .replace(/\bhalf\s*lakh\b/g,'50000')
     .replace(/(\d+\.?\d*)\s*thousand/g,function(_,n){return String(Math.round(n*1000));})
@@ -2172,8 +2386,7 @@ function parseVoiceEntry(alternatives) {
   function fillAmountType(displayName) {
     var amtInput = document.getElementById('amt-input');
     if (amtInput && amount) amtInput.value = amount;
-    var typeInput = document.getElementById('type-input');
-    if (typeInput) typeInput.value = type;
+    setEntryType(type);
     showToast('🎤 ' + displayName + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
     var noteInput = document.getElementById('note-input');
     if (noteInput) setTimeout(function(){ noteInput.focus(); }, 50);
