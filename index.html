@@ -619,97 +619,68 @@ tr.active-row{height:62px}
 </div><!-- end app-container -->
 
 <script>
-// ==================== INDEXEDDB ====================
-let db = null;
+// ==================== JSONBIN CLOUD STORAGE ====================
+var _BIN_ID  = '6a271d69da38895dfe9be3ec';
+var _API_KEY = '$2a$10$15vC.oBMbrf.hnmsWe1nmeQy4FNhiccmgCBt7TxUJQCZ..KIvimDC';
+var _BIN_URL = 'https://api.jsonbin.io/v3/b/' + _BIN_ID;
+var _db = { customers: [], transactions: [], loans: [] };
+var _syncTimer = null;
 
 function initDB() {
-  return new Promise(function(resolve, reject) {
-    var req = indexedDB.open('FinanceTrackerDB', 1);
-    req.onupgradeneeded = function(e) {
-      var d = e.target.result;
-      if (!d.objectStoreNames.contains('customers')) {
-        var cs = d.createObjectStore('customers', { keyPath: 'id' });
-        cs.createIndex('name', 'name', { unique: false });
-      }
-      if (!d.objectStoreNames.contains('transactions')) {
-        var ts = d.createObjectStore('transactions', { keyPath: 'id' });
-        ts.createIndex('date', 'date', { unique: false });
-        ts.createIndex('customerId', 'customerId', { unique: false });
-      }
-      if (!d.objectStoreNames.contains('loans')) {
-        var ls = d.createObjectStore('loans', { keyPath: 'id' });
-        ls.createIndex('customerId', 'customerId', { unique: false });
-      }
-    };
-    req.onsuccess = function(e) { db = e.target.result; resolve(db); };
-    req.onerror = function(e) { reject(e.target.error); };
-  });
+  return fetch(_BIN_URL + '/latest', { headers: { 'X-Master-Key': _API_KEY } })
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      var rec = j.record || {};
+      _db.customers    = rec.customers    || [];
+      _db.transactions = rec.transactions || [];
+      _db.loans        = rec.loans        || [];
+    });
+}
+
+function _syncJSONBin() {
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(function() {
+    fetch(_BIN_URL, {
+      method: 'PUT',
+      headers: { 'X-Master-Key': _API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(_db)
+    });
+  }, 800);
 }
 
 function db_add(store, obj) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readwrite');
-    var req = tx.objectStore(store).add(obj);
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
+  _db[store].push(obj);
+  _syncJSONBin();
+  return Promise.resolve(obj.id);
 }
 
 function db_put(store, obj) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readwrite');
-    var req = tx.objectStore(store).put(obj);
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
+  var idx = _db[store].findIndex(function(r) { return r.id === obj.id; });
+  if (idx >= 0) _db[store][idx] = obj; else _db[store].push(obj);
+  _syncJSONBin();
+  return Promise.resolve(obj.id);
 }
 
 function db_getAll(store) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readonly');
-    var req = tx.objectStore(store).getAll();
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
+  return Promise.resolve(_db[store].slice());
 }
 
 function db_delete(store, id) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readwrite');
-    var req = tx.objectStore(store).delete(id);
-    req.onsuccess = function() { resolve(); };
-    req.onerror = function() { reject(req.error); };
-  });
+  _db[store] = _db[store].filter(function(r) { return r.id !== id; });
+  _syncJSONBin();
+  return Promise.resolve();
 }
 
 function db_update(store, obj) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readwrite');
-    var req = tx.objectStore(store).put(obj);
-    req.onsuccess = function() { resolve(); };
-    req.onerror = function() { reject(req.error); };
-  });
+  return db_put(store, obj);
 }
 
 function db_getByIndex(store, indexName, value) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readonly');
-    var idx = tx.objectStore(store).index(indexName);
-    var req = idx.getAll(value);
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
+  return Promise.resolve(_db[store].filter(function(r) { return r[indexName] === value; }));
 }
 
 function db_getByDateRange(store, startDate, endDate) {
-  return new Promise(function(resolve, reject) {
-    var tx = db.transaction(store, 'readonly');
-    var idx = tx.objectStore(store).index('date');
-    var range = IDBKeyRange.bound(startDate, endDate);
-    var req = idx.getAll(range);
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
+  return Promise.resolve(_db[store].filter(function(r) { return r.date >= startDate && r.date <= endDate; }));
 }
 
 // ==================== GLOBALS ====================
