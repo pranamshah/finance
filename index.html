@@ -2005,41 +2005,60 @@ function parseVoiceEntry(text) {
     return;
   }
 
+  // Helper: fill amount + type after customer is selected
+  function fillAmountType() {
+    var amtInput = document.getElementById('amt-input');
+    if (amtInput && amount) amtInput.value = amount;
+    var typeInput = document.getElementById('type-input');
+    if (typeInput) typeInput.value = type;
+    showToast('🎤 ' + (name || '?') + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
+    var noteInput = document.getElementById('note-input');
+    if (noteInput) setTimeout(function(){ noteInput.focus(); }, 50);
+  }
+
   // --- Fill into entry row ---
-  // 1. Fill customer name & trigger search
-  var custInput = document.getElementById('cust-input');
-  if (custInput && name) {
-    custInput.value = name;
-    onCustInput(); // triggers dropdown
-    // After short delay, auto-select first real match
-    setTimeout(function() {
-      var firstReal = activeDropdownItems ? activeDropdownItems.findIndex(function(i) {
-        return !i.classList.contains('add-new');
-      }) : -1;
-      if (firstReal >= 0) {
-        entryDropdownIndex = firstReal;
-        updateDropdownFocus();
-        activeDropdownItems[firstReal].dispatchEvent(new MouseEvent('mousedown'));
-      }
-      // 2. Fill amount
-      setTimeout(function() {
-        var amtInput = document.getElementById('amt-input');
-        if (amtInput && amount) amtInput.value = amount;
-        // 3. Fill type
-        var typeInput = document.getElementById('type-input');
-        if (typeInput) typeInput.value = type;
-        // 4. Focus note for any last additions, or just show confirmation
-        showToast('🎤 ' + (name||'?') + ' · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
-        var noteInput = document.getElementById('note-input');
-        if (noteInput) noteInput.focus();
-      }, 120);
-    }, 80);
-  } else if (amount) {
-    var amtInput2 = document.getElementById('amt-input');
-    if (amtInput2) amtInput2.value = amount;
-    var typeInput2 = document.getElementById('type-input');
-    if (typeInput2) typeInput2.value = type;
+  if (!name && amount) {
+    // Only amount heard — just fill amount + type
+    var amtInputOnly = document.getElementById('amt-input');
+    if (amtInputOnly) amtInputOnly.value = amount;
+    var typeInputOnly = document.getElementById('type-input');
+    if (typeInputOnly) typeInputOnly.value = type;
     showToast('🎤 ₹' + Number(amount).toLocaleString('en-IN') + ' · ' + type);
+    return;
+  }
+
+  if (!name) { showToast('Could not understand — try again'); return; }
+
+  // Check if any existing customer matches (case-insensitive, partial OK)
+  var nameLower = name.toLowerCase();
+  var exactMatch = window.allCustomers.find(function(c) {
+    return c.name.toLowerCase() === nameLower;
+  });
+  var partialMatch = !exactMatch && window.allCustomers.find(function(c) {
+    return c.name.toLowerCase().indexOf(nameLower) === 0 || nameLower.indexOf(c.name.toLowerCase()) === 0;
+  });
+  var matched = exactMatch || partialMatch;
+
+  if (matched) {
+    // Existing client found — select them directly, no dropdown needed
+    var custInput = document.getElementById('cust-input');
+    if (custInput) custInput.value = matched.name;
+    _selectedCustomer = matched;
+    closeDropdown();
+    fillAmountType();
+  } else {
+    // No match — auto-create client immediately, then fill
+    var newC = { id: uid(), name: name, phone: '', createdAt: Date.now() };
+    db_add('customers', newC).then(function() {
+      window.allCustomers.push(newC);
+      rebuildBalanceMap();
+      var custInput2 = document.getElementById('cust-input');
+      if (custInput2) custInput2.value = newC.name;
+      _selectedCustomer = newC;
+      closeDropdown();
+      fillAmountType();
+      showToast('🎤 New client "' + name + '" created · ₹' + (amount ? Number(amount).toLocaleString('en-IN') : '?') + ' · ' + type);
+    });
   }
 
   // Reset transcript label after 3s
