@@ -716,6 +716,7 @@ function _setSyncStatus(s) {
 }
 
 function initDB() {
+  _db = { customers: [], transactions: [], loans: [] };
   return fetch('/api/db?user=' + _currentUser)
     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data) {
