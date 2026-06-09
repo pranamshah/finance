@@ -363,6 +363,15 @@ tr.active-row{height:62px}
 #voice-status{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
 #voice-hint{font-size:12px;color:var(--muted);padding:4px 16px 8px;opacity:0.7}
 
+/* USER STRIP */
+#user-strip{display:flex;align-items:center;gap:6px;position:fixed;top:0;left:0;right:0;z-index:400;background:rgba(13,33,55,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:7px 16px;border-bottom:1px solid rgba(255,255,255,0.07);height:44px}
+#user-strip-label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-right:4px}
+.user-btn{padding:5px 16px;border:1.5px solid rgba(255,255,255,0.15);border-radius:20px;background:transparent;color:rgba(255,255,255,0.5);font-family:'Inter','Noto Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap}
+.user-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.user-btn:not(.active):hover{border-color:rgba(255,255,255,0.4);color:#fff}
+@media(min-width:769px){#user-strip{display:none}}
+@media(max-width:768px){#app-container{padding-top:44px}#date-bar{top:44px}}
+
 /* SYNC DOT */
 .sync-dot{position:fixed;bottom:90px;right:16px;width:10px;height:10px;border-radius:50%;z-index:9998;transition:background 0.3s}
 .sync-dot.saving{background:#f0a500;box-shadow:0 0 0 3px rgba(240,165,0,0.25);animation:pulse-sync 0.8s infinite}
@@ -427,6 +436,13 @@ tr.active-row{height:62px}
 <!-- Global dropdown — lives at body level, never clipped by table overflow -->
 <div id="global-cust-dropdown" class="customer-dropdown" style="display:none;position:fixed"></div>
 
+<!-- USER STRIP (mobile fixed top bar) -->
+<div id="user-strip">
+  <span id="user-strip-label">User</span>
+  <button class="user-btn" data-uid="1" onclick="switchUser(1)">Father</button>
+  <button class="user-btn" data-uid="2" onclick="switchUser(2)">Uncle</button>
+</div>
+
 <!-- TOP NAV (desktop) -->
 <div id="top-nav">
   <div id="top-nav-inner">
@@ -435,6 +451,11 @@ tr.active-row{height:62px}
     <button class="top-nav-btn" data-tab="clients" onclick="switchTab('clients')"><span class="top-nav-btn-bg"></span>👥 Clients</button>
     <button class="top-nav-btn" data-tab="records" onclick="switchTab('records')"><span class="top-nav-btn-bg"></span>📊 Records</button>
     <button class="top-nav-btn" data-tab="search" onclick="switchTab('search')"><span class="top-nav-btn-bg"></span>🔍 Search</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-left:16px;border-left:1px solid rgba(255,255,255,0.1)">
+      <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em">User</span>
+      <button class="user-btn" data-uid="1" onclick="switchUser(1)">Father</button>
+      <button class="user-btn" data-uid="2" onclick="switchUser(2)">Uncle</button>
+    </div>
   </div>
 </div>
 
@@ -675,6 +696,13 @@ tr.active-row{height:62px}
 </div><!-- end app-container -->
 
 <script>
+// ==================== USERS ====================
+var USERS = [
+  { id: 1, name: 'Father' },
+  { id: 2, name: 'Uncle' }
+];
+var _currentUser = parseInt(localStorage.getItem('activeUser') || '1', 10);
+
 // ==================== NEON CLOUD STORAGE ====================
 var _db = { customers: [], transactions: [], loans: [] };
 var _syncTimer = null;
@@ -688,7 +716,7 @@ function _setSyncStatus(s) {
 }
 
 function initDB() {
-  return fetch('/api/db')
+  return fetch('/api/db?user=' + _currentUser)
     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data) {
       _db.customers    = data.customers    || [];
@@ -699,7 +727,7 @@ function initDB() {
 
 function _doSync() {
   _setSyncStatus('saving');
-  return fetch('/api/db', {
+  return fetch('/api/db?user=' + _currentUser, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(_db),
@@ -707,6 +735,26 @@ function _doSync() {
   }).then(function(r) {
     _setSyncStatus(r.ok ? 'saved' : 'error');
   }).catch(function() { _setSyncStatus('error'); });
+}
+
+function switchUser(uid) {
+  if (uid === _currentUser) return;
+  clearTimeout(_syncTimer);
+  _currentUser = uid;
+  localStorage.setItem('activeUser', uid);
+  document.querySelectorAll('.user-btn').forEach(function(b) {
+    b.classList.toggle('active', Number(b.dataset.uid) === uid);
+  });
+  var ls = document.getElementById('loading-screen');
+  if (ls) { ls.textContent = 'Switching…'; ls.style.display = 'flex'; }
+  initDB().then(function() {
+    return loadAllData();
+  }).then(function() {
+    if (ls) ls.style.display = 'none';
+    renderEntryTab();
+    var active = document.querySelector('.tab-content.active');
+    if (active && active.id === 'clients-tab') renderClientsList();
+  });
 }
 
 function _syncCloud() {
@@ -2610,6 +2658,9 @@ window.addEventListener('resize', function() { closeDropdown(); });
 window.addEventListener('beforeunload', function() { clearTimeout(_syncTimer); _doSync(); });
 
 // ==================== INIT ====================
+document.querySelectorAll('.user-btn').forEach(function(b) {
+  b.classList.toggle('active', Number(b.dataset.uid) === _currentUser);
+});
 initDB().then(function() {
   return loadAllData();
 }).then(function() {
