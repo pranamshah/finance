@@ -1629,7 +1629,7 @@ function loadDayRecords() {
     tr.querySelector('[data-del-day]').addEventListener('click', function() { deleteDayTxn(t.id); });
     tbody.appendChild(tr);
   });
-  renderMissedSection('day-missed', date, date);
+  renderMissedSection('day-missed');
 }
 
 function deleteDayTxn(id) {
@@ -1688,7 +1688,7 @@ function loadMonthRecords() {
       '<td style="padding:10px 12px"></td>' +
       '<td colspan="2" style="padding:10px 12px;font-size:14px">Rcvd: '+fmtINR(totalRecv)+'&nbsp;&nbsp;Given: '+fmtINR(totalGiven)+'</td>';
     tbody.appendChild(totRow);
-    renderMissedSection('month-missed', startDate, endDate);
+    renderMissedSection('month-missed');
   });
 }
 
@@ -1716,7 +1716,7 @@ function loadYearRecords() {
     _yearData = { rows:rows, allTxns:txnByMonth, recv:totalRecv, given:totalGiven, net:totalRecv-totalGiven, label:y };
     document.getElementById('year-summary-cards').innerHTML = buildSummaryCards3(totalRecv, totalGiven, totalRecv-totalGiven);
     renderYearTable();
-    renderMissedSection('year-missed', y+'-01-01', y+'-12-31');
+    renderMissedSection('year-missed');
   });
 }
 
@@ -1822,7 +1822,7 @@ function loadRangeRecords() {
       tr.innerHTML = '<td>' + r.date + '</td><td>' + fmtINR(r.given) + '</td><td>' + fmtINR(r.received) + '</td><td>' + fmtINR(r.net) + '</td>';
       tbody.appendChild(tr);
     });
-    renderMissedSection('range-missed', from, to);
+    renderMissedSection('range-missed');
   });
 }
 
@@ -1862,12 +1862,16 @@ function cycleClientSchedule(e, cid) {
 }
 
 // ==================== MISSED PAYMENTS ====================
-function renderMissedSection(containerId, fromDate, toDate) {
+function renderMissedSection(containerId) {
   var container = document.getElementById(containerId);
   if (!container) return;
   container.style.display = 'none';
   var customers = window.allCustomers;
   if (!customers || !customers.length) return;
+  // Always: current month start → today
+  var today = todayStr();
+  var fromDate = today.substring(0, 7) + '-01';
+  var toDate = today;
   db_getAll('transactions').then(function(allTxns) {
     var rows = [];
     customers.forEach(function(c) {
@@ -1880,9 +1884,9 @@ function renderMissedSection(containerId, fromDate, toDate) {
       var firstDate = clientRecv.map(function(t){return t.date;}).sort()[0];
       var paidDates = {};
       clientRecv.forEach(function(t) { paidDates[t.date] = true; });
-      // Generate all expected dates up to toDate, then filter to [fromDate, toDate]
-      var allExpected = generateExpectedDates(firstDate, shiftDate(toDate, 1), sched);
-      var missed = allExpected.filter(function(d) { return d >= fromDate && d <= toDate && !paidDates[d]; });
+      var effectiveFrom = firstDate > fromDate ? firstDate : fromDate;
+      var allExpected = generateExpectedDates(effectiveFrom, shiftDate(toDate, 1), sched);
+      var missed = allExpected.filter(function(d) { return d >= effectiveFrom && d <= toDate && !paidDates[d]; });
       if (missed.length === 0) return;
       var total = 0;
       clientRecv.forEach(function(t) { total += Number(t.amount); });
