@@ -363,6 +363,14 @@ tr.active-row{height:62px}
 #voice-status{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
 #voice-hint{font-size:12px;color:var(--muted);padding:4px 16px 8px;opacity:0.7}
 
+/* SYNC DOT */
+.sync-dot{position:fixed;bottom:90px;right:16px;width:10px;height:10px;border-radius:50%;z-index:9998;transition:background 0.3s}
+.sync-dot.saving{background:#f0a500;box-shadow:0 0 0 3px rgba(240,165,0,0.25);animation:pulse-sync 0.8s infinite}
+.sync-dot.saved{background:#0b6e3f}
+.sync-dot.error{background:#b52419;box-shadow:0 0 0 3px rgba(181,36,25,0.25)}
+@keyframes pulse-sync{0%,100%{opacity:1}50%{opacity:0.4}}
+@media(min-width:769px){.sync-dot{bottom:24px;right:20px}}
+
 /* ===== MOBILE BREATHING ROOM ===== */
 @media(max-width:768px){
   #app-container{padding-left:14px;padding-right:14px;padding-bottom:120px}
@@ -414,6 +422,7 @@ tr.active-row{height:62px}
 <body>
 
 <div id="loading-screen">Loading...</div>
+<div id="sync-dot" class="sync-dot saved" title="All saved"></div>
 <div id="toast"></div>
 <!-- Global dropdown — lives at body level, never clipped by table overflow -->
 <div id="global-cust-dropdown" class="customer-dropdown" style="display:none;position:fixed"></div>
@@ -666,45 +675,55 @@ tr.active-row{height:62px}
 </div><!-- end app-container -->
 
 <script>
-// ==================== JSONBIN CLOUD STORAGE ====================
-var _BIN_ID  = '6a271d69da38895dfe9be3ec';
-var _API_KEY = '$2a$10$15vC.oBMbrf.hnmsWe1nmeQy4FNhiccmgCBt7TxUJQCZ..KIvimDC';
-var _BIN_URL = 'https://api.jsonbin.io/v3/b/' + _BIN_ID;
+// ==================== NEON CLOUD STORAGE ====================
 var _db = { customers: [], transactions: [], loans: [] };
 var _syncTimer = null;
+var _syncDot = null;
+
+function _setSyncStatus(s) {
+  if (!_syncDot) _syncDot = document.getElementById('sync-dot');
+  if (!_syncDot) return;
+  _syncDot.className = 'sync-dot ' + s;
+  _syncDot.title = s === 'saving' ? 'Saving…' : s === 'saved' ? 'All saved' : 'Save failed';
+}
 
 function initDB() {
-  return fetch(_BIN_URL + '/latest', { headers: { 'X-Master-Key': _API_KEY } })
-    .then(function(r) { return r.json(); })
-    .then(function(j) {
-      var rec = j.record || {};
-      _db.customers    = rec.customers    || [];
-      _db.transactions = rec.transactions || [];
-      _db.loans        = rec.loans        || [];
+  return fetch('/api/db')
+    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(data) {
+      _db.customers    = data.customers    || [];
+      _db.transactions = data.transactions || [];
+      _db.loans        = data.loans        || [];
     });
 }
 
-function _syncJSONBin() {
+function _doSync() {
+  _setSyncStatus('saving');
+  return fetch('/api/db', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(_db),
+    keepalive: true
+  }).then(function(r) {
+    _setSyncStatus(r.ok ? 'saved' : 'error');
+  }).catch(function() { _setSyncStatus('error'); });
+}
+
+function _syncCloud() {
   clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(function() {
-    fetch(_BIN_URL, {
-      method: 'PUT',
-      headers: { 'X-Master-Key': _API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify(_db)
-    });
-  }, 800);
+  _syncTimer = setTimeout(_doSync, 600);
 }
 
 function db_add(store, obj) {
   _db[store].push(obj);
-  _syncJSONBin();
+  _syncCloud();
   return Promise.resolve(obj.id);
 }
 
 function db_put(store, obj) {
   var idx = _db[store].findIndex(function(r) { return r.id === obj.id; });
   if (idx >= 0) _db[store][idx] = obj; else _db[store].push(obj);
-  _syncJSONBin();
+  _syncCloud();
   return Promise.resolve(obj.id);
 }
 
@@ -714,7 +733,7 @@ function db_getAll(store) {
 
 function db_delete(store, id) {
   _db[store] = _db[store].filter(function(r) { return r.id !== id; });
-  _syncJSONBin();
+  _syncCloud();
   return Promise.resolve();
 }
 
@@ -2588,6 +2607,7 @@ document.addEventListener('click', function(e) {
 // Reposition dropdown on scroll/resize
 window.addEventListener('scroll', function() { closeDropdown(); }, true);
 window.addEventListener('resize', function() { closeDropdown(); });
+window.addEventListener('beforeunload', function() { clearTimeout(_syncTimer); _doSync(); });
 
 // ==================== INIT ====================
 initDB().then(function() {
