@@ -741,20 +741,24 @@ function _doSync() {
 function switchUser(uid) {
   if (uid === _currentUser) return;
   clearTimeout(_syncTimer);
-  _currentUser = uid;
-  localStorage.setItem('activeUser', uid);
-  document.querySelectorAll('.user-btn').forEach(function(b) {
-    b.classList.toggle('active', Number(b.dataset.uid) === uid);
-  });
   var ls = document.getElementById('loading-screen');
-  if (ls) { ls.textContent = 'Switching…'; ls.style.display = 'flex'; }
-  initDB().then(function() {
-    return loadAllData();
-  }).then(function() {
-    if (ls) ls.style.display = 'none';
-    renderEntryTab();
-    var active = document.querySelector('.tab-content.active');
-    if (active && active.id === 'clients-tab') renderClientsList();
+  if (ls) { ls.textContent = 'Saving…'; ls.style.display = 'flex'; }
+  // Save current user's data first, THEN switch
+  _doSync().finally(function() {
+    _currentUser = uid;
+    localStorage.setItem('activeUser', uid);
+    document.querySelectorAll('.user-btn').forEach(function(b) {
+      b.classList.toggle('active', Number(b.dataset.uid) === uid);
+    });
+    if (ls) ls.textContent = 'Switching…';
+    initDB().then(function() {
+      return loadAllData();
+    }).then(function() {
+      if (ls) ls.style.display = 'none';
+      renderEntryTab();
+      var active = document.querySelector('.tab-content.active');
+      if (active && active.id === 'clients-tab') renderClientsList();
+    });
   });
 }
 
