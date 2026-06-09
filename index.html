@@ -439,8 +439,8 @@ tr.active-row{height:62px}
 <!-- USER STRIP (mobile fixed top bar) -->
 <div id="user-strip">
   <span id="user-strip-label">User</span>
-  <button class="user-btn" data-uid="1" onclick="switchUser(1)">Father</button>
-  <button class="user-btn" data-uid="2" onclick="switchUser(2)">Uncle</button>
+  <button class="user-btn" data-uid="1" onclick="switchUser(1)">Koyembedu</button>
+  <button class="user-btn" data-uid="2" onclick="switchUser(2)">Office</button>
 </div>
 
 <!-- TOP NAV (desktop) -->
@@ -453,8 +453,8 @@ tr.active-row{height:62px}
     <button class="top-nav-btn" data-tab="search" onclick="switchTab('search')"><span class="top-nav-btn-bg"></span>🔍 Search</button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-left:16px;border-left:1px solid rgba(255,255,255,0.1)">
       <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em">User</span>
-      <button class="user-btn" data-uid="1" onclick="switchUser(1)">Father</button>
-      <button class="user-btn" data-uid="2" onclick="switchUser(2)">Uncle</button>
+      <button class="user-btn" data-uid="1" onclick="switchUser(1)">Koyembedu</button>
+      <button class="user-btn" data-uid="2" onclick="switchUser(2)">Office</button>
     </div>
   </div>
 </div>
@@ -698,8 +698,8 @@ tr.active-row{height:62px}
 <script>
 // ==================== USERS ====================
 var USERS = [
-  { id: 1, name: 'Father' },
-  { id: 2, name: 'Uncle' }
+  { id: 1, name: 'Koyembedu' },
+  { id: 2, name: 'Office' }
 ];
 var _currentUser = parseInt(localStorage.getItem('activeUser') || '1', 10);
 
